@@ -75,7 +75,7 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 		return
 	}
 
-	twiUser, err := h.twiCli.AccountVerifyCredentials(accessToken.Token, accessToken.Secret)
+	twiUser, err := h.twiCli.AccountVerifyCredentials(accessToken)
 	if err != nil {
 		logger.Warn("failed to get twitter user", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendURL+"/callback")
@@ -106,10 +106,33 @@ func (h *Handler) GetMe(c *gin.Context) {
 		return
 	}
 
-	user, err := h.twiCli.AccountVerifyCredentials(accessToken.Token, accessToken.Secret)
+	user, err := h.twiCli.AccountVerifyCredentials(accessToken)
 	if err != nil {
 		sendError(err, c)
 		return
 	}
+
 	c.JSON(http.StatusOK, user)
+}
+
+func (h *Handler) GetTweets(c *gin.Context) {
+	v, ok := c.Get(userIDContextKey)
+	if !ok {
+		sendServiceError(errors.NewUnknown("user id must be set with context"), c)
+		return
+	}
+	userID := v.(string)
+
+	accessToken, ok := h.accessTokens[userID]
+	if !ok {
+		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
+		return
+	}
+
+	tweets, err := h.twiCli.UserTimeLine(accessToken, accessToken.AdditionalData["user_id"])
+	if err != nil {
+		sendError(err, c)
+		return
+	}
+	c.JSON(http.StatusOK, tweets)
 }

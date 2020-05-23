@@ -22,7 +22,7 @@ func main() {
 	}
 	fmt.Println(url)
 
-	router, err := NewRouter(handler.NewHandler(cli, "http://localhost.local:3000", "http://localhost.local"), "*")
+	router, err := handler.NewRouter(handler.NewHandler(cli, "http://localhost.local:8080/me", "http://localhost.local"), "*")
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -2,8 +2,11 @@ package twitter
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"net/url"
 	"sync"
+	"time"
 
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/seikatsu-syukan-midare/lib/errors"
@@ -67,16 +70,14 @@ func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.Access
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to authorize token")
 	}
+	fmt.Println(aToken)
 
 	return aToken, nil
 }
 
 // AccountVerifyCredentials fetch twitter profile from twitter api
-func (cli *client) AccountVerifyCredentials(token, secret string) (*User, error) {
-	httpCli, err := cli.httpClient(&oauth.AccessToken{
-		Token:  token,
-		Secret: secret,
-	})
+func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, error) {
+	httpCli, err := cli.httpClient(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make http client")
 	}
@@ -112,6 +113,42 @@ func (cli *client) AccountVerifyCredentials(token, secret string) (*User, error)
 	return twiUser, nil
 }
 
+func (cli *client) UserTimeLine(token *oauth.AccessToken, userID string) ([]*Tweet, error) {
+	httpCli, err := cli.httpClient(token)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to make http client")
+	}
+
+	query := url.Values{}
+	query.Add("count", "200")
+	query.Add("user_id", userID)
+	query.Add("exclude_replies", "false")
+	query.Add("trim_user", "true")
+	// query.Add("max_id", "1264176654227656700")
+
+	resp, err := httpCli.Get(twitterAPIEndpoint + "/statuses/user_timeline.json?" + query.Encode())
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to fetch verify credentials from twitter api")
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		errMsg := &twitterError{}
+		err = json.NewDecoder(resp.Body).Decode(errMsg)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to decode twitter api response")
+		}
+		return nil, errors.New(errors.Unauthorized, "twitter api response status code=%d message=%v", resp.StatusCode, errMsg.Errors)
+	}
+
+	var res []*tweetObject
+	err = json.NewDecoder(resp.Body).Decode(&res)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to decode twitter api response")
+	}
+	return cli.toTweets(res), nil
+}
+
 // httpClient make *http.Client using access token
 func (cli *client) httpClient(aToken *oauth.AccessToken) (*http.Client, error) {
 	client, err := cli.consumer.MakeHttpClient(aToken)
@@ -136,4 +173,24 @@ type userObject struct {
 	ScreenName      string `json:"screen_name"`
 	URL             string `json:"url"`
 	ProfileImageURL string `json:"profile_image_url_https"`
+}
+
+type tweetObject struct {
+	ID         int64  `json:"id"`
+	Text       string `json:"text"`
+	CreatedStr string `json:"created_at"`
+}
+
+func (cli *client) toTweets(tweetObjects []*tweetObject) []*Tweet {
+	var ts []*Tweet
+
+	for _, t := range tweetObjects {
+		created, _ := time.Parse(time.RubyDate, t.CreatedStr)
+		ts = append(ts, &Tweet{
+			ID:      fmt.Sprintf("%d", t.ID),
+			Text:    t.Text,
+			Created: created,
+		})
+	}
+	return ts
 }

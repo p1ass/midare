@@ -1,10 +1,9 @@
-package main
+package handler
 
 import (
 	"net/http"
 	"time"
 
-	"github.com/p1ass/seikatsu-syukan-midare/handler"
 	"github.com/p1ass/seikatsu-syukan-midare/lib/logging"
 
 	"github.com/gin-contrib/cors"
@@ -15,7 +14,7 @@ import (
 )
 
 // NewRouter returns a gin router
-func NewRouter(twiHandler *handler.Handler, allowOrigin string) (*gin.Engine, error) {
+func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 	r := gin.New()
 
 	r.Use(gin.Recovery())
@@ -41,8 +40,9 @@ func NewRouter(twiHandler *handler.Handler, allowOrigin string) (*gin.Engine, er
 	r.GET("/callback", twiHandler.TwitterCallback)
 
 	withAuthGrp := r.Group("/")
-	withAuthGrp.Use(handler.AuthMiddleware())
+	withAuthGrp.Use(AuthMiddleware())
 	withAuthGrp.GET("/me", twiHandler.GetMe)
+	withAuthGrp.GET("/tweets", twiHandler.GetTweets)
 
 	return r, nil
 }

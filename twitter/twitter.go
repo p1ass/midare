@@ -6,7 +6,8 @@ import "github.com/mrjones/oauth"
 type Client interface {
 	GetRequestTokenAndURL() (loginURL string, err error)
 	AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error)
-	AccountVerifyCredentials(token, secret string) (*User, error)
+	AccountVerifyCredentials(token *oauth.AccessToken) (*User, error)
+	UserTimeLine(token *oauth.AccessToken, userID string) ([]*Tweet, error)
 }
 
 // NewClient returns Client

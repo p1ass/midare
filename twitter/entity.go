@@ -6,7 +6,6 @@ type User struct {
 	Name       string `json:"name"`
 	ScreenName string `json:"screenName"`
 	ImageURL   string `json:"imageUrl"`
-	UserID     string `json:"userID"`
 }
 
 // Credential represents a twitter oauth credential

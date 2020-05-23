@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/p1ass/seikatsu-syukan-midare/handler"
+	"github.com/p1ass/seikatsu-syukan-midare/web"
 
 	"github.com/p1ass/seikatsu-syukan-midare/lib/logging"
 
@@ -22,7 +22,7 @@ func main() {
 	}
 	fmt.Println(url)
 
-	router, err := handler.NewRouter(handler.NewHandler(cli, "http://localhost.local:8080/me", "http://localhost.local"), "*")
+	router, err := web.NewRouter(web.NewHandler(cli, "http://localhost.local:8080/me", "http://localhost.local"), "*")
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -1,31 +1,12 @@
 package twitter
 
-import (
-	"fmt"
-	"time"
-)
-
 // User represents a user info about twitter
 type User struct {
-	ID         string    `json:"id"`
-	Name       string    `json:"name"`
-	ScreenName string    `json:"screenName"`
-	ImageURL   string    `json:"imageUrl"`
-	UserID     string    `json:"userID"`
-	CreatedAt  time.Time `json:"createdAt"`
-	UpdatedAt  time.Time `json:"updatedAt"`
-}
-
-// SetID sets id into ID and IDStr
-func (u *User) SetID(id int64) *User {
-	u.ID = fmt.Sprintf("%d", id)
-	return u
-}
-
-// SetUserID sets user id into UserID and UserIDStr
-func (u *User) SetUserID(userID int64) *User {
-	u.UserID = fmt.Sprintf("%d", userID)
-	return u
+	ID         string `json:"id"`
+	Name       string `json:"name"`
+	ScreenName string `json:"screenName"`
+	ImageURL   string `json:"imageUrl"`
+	UserID     string `json:"userID"`
 }
 
 // Credential represents a twitter oauth credential

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 	"sync"
 
@@ -86,10 +85,6 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	h.accessTokens[twiUser.ID] = accessToken
-
-	logger.Info(fmt.Sprintf("%#v", accessToken))
-	logger.Info(fmt.Sprintf("%#v", twiUser))
-
 	if err := setSessionAndCookie(c, twiUser.ID, h.frontendDomain); err != nil {
 		sendError(errors.Wrap(err, "failed to set session"), c)
 		return

@@ -32,7 +32,7 @@ func getUserIDFromCookie(c *gin.Context) (string, error) {
 	session := sessions.Default(c)
 	userID, ok := session.Get(sessID).(string)
 	if !ok {
-		return "", errors.New(errors.Unauthorized, "session not found")
+		return "", errors.New(errors.Unauthorized, http.StatusText(http.StatusUnauthorized))
 	}
 	return userID, nil
 }

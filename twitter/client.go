@@ -67,8 +67,7 @@ func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.Access
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to authorize token")
 	}
-	cli.mu.Lock()
-	cli.mu.Unlock()
+
 	return aToken, nil
 }
 

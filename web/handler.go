@@ -23,21 +23,21 @@ const (
 
 // Handler ia HTTP handler.
 type Handler struct {
-	twiCli         twitter.Client
-	frontendURL    string
-	frontendDomain string
-	accessTokens   map[string]*oauth.AccessToken
-	mu             sync.Mutex
+	twiCli              twitter.Client
+	frontendCallbackURL string
+	frontendDomain      string
+	accessTokens        map[string]*oauth.AccessToken
+	mu                  sync.Mutex
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiCli twitter.Client, frontendURL string, frontendDomain string) *Handler {
+func NewHandler(twiCli twitter.Client, frontendCallbackURL string, frontendDomain string) *Handler {
 	return &Handler{
-		twiCli:         twiCli,
-		frontendURL:    frontendURL,
-		frontendDomain: frontendDomain,
-		accessTokens:   map[string]*oauth.AccessToken{},
-		mu:             sync.Mutex{},
+		twiCli:              twiCli,
+		frontendCallbackURL: frontendCallbackURL,
+		frontendDomain:      frontendDomain,
+		accessTokens:        map[string]*oauth.AccessToken{},
+		mu:                  sync.Mutex{},
 	}
 }
 

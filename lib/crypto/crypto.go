@@ -6,11 +6,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// SecureRandom returns a random uuid string
-func SecureRandom() string {
-	return uuid.New().String()
-}
-
 // SecureRandomBase64 returns a random uuid string encoded by base64
 func SecureRandomBase64() string {
 	return base64.StdEncoding.EncodeToString(uuid.New().NodeID())

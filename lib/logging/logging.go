@@ -20,8 +20,3 @@ func New() *zap.Logger {
 func Error(err error) zap.Field {
 	return zap.String("error", fmt.Sprintf("%+v", err))
 }
-
-// String return zap string field
-func String(key, val string) zap.Field {
-	return zap.String(key, val)
-}

@@ -1,4 +1,4 @@
-module github.com/p1ass/seikatsu-syukan-midare
+module github.com/p1ass/midare
 
 go 1.14
 

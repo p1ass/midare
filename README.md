@@ -22,11 +22,23 @@ $ cp .env.example .env
 $ $EDITOR .env
 ```
 
-3. サーバを起動
+3. ローカルでもクッキーを使えるように `/etc/hosts` を編集
+
+```consoel
+$ sudo $EDITOR /etc/hosts
+
+# 次の設定を追加
+127.0.0.1 localhost.local
+::1 localhost.local
+```
+
+4. サーバを起動
 
 ```console
 $ make serve
 ```
+
+5. http://localhost.local:8080 にアクセスして起動しているか確認。
 
 
 ## ⚠️ Not Production Ready

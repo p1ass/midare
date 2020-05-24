@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -16,11 +15,6 @@ func main() {
 	logger := logging.New()
 
 	cli := twitter.NewClient(os.Getenv("TWITTER_CONSUMER_KEY"), os.Getenv("TWITTER_CONSUMER_SECRET"), "http://localhost.local:8080/callback")
-	url, err := cli.GetRequestTokenAndURL()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Println(url)
 
 	router, err := web.NewRouter(web.NewHandler(cli, "http://localhost.local:8080/me", "http://localhost.local"), "*")
 	if err != nil {

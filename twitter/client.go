@@ -19,6 +19,10 @@ const (
 	twitterAPIEndpoint = "https://api.twitter.com/1.1"
 )
 
+var (
+	jst = time.FixedZone("Asia/Tokyo", 9*60*60)
+)
+
 type client struct {
 	consumer      *oauth.Consumer
 	callbackURL   string
@@ -70,7 +74,6 @@ func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.Access
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to authorize token")
 	}
-	fmt.Println(aToken)
 
 	return aToken, nil
 }
@@ -113,7 +116,7 @@ func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, er
 	return twiUser, nil
 }
 
-func (cli *client) UserTimeLine(token *oauth.AccessToken, userID string) ([]*Tweet, error) {
+func (cli *client) UserTimeLine(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error) {
 	httpCli, err := cli.httpClient(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make http client")
@@ -121,10 +124,12 @@ func (cli *client) UserTimeLine(token *oauth.AccessToken, userID string) ([]*Twe
 
 	query := url.Values{}
 	query.Add("count", "200")
-	query.Add("user_id", userID)
+	query.Add("screen_name", screenName)
 	query.Add("exclude_replies", "false")
 	query.Add("trim_user", "true")
-	// query.Add("max_id", "1264176654227656700")
+	if maxID != "" {
+		query.Add("max_id", maxID)
+	}
 
 	resp, err := httpCli.Get(twitterAPIEndpoint + "/statuses/user_timeline.json?" + query.Encode())
 	if err != nil {
@@ -146,6 +151,7 @@ func (cli *client) UserTimeLine(token *oauth.AccessToken, userID string) ([]*Twe
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to decode twitter api response")
 	}
+
 	return cli.toTweets(res), nil
 }
 
@@ -189,7 +195,7 @@ func (cli *client) toTweets(tweetObjects []*tweetObject) []*Tweet {
 		ts = append(ts, &Tweet{
 			ID:      fmt.Sprintf("%d", t.ID),
 			Text:    t.Text,
-			Created: created,
+			Created: created.In(jst),
 		})
 	}
 	return ts

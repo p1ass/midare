@@ -7,7 +7,7 @@ type Client interface {
 	GetRequestTokenAndURL() (loginURL string, err error)
 	AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error)
 	AccountVerifyCredentials(token *oauth.AccessToken) (*User, error)
-	UserTimeLine(token *oauth.AccessToken, userID string) ([]*Tweet, error)
+	UserTimeLine(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error)
 }
 
 // NewClient returns Client

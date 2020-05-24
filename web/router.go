@@ -42,7 +42,7 @@ func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 	withAuthGrp := r.Group("/")
 	withAuthGrp.Use(AuthMiddleware())
 	withAuthGrp.GET("/me", twiHandler.GetMe)
-	withAuthGrp.GET("/tweets", twiHandler.GetTweets)
+	withAuthGrp.GET("/periods", twiHandler.GetAwakePeriods)
 
 	return r, nil
 }

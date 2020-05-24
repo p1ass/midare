@@ -9,9 +9,6 @@ serve:
 test:
 	$(ENV) go test -v ./... -count=1
 
-.PHONY: integration-test
-integration-test:
-	$(ENV) go test -v ./... -tags integration -count=1
 
 .PHONY: deploy-dev
 deploy-dev:

@@ -2,12 +2,12 @@ package web
 
 import (
 	"net/http"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/mrjones/oauth"
 
-	"github.com/p1ass/seikatsu-syukan-midare/lib/errors"
-	"github.com/p1ass/seikatsu-syukan-midare/lib/logging"
 	"github.com/p1ass/seikatsu-syukan-midare/twitter"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +16,9 @@ import (
 const (
 	sessionIDKey = "sessionID"
 	sevenDays    = 60 * 60 * 24 * 7
+
+	// この時間以内にツイートされていたらその時間は起きていることにする
+	awakeThreshold = 3*time.Hour + 30*time.Minute
 )
 
 type Handler struct {
@@ -36,73 +39,9 @@ func NewHandler(twiCli twitter.Client, frontendURL string, frontendDomain string
 	}
 }
 
-// StartSignInWithTwitter start twitter oauth sign in
-func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
-	url, err := h.twiCli.GetRequestTokenAndURL()
-	if err != nil {
-		sendError(errors.Wrap(err, "failed to get redirect url"), c)
-		return
-	}
-
-	c.Header("Cache-Control", "no-cache")
-	c.Header("Pragma", "no-cache")
-	c.Redirect(http.StatusTemporaryRedirect, url)
-}
-
-// TwitterCallback handles callback function after login succeeded
-// Redirect to frontend even if callback function fails
-func (h *Handler) TwitterCallback(c *gin.Context) {
-	logger := logging.New()
-
-	token := c.DefaultQuery("oauth_token", "")
-	if token == "" {
-		logger.Warn("oauth token should be not empty")
-		c.Redirect(http.StatusFound, h.frontendURL+"/callback")
-		return
-	}
-
-	ov := c.DefaultQuery("oauth_verifier", "")
-	if ov == "" {
-		logger.Warn("oauth verifier should be not empty")
-		c.Redirect(http.StatusFound, h.frontendURL+"/callback")
-		return
-	}
-
-	accessToken, err := h.twiCli.AuthorizeToken(token, ov)
-	if err != nil {
-		logger.Warn("failed to authorize", logging.Error(err))
-		c.Redirect(http.StatusFound, h.frontendURL+"/callback")
-		return
-	}
-
-	twiUser, err := h.twiCli.AccountVerifyCredentials(accessToken)
-	if err != nil {
-		logger.Warn("failed to get twitter user", logging.Error(err))
-		c.Redirect(http.StatusFound, h.frontendURL+"/callback")
-		return
-	}
-
-	h.mu.Lock()
-	defer h.mu.Unlock()
-	h.accessTokens[twiUser.ID] = accessToken
-	if err := setSessionAndCookie(c, twiUser.ID, h.frontendDomain); err != nil {
-		sendError(errors.Wrap(err, "failed to set session"), c)
-		return
-	}
-	c.Redirect(http.StatusFound, h.frontendURL+"/callback")
-}
-
 func (h *Handler) GetMe(c *gin.Context) {
-	v, ok := c.Get(userIDContextKey)
-	if !ok {
-		sendServiceError(errors.NewUnknown("user id must be set with context"), c)
-		return
-	}
-	userID := v.(string)
-
-	accessToken, ok := h.accessTokens[userID]
-	if !ok {
-		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
+	accessToken := h.getAccessToken(c)
+	if accessToken == nil {
 		return
 	}
 
@@ -115,24 +54,86 @@ func (h *Handler) GetMe(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func (h *Handler) GetTweets(c *gin.Context) {
-	v, ok := c.Get(userIDContextKey)
-	if !ok {
-		sendServiceError(errors.NewUnknown("user id must be set with context"), c)
-		return
-	}
-	userID := v.(string)
-
-	accessToken, ok := h.accessTokens[userID]
-	if !ok {
-		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
+func (h *Handler) GetAwakePeriods(c *gin.Context) {
+	accessToken := h.getAccessToken(c)
+	if accessToken == nil {
 		return
 	}
 
-	tweets, err := h.twiCli.UserTimeLine(accessToken, accessToken.AdditionalData["user_id"])
+	tweets, err := h.getTweets(accessToken)
 	if err != nil {
 		sendError(err, c)
 		return
 	}
-	c.JSON(http.StatusOK, tweets)
+
+	type getAwakePeriodsRes struct {
+		Periods []*period `json:"periods"`
+	}
+
+	c.JSON(http.StatusOK, &getAwakePeriodsRes{Periods: h.calcAwakePeriods(tweets)})
+}
+
+// getTweets gets more than 1000 tweets.
+func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, error) {
+	var allTweets []*twitter.Tweet
+	maxID := ""
+	for {
+		tweets, err := h.twiCli.UserTimeLine(accessToken, accessToken.AdditionalData["screen_name"], maxID)
+		if err != nil {
+			return nil, err
+		}
+		allTweets = append(allTweets, tweets...)
+		if len(allTweets) > 1000 {
+			break
+		}
+		maxID = allTweets[len(allTweets)-1].ID
+	}
+	return allTweets, nil
+}
+
+func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
+	var periods []*period
+	neTime := ts[0]
+	okiTime := ts[0]
+	lastTweetTime := ts[0]
+
+	for _, t := range ts[1:] {
+		if h.containExcludeWord(t.Text) {
+			continue
+		}
+
+		durationBetweenTweets := lastTweetTime.Created.Sub(t.Created)
+		if durationBetweenTweets < awakeThreshold {
+			okiTime = t
+			lastTweetTime = t
+			continue
+		}
+
+		if okiTime != neTime {
+			periods = append(periods, &period{
+				OkiTime: okiTime,
+				NeTime:  neTime,
+			})
+		}
+
+		neTime = t
+		lastTweetTime = t
+	}
+
+	return periods
+}
+
+func (h *Handler) containExcludeWord(text string) bool {
+	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "#contributter_report"}
+	for _, word := range excludeWords {
+		if strings.Contains(text, word) {
+			return true
+		}
+	}
+	return false
+}
+
+type period struct {
+	OkiTime *twitter.Tweet `json:"okiTime"`
+	NeTime  *twitter.Tweet `json:"neTime"`
 }

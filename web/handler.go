@@ -21,6 +21,7 @@ const (
 	awakeThreshold = 3*time.Hour + 30*time.Minute
 )
 
+// Handler ia HTTP handler.
 type Handler struct {
 	twiCli         twitter.Client
 	frontendURL    string
@@ -29,6 +30,7 @@ type Handler struct {
 	mu             sync.Mutex
 }
 
+// NewHandler returns a new struct of Handler.
 func NewHandler(twiCli twitter.Client, frontendURL string, frontendDomain string) *Handler {
 	return &Handler{
 		twiCli:         twiCli,
@@ -39,6 +41,7 @@ func NewHandler(twiCli twitter.Client, frontendURL string, frontendDomain string
 	}
 }
 
+// GetMe gets my profile.
 func (h *Handler) GetMe(c *gin.Context) {
 	accessToken := h.getAccessToken(c)
 	if accessToken == nil {
@@ -54,6 +57,7 @@ func (h *Handler) GetMe(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// GetAwakePeriods gets awake periods from tweets.
 func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	accessToken := h.getAccessToken(c)
 	if accessToken == nil {

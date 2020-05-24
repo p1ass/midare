@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/p1ass/seikatsu-syukan-midare/web"
+	"github.com/p1ass/midare/web"
 
-	"github.com/p1ass/seikatsu-syukan-midare/lib/logging"
+	"github.com/p1ass/midare/lib/logging"
 
-	"github.com/p1ass/seikatsu-syukan-midare/twitter"
+	"github.com/p1ass/midare/twitter"
 )
 
 func main() {

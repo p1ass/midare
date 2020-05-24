@@ -8,7 +8,7 @@ import (
 
 	"github.com/mrjones/oauth"
 
-	"github.com/p1ass/seikatsu-syukan-midare/twitter"
+	"github.com/p1ass/midare/twitter"
 
 	"github.com/gin-gonic/gin"
 )
@@ -128,7 +128,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 }
 
 func (h *Handler) containExcludeWord(text string) bool {
-	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "#contributter_report"}
+	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数："}
 	for _, word := range excludeWords {
 		if strings.Contains(text, word) {
 			return true

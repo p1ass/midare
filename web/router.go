@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/p1ass/seikatsu-syukan-midare/lib/logging"
+	"github.com/p1ass/midare/lib/logging"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"

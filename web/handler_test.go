@@ -22,6 +22,11 @@ func TestHandler_containExcludeWord(t *testing.T) {
 			text: "p1ass さんの 2020/05/23 の contribution 数: 22\n #contributter_report",
 			want: true,
 		},
+		{
+			name: "@uzimaru0000 05-24のポスト数：24 (うちRT：0)",
+			text: "@uzimaru0000 05-24のポスト数：24 (うちRT：0)",
+			want: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/mrjones/oauth"
-	"github.com/p1ass/seikatsu-syukan-midare/lib/errors"
+	"github.com/p1ass/midare/lib/errors"
 )
 
 const (

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/p1ass/seikatsu-syukan-midare/lib/crypto"
-	"github.com/p1ass/seikatsu-syukan-midare/lib/errors"
+	"github.com/p1ass/midare/lib/crypto"
+	"github.com/p1ass/midare/lib/errors"
 )
 
 func setSessionAndCookie(c *gin.Context, userID string, frontendDomain string) error {

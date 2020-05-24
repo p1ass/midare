@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/p1ass/seikatsu-syukan-midare/lib/errors"
-	"github.com/p1ass/seikatsu-syukan-midare/lib/logging"
+	"github.com/p1ass/midare/lib/errors"
+	"github.com/p1ass/midare/lib/logging"
 )
 
 func sendError(err error, c *gin.Context) {

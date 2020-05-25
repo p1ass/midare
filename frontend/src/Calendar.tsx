@@ -4,7 +4,9 @@ type Time = {
   hour: string
   min: string
 }
-const members = ['taro', 'jiro', 'hanako']
+const members = Array.from({ length: 30 }, (_, i) => {
+  return i + 1
+}).map((i) => `May${i}`)
 
 const rows = members
 
@@ -20,27 +22,33 @@ const rangeTimes = (start = 6, hours = 24): Time[] => {
 }
 
 const times = rangeTimes()
-const rowTemplate = ['[t-header]']
+const columnTemplate = ['[t-header]']
   .concat(times.map((time) => `[t-${time.hour}${time.min}]`))
   .join(' 0.3fr ')
+
+const rowTemplate = rows.map((row) => `[${row}] 1fr `)
 
 const Grid = styled.div`
   display: grid;
   background: white;
   box-sizing: border-box;
-  grid-template-rows: [time] 0.5fr [taro] 1fr [jiro] 1fr [hanako] 1fr;
-  grid-template-columns: ${rowTemplate};
+  margin: 16px;
+  grid-template-rows: ${rowTemplate};
+  grid-template-columns: ${columnTemplate};
 `
 
-const Area = styled.div<{ column: string; rowStart: string; rowEnd?: string }>`
-  grid-row: ${({ column }) => column};
-  grid-column: ${({ rowStart, rowEnd }) => {
-    if (rowEnd) {
-      return `t-${rowStart} / t-${rowEnd}`
-    }
-    return `t-${rowStart}`
-  }};
-`
+interface AreaProps {
+  row: string
+  colStart: string
+  colEnd?: string
+}
+
+const Area = styled.div.attrs<AreaProps>(({ row, colStart, colEnd }) => ({
+  style: {
+    gridRow: row,
+    gridColumn: colEnd ? `t-${colStart} / t-${colEnd}` : `t-${colStart}`,
+  },
+}))<AreaProps>``
 
 // @ts-ignore
 const flatten = (item) => item.reduce((a, b) => a.concat(b), [])
@@ -53,9 +61,9 @@ const Border = styled(Area)`
 `
 
 const Borders = () => {
-  const elms = rows.map((column) => {
+  const elms = rows.map((row) => {
     return times.map((time, i) => (
-      <Border column={column} rowStart={`${time.hour}${time.min}`} key={`${column}-${i}`} />
+      <Border row={row} colStart={`${time.hour}${time.min}`} key={`${row}-${i}`} />
     ))
   })
   return flatten(elms)
@@ -67,7 +75,6 @@ const Time = styled(Area)`
 
 const ScheduleBlock = styled(Area)`
   background: #429bf4;
-  /* border: 1px solid #2b293f; */
   border-radius: 10px;
   font-weight: bold;
   padding: 1em;
@@ -77,19 +84,20 @@ const ScheduleBlock = styled(Area)`
 `
 
 const Schedule: SFC<{ start: string; end: string; name: string }> = ({ start, end, name }) => {
-  return <ScheduleBlock rowStart={start} rowEnd={end} column={name}></ScheduleBlock>
+  return <ScheduleBlock colStart={start} colEnd={end} row={name}></ScheduleBlock>
 }
 
 const HeaderCell = styled(Area)`
   text-align: center;
   height: 100%;
+  padding: 0 8px;
 `
 const Headers = () => {
   return (
     <>
       {members.map((member) => {
         return (
-          <HeaderCell column={member} rowStart={'header'}>
+          <HeaderCell row={member} colStart={'header'} key={member}>
             <p>{member}</p>
           </HeaderCell>
         )
@@ -104,11 +112,9 @@ export const Timetable = () => {
       <Borders />
       <Headers />
 
-      <Schedule name="taro" start={'0830'} end={'0900'}></Schedule>
-      <Schedule name="taro" start={'1300'} end={'2700'}></Schedule>
-      <Schedule name="hanako" start={'1130'} end={'1500'}></Schedule>
-      <Schedule name="jiro" start={'1230'} end={'1600'}></Schedule>
-      <Schedule name="hanako" start={'1030'} end={'1400'}></Schedule>
+      <Schedule name="May21" start={'1000'} end={'2600'}></Schedule>
+      <Schedule name="May22" start={'1130'} end={'2630'}></Schedule>
+      <Schedule name="May23" start={'1300'} end={'2630'}></Schedule>
     </Grid>
   )
 }

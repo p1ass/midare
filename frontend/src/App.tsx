@@ -1,58 +1,53 @@
 import React from 'react'
-import logo from './logo.svg'
-import './App.css'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
+import { Timetable } from './Calendar'
 
 const Wrapper = styled.div`
-  text-align: center;
-`
-
-const Header = styled.div`
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  color: #333;
 `
 
-const AppLink = styled.a`
-  color: #61dafb;
+const template = `
+"avatar name name .    .    menu"
+".      body body body body body"
+".      com  like rt   .    ."
 `
 
-const LogoSpin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+const GridLayout = styled.div`
+  display: grid;
+  grid-template: ${template};
+  padding: 0.5em;
+  margin: 1em;
+  grid-gap: 0.2em;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  align-content: center;
+  font-size: 1em;
 `
 
-const Logo = styled.img`
-  height: 40vmin;
-  pointer-events: none;
-
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${LogoSpin} infinite 20s linear;
-  }
+const Area = styled.div<{ area: string }>`
+  grid-column: ${(props) => props.area};
+  align-self: center;
 `
+
+const Avatar = styled.img`
+  width: 48px;
+`
+
+const Name = styled.div`
+  margin: 0;
+`
+
+const Body = styled.p``
 
 export function App() {
   return (
     <Wrapper>
-      <Header>
-        <Logo src={logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <AppLink href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </AppLink>
-      </Header>
+      <Timetable></Timetable>
     </Wrapper>
   )
 }

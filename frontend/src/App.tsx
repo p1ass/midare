@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Timetable } from './Calendar'
+import { Calendar } from './Calendar'
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 export function App() {
   return (
     <Wrapper>
-      <Timetable></Timetable>
+      <Calendar></Calendar>
     </Wrapper>
   )
 }

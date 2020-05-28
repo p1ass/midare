@@ -98,42 +98,45 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 
 func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 	var periods []*period
-	var neTime *twitter.Tweet
-	var okiTime *twitter.Tweet
-	var lastTweetTime *twitter.Tweet
-	for _, t := range ts {
+	var neTweet *twitter.Tweet
+	var okiTweet *twitter.Tweet
+	var lastTweet *twitter.Tweet
+	startIdx := 1
+	for i, t := range ts {
 		if !h.containExcludeWord(t.Text) {
-			neTime = t
-			okiTime = t
-			lastTweetTime = t
+			neTweet = t
+			okiTweet = t
+			lastTweet = t
+			startIdx = i + 1
 			break
 		}
 	}
-	if neTime == nil {
+	if neTweet == nil {
 		return nil
 	}
 
-	for _, t := range ts[1:] {
+	for _, t := range ts[startIdx:] {
 		if h.containExcludeWord(t.Text) {
 			continue
 		}
 
-		durationBetweenTweets := lastTweetTime.Created.Sub(t.Created)
+		durationBetweenTweets := lastTweet.Created.Sub(t.Created)
 		if durationBetweenTweets < awakeThreshold {
-			okiTime = t
-			lastTweetTime = t
+			okiTweet = t
+			lastTweet = t
 			continue
 		}
 
-		if okiTime != neTime {
+		if okiTweet != neTweet {
 			periods = append(periods, &period{
-				OkiTime: okiTime,
-				NeTime:  neTime,
+				OkiTime: okiTweet,
+				NeTime:  neTweet,
 			})
 		}
 
-		neTime = t
-		lastTweetTime = t
+		okiTweet = t
+		neTweet = t
+		lastTweet = t
 	}
 
 	return periods

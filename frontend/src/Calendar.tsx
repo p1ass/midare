@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import dayjs from 'dayjs'
 
 import { rangeTimes } from './Time'
+import { Times } from './Times'
 import { Borders } from './Borders'
 import { AwakeSchedule } from './AwakeSchedule'
 import { DateHeaders } from './DateHeaders'
@@ -43,7 +44,7 @@ const columnTemplate =
   '[t-header] 5fr ' +
   timesPerHalfHour.map((time) => `[t-${time.hour}${time.min}]`).join(' 0.5fr ') +
   ' 0.5fr '
-const rowTemplate = dateLabels.map((dateText) => `[${dateText}] 0.5fr `)
+const rowTemplate = ['time'].concat(dateLabels).map((dateText) => `[${dateText}] 0.5fr `)
 
 const Grid = styled.div`
   display: grid;
@@ -123,6 +124,7 @@ export const Calendar = () => {
     <Grid>
       <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
       <DateHeaders dateTexts={dateTexts} />
+      <Times></Times>
       {periods.map((period, idx) => {
         const neTimeTruncate = period.neTime.createdAt.startOf('hour')
         return (

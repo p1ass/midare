@@ -21,7 +21,7 @@ interface DateHeadersProps {
 export const DateHeaders = ({ dateTexts }: DateHeadersProps) => {
   return (
     <>
-      {dateTexts.map((dateText) => {
+      {[''].concat(dateTexts).map((dateText) => {
         return (
           <HeaderCell row={dateText} colStart={'header'} key={dateText}>
             <DateText>{dateText}</DateText>

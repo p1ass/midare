@@ -11,8 +11,6 @@ import { DateHeaders } from './DateHeaders'
 import { getPeriods, Period } from './api/client'
 
 const getDaysBetweenLatestAndOldest = (oldestDate: dayjs.Dayjs, latestDate: dayjs.Dayjs) => {
-  console.log(oldestDate)
-  console.log(latestDate)
   const truncateOldestDate = oldestDate.startOf('date')
   const daysBetweenLatestAndOldest: dayjs.Dayjs[] = [truncateOldestDate]
 
@@ -95,7 +93,7 @@ const splitPeriodsAtMidnight = (periods: Period[]) => {
 }
 
 export const Calendar = () => {
-  const [periods, setPeriods] = useState(new Array<AwakePeriod>())
+  const [awakePeriods, setAwakePeriods] = useState(new Array<AwakePeriod>())
   const [dateTexts, setDateTexts] = useState(new Array<string>())
   const [dateLabels, setDateLabels] = useState(new Array<string>())
   const [rowTemplate, setRowTemplate] = useState(new Array<string>())
@@ -104,7 +102,7 @@ export const Calendar = () => {
     const getPeriodsAsync = async () => {
       const res = await getPeriods()
       const awakePeriods = splitPeriodsAtMidnight(res.periods)
-      setPeriods(awakePeriods)
+      setAwakePeriods(awakePeriods)
 
       const dates = getDaysBetweenLatestAndOldest(
         awakePeriods[awakePeriods.length - 1].neTime.createdAt,
@@ -132,12 +130,12 @@ export const Calendar = () => {
       <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
       <DateHeaders dateTexts={dateTexts} />
       <Times></Times>
-      {periods.map((period, idx) => {
-        const neTimeTruncate = period.neTime.createdAt.startOf('hour')
+      {awakePeriods.map((awakePeriod, idx) => {
+        const neTimeTruncate = awakePeriod.neTime.createdAt.startOf('hour')
         return (
           <AwakeSchedule
-            name={period.okiTime.createdAt.format('MMMMDD')}
-            start={period.okiTime.createdAt.startOf('hour').format('HHmm')}
+            name={awakePeriod.okiTime.createdAt.format('MMMMDD')}
+            start={awakePeriod.okiTime.createdAt.startOf('hour').format('HHmm')}
             end={
               neTimeTruncate.hour() === 0
                 ? '24'

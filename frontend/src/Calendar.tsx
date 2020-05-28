@@ -31,6 +31,9 @@ const Grid = styled.div<{ rowTemplate: string[] }>`
   border: 1px solid #ccc;
 `
 
+// TODO : 時間の四捨五入をしっかりする
+// TODO : 3時間半時間が空いていないところがあるのでチェック
+
 export const Calendar = () => {
   const [awakePeriods, setAwakePeriods] = useState(new Array<AwakePeriod>())
   const [dateTexts, setDateTexts] = useState(new Array<string>())

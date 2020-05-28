@@ -32,12 +32,13 @@ export const AwakeSchedules = ({ awakePeriods }: AwakeSchedulesProps) => {
     <>
       {awakePeriods.map((awakePeriod, idx) => {
         const neTimeTruncate = awakePeriod.neTime.createdAt.startOf('hour')
+        const okiTimeTrunate = awakePeriod.okiTime.createdAt.startOf('hour')
         return (
           <AwakeSchedule
             name={awakePeriod.okiTime.createdAt.format('MMMMDD')}
-            start={awakePeriod.okiTime.createdAt.startOf('hour').format('HHmm')}
+            start={okiTimeTrunate.format('HHmm')}
             end={
-              neTimeTruncate.hour() === 0
+              neTimeTruncate.hour() === 0 && okiTimeTrunate.hour() !== 0
                 ? '2400'
                 : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
             }

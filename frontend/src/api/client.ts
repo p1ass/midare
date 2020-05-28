@@ -35,12 +35,10 @@ export const getLoginUrl = () => {
 
 export const getMe = async () => {
   const res = await instance.get<GetMeResponse>('/me')
-  console.log(res.data)
   return res.data
 }
 
 export const getPeriods = async () => {
   const res = await instance.get<GetPeriodsResponse>('/periods')
-  console.log(res.data)
   return res.data
 }

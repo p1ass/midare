@@ -38,7 +38,7 @@ export const AwakeSchedules = ({ awakePeriods }: AwakeSchedulesProps) => {
             start={awakePeriod.okiTime.createdAt.startOf('hour').format('HHmm')}
             end={
               neTimeTruncate.hour() === 0
-                ? '24'
+                ? '2400'
                 : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
             }
             key={idx}

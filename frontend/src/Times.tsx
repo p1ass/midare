@@ -13,15 +13,13 @@ const Hour = styled(Area)`
 export const Times = () => {
   return (
     <>
-      {rangeTimes()
-        // .filter((time) => time.min === '00')
-        .map((time, i) => {
-          return (
-            <Hour colStart={`${time.hour}${time.min}`} row={'time'} key={i.toString()}>
-              {time.min === '00' ? time.hour : ''}
-            </Hour>
-          )
-        })}
+      {rangeTimes().map((time, i) => {
+        return (
+          <Hour colStart={`${time.hour}${time.min}`} row={'time'} key={i.toString()}>
+            {time.min === '00' ? time.hour : ''}
+          </Hour>
+        )
+      })}
     </>
   )
 }

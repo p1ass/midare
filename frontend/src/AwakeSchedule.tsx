@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import dayjs from 'dayjs'
 import { Area } from './Area'
 import { AwakePeriod } from './AwakePeriods'
 
@@ -8,7 +9,7 @@ const ScheduleBlock = styled(Area)`
   border-radius: 4px;
   font-weight: bold;
   padding: 1em;
-  margin: 0.1em 0.5em;
+  margin: 0.1em 0;
   color: #eee;
   font-size: 0.5rem;
 `
@@ -27,18 +28,28 @@ interface AwakeSchedulesProps {
   awakePeriods: AwakePeriod[]
 }
 
+const truncateDate = (date: dayjs.Dayjs) => {
+  if (date.minute() < 15) {
+    return date.startOf('hour')
+  }
+  if (date.minute() >= 15 && date.minute() < 45) {
+    return date.startOf('hour').add(30, 'minute')
+  }
+  return date.add(1, 'hour').startOf('hour')
+}
+
 export const AwakeSchedules = ({ awakePeriods }: AwakeSchedulesProps) => {
   return (
     <>
       {awakePeriods.map((awakePeriod, idx) => {
-        const neTimeTruncate = awakePeriod.neTime.createdAt.startOf('hour')
-        const okiTimeTrunate = awakePeriod.okiTime.createdAt.startOf('hour')
+        const okiTimeTrunate = truncateDate(awakePeriod.okiTime.createdAt)
+        const neTimeTruncate = truncateDate(awakePeriod.neTime.createdAt)
         return (
           <AwakeSchedule
-            name={awakePeriod.okiTime.createdAt.format('MMMMDD')}
+            name={okiTimeTrunate.format('MMMMDD')}
             start={okiTimeTrunate.format('HHmm')}
             end={
-              neTimeTruncate.hour() === 0 && okiTimeTrunate.hour() !== 0
+              okiTimeTrunate.hour() !== 0 && neTimeTruncate.hour() === 0
                 ? '2400'
                 : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
             }

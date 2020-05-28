@@ -14,12 +14,12 @@ const Border = styled(Area)<{ min: string }>`
 `
 
 interface BordersProps {
-  dateTexts: string[]
+  dateLabels: string[]
   timesPerHalfHour: Time[]
 }
 
-export const Borders = ({ dateTexts, timesPerHalfHour }: BordersProps) => {
-  const elms = dateTexts.map((dateText) => {
+export const Borders = ({ dateLabels, timesPerHalfHour }: BordersProps) => {
+  const elms = dateLabels.map((dateText) => {
     return timesPerHalfHour.map((time, i) => (
       <Border
         row={dateText}

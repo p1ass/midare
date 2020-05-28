@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { Area } from './Area'
 
 const HeaderCell = styled(Area)`
-  text-align: center;
   height: 100%;
   padding: 0 8px;
   border-top: solid 1px #ccc;

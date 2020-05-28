@@ -82,6 +82,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 	var allTweets []*twitter.Tweet
 	maxID := ""
 	for {
+		// tweets, err := h.twiCli.UserTimeLine(accessToken, "uzimaru0000", maxID)
 		tweets, err := h.twiCli.UserTimeLine(accessToken, accessToken.AdditionalData["screen_name"], maxID)
 		if err != nil {
 			return nil, err

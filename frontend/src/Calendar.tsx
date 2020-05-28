@@ -44,8 +44,8 @@ export const Calendar = () => {
       setAwakePeriods(awakePeriods)
 
       const dates = getDatesBetweenLatestAndOldest(
-        awakePeriods[awakePeriods.length - 1].neTime.createdAt,
-        awakePeriods[0].okiTime.createdAt
+        awakePeriods[awakePeriods.length - 1].okiTime.createdAt,
+        awakePeriods[0].neTime.createdAt
       )
 
       const dateLabels = dates.map((date) => {

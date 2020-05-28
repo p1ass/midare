@@ -98,9 +98,20 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 
 func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 	var periods []*period
-	neTime := ts[0]
-	okiTime := ts[0]
-	lastTweetTime := ts[0]
+	var neTime *twitter.Tweet
+	var okiTime *twitter.Tweet
+	var lastTweetTime *twitter.Tweet
+	for _, t := range ts {
+		if !h.containExcludeWord(t.Text) {
+			neTime = t
+			okiTime = t
+			lastTweetTime = t
+			break
+		}
+	}
+	if neTime == nil {
+		return nil
+	}
 
 	for _, t := range ts[1:] {
 		if h.containExcludeWord(t.Text) {
@@ -129,7 +140,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 }
 
 func (h *Handler) containExcludeWord(text string) bool {
-	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数："}
+	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数"}
 	for _, word := range excludeWords {
 		if strings.Contains(text, word) {
 			return true

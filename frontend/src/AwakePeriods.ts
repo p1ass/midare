@@ -11,7 +11,7 @@ export type AwakePeriod = {
   neTime: Tweet
 }
 
-const splidPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: dayjs.Dayjs) => {
+const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: dayjs.Dayjs) => {
   const awakePeriods: AwakePeriod[] = []
   let dividedTime = okiDate.add(1, 'date').startOf('date')
   while (!netaDate.isSame(dividedTime, 'date')) {
@@ -40,8 +40,8 @@ export const convertPeriodsToAwakePeriods = (periods: Period[]) => {
         neTime: { text: period.neTime.text, createdAt: netaDate },
       })
     } else {
-      const divided = splidPeriodAtMidnight(period, okiDate, netaDate)
-      awakePeriods = awakePeriods.concat(divided)
+      const divided = splitPeriodAtMidnight(period, okiDate, netaDate)
+      awakePeriods = awakePeriods.concat(divided.reverse())
     }
   }
 

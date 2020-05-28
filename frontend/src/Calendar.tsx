@@ -10,12 +10,9 @@ import { DateHeaders } from './DateHeaders'
 
 import { getPeriods, Period } from './api/client'
 
-const oldestDate = dayjs('2020-05-02T16:00:00.000+09:00')
-const latestDate = dayjs('2020-05-30T16:00:00.000+09:00')
-console.log(latestDate.format())
-console.log(oldestDate.format())
-
 const getDaysBetweenLatestAndOldest = (oldestDate: dayjs.Dayjs, latestDate: dayjs.Dayjs) => {
+  console.log(oldestDate)
+  console.log(latestDate)
   const truncateOldestDate = oldestDate.startOf('date')
   const daysBetweenLatestAndOldest: dayjs.Dayjs[] = [truncateOldestDate]
 
@@ -29,29 +26,19 @@ const getDaysBetweenLatestAndOldest = (oldestDate: dayjs.Dayjs, latestDate: dayj
   return daysBetweenLatestAndOldest
 }
 
-const dates = getDaysBetweenLatestAndOldest(oldestDate, latestDate)
-
-const dateLabels = dates.map((date) => {
-  return date.format('MMMMDD')
-})
-const dateTexts = dates.map((date) => {
-  return date.format('MM/DD (dd)')
-})
-
 const timesPerHalfHour = rangeTimes()
 
 const columnTemplate =
   '[t-header] 5fr ' +
   timesPerHalfHour.map((time) => `[t-${time.hour}${time.min}]`).join(' 0.5fr ') +
   ' 0.5fr '
-const rowTemplate = ['time'].concat(dateLabels).map((dateText) => `[${dateText}] 0.5fr `)
 
-const Grid = styled.div`
+const Grid = styled.div<{ rowTemplate: string[] }>`
   display: grid;
   background: white;
   box-sizing: border-box;
   margin: 16px;
-  grid-template-rows: ${rowTemplate};
+  grid-template-rows: ${({ rowTemplate }) => rowTemplate};
   grid-template-columns: ${columnTemplate};
   border: 1px solid #ccc;
 `
@@ -109,19 +96,39 @@ const splitPeriodsAtMidnight = (periods: Period[]) => {
 
 export const Calendar = () => {
   const [periods, setPeriods] = useState(new Array<AwakePeriod>())
+  const [dateTexts, setDateTexts] = useState(new Array<string>())
+  const [dateLabels, setDateLabels] = useState(new Array<string>())
+  const [rowTemplate, setRowTemplate] = useState(new Array<string>())
 
   useEffect(() => {
-    const set = async () => {
+    const getPeriodsAsync = async () => {
       const res = await getPeriods()
       const awakePeriods = splitPeriodsAtMidnight(res.periods)
       setPeriods(awakePeriods)
-      console.log(awakePeriods)
+
+      const dates = getDaysBetweenLatestAndOldest(
+        awakePeriods[awakePeriods.length - 1].neTime.createdAt,
+        awakePeriods[0].okiTime.createdAt
+      )
+
+      const dateLabels = dates.map((date) => {
+        return date.format('MMMMDD')
+      })
+      setDateLabels(dateLabels)
+
+      const dateTexts = dates.map((date) => {
+        return date.format('MM/DD (dd)')
+      })
+      setDateTexts(dateTexts)
+
+      const rowTemplate = ['time'].concat(dateLabels).map((dateLabel) => `[${dateLabel}] 0.5fr `)
+      setRowTemplate(rowTemplate)
     }
-    set()
+    getPeriodsAsync()
   }, [])
 
   return (
-    <Grid>
+    <Grid rowTemplate={rowTemplate}>
       <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
       <DateHeaders dateTexts={dateTexts} />
       <Times></Times>

@@ -45,7 +45,7 @@ export function App() {
       <Header></Header>
       <Container>
         <FlexContainer>
-          <h1>生活習慣の乱れを可視化するやつ for ツイ廃</h1>
+          <h1>生活習慣の乱れを可視化するやつ</h1>
           {!user ? <ButtonTwitterLogin></ButtonTwitterLogin> : <Calendar />}
           <Description></Description>
         </FlexContainer>

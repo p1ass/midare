@@ -17,7 +17,7 @@ const Title = styled.span`
 export const Header = () => {
   return (
     <HeaderWrapper>
-      <Title>生活習慣の乱れを可視化するやつ for ツイ廃</Title>
+      <Title>生活習慣の乱れを可視化するやつ</Title>
     </HeaderWrapper>
   )
 }

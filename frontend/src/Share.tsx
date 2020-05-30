@@ -16,7 +16,7 @@ export const Share = () => {
   return (
     <ShareWrapper>
       <ShareButton
-        href="http://twitter.com/intent/tweet?url=https%3A%2F%2Fmidare.p1ass.com&text=生活習慣の乱れを可視化するやつ for ツイ廃"
+        href="http://twitter.com/intent/tweet?url=https%3A%2F%2Fmidare.p1ass.com&text=生活習慣の乱れを可視化するやつ"
         target="_blank"
         rel="noopener noreferrer"
         title="Tweet"
@@ -25,7 +25,7 @@ export const Share = () => {
       </ShareButton>
 
       <ShareButton
-        href="http://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmidare.p1ass.com&t=生活習慣の乱れを可視化するやつ for ツイ廃 - ぷらすのブログ"
+        href="http://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fmidare.p1ass.com&t=生活習慣の乱れを可視化するやつ - ぷらすのブログ"
         target="_blank"
         rel="noopener noreferrer"
         title="Facebook"

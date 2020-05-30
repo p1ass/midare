@@ -27,7 +27,7 @@ jobs:
         env:
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_IP: ${{ secrets.SSH_IP }}
-          SSH_PORT: ${{ secrets.SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
       - name: Check out
         uses: actions/checkout@v1
       - name: Deploy

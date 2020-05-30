@@ -10,6 +10,7 @@ import (
 
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/lib/errors"
+	"github.com/patrickmn/go-cache"
 )
 
 const (
@@ -28,6 +29,7 @@ type client struct {
 	callbackURL   string
 	requestTokens map[string]*oauth.RequestToken
 	mu            sync.Mutex
+	tweetCache    *cache.Cache
 }
 
 func newClient(consumerKey, consumerSecret, callbackURL string) *client {
@@ -44,6 +46,7 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 		callbackURL:   callbackURL,
 		requestTokens: map[string]*oauth.RequestToken{},
 		mu:            sync.Mutex{},
+		tweetCache:    cache.New(15*time.Minute, 15*time.Minute),
 	}
 }
 
@@ -117,6 +120,11 @@ func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, er
 }
 
 func (cli *client) UserTimeLine(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error) {
+	cached, ok := cli.tweetCache.Get(screenName + maxID)
+	if ok {
+		return cached.([]*Tweet), nil
+	}
+
 	httpCli, err := cli.httpClient(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make http client")
@@ -152,7 +160,9 @@ func (cli *client) UserTimeLine(token *oauth.AccessToken, screenName, maxID stri
 		return nil, errors.Wrap(err, "failed to decode twitter api response")
 	}
 
-	return cli.toTweets(res), nil
+	tweets := cli.toTweets(res)
+	cli.tweetCache.SetDefault(screenName+maxID, tweets)
+	return tweets, nil
 }
 
 // httpClient make *http.Client using access token

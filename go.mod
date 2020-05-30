@@ -11,6 +11,7 @@ require (
 	github.com/google/go-cmp v0.4.0
 	github.com/google/uuid v1.1.1
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/tommy351/zap-stackdriver v0.1.3
 	go.uber.org/zap v1.15.0

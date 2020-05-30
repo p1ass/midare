@@ -13,7 +13,7 @@ import { Borders } from './Borders'
 import { AwakeSchedules } from './AwakeSchedule'
 import { DateHeaders } from './DateHeaders'
 
-import { getLoginUrl, getPeriods } from './api/client'
+import { getPeriods } from './api/client'
 
 const timesPerHalfHour = rangeTimes()
 const columnTemplate =
@@ -70,13 +70,16 @@ export const Calendar = () => {
 
   return (
     <>
-      <a href={getLoginUrl()}>ログイン</a>
-      <Grid rowTemplate={rowTemplate}>
-        <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
-        <DateHeaders dateTexts={dateTexts} />
-        <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
-        <Times></Times>
-      </Grid>
+      {rowTemplate.length !== 0 ? (
+        <Grid rowTemplate={rowTemplate}>
+          <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
+          <DateHeaders dateTexts={dateTexts} />
+          <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
+          <Times></Times>
+        </Grid>
+      ) : (
+        <p>Now Loading...</p>
+      )}
     </>
   )
 }

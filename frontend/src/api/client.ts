@@ -18,7 +18,7 @@ export interface Period {
   neTime: Tweet
 }
 
-interface GetMeResponse {
+export interface User {
   id: string
   name: string
   screenName: string
@@ -34,7 +34,7 @@ export const getLoginUrl = () => {
 }
 
 export const getMe = async () => {
-  const res = await instance.get<GetMeResponse>('/me')
+  const res = await instance.get<User>('/me')
   return res.data
 }
 

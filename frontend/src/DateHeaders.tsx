@@ -12,6 +12,12 @@ const HeaderCell = styled(Area)`
 const DateText = styled.p`
   margin: 0.2rem;
   font-size: 0.9rem;
+  @media (max-width: 60rem) {
+    font-size: 0.7rem;
+  }
+  @media (max-width: 40rem) {
+    font-size: 0.4rem;
+  }
 `
 
 interface DateHeadersProps {

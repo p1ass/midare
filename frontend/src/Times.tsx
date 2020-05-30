@@ -8,6 +8,14 @@ const Hour = styled(Area)`
   margin: 4px 0;
   font-size: 1rem;
   min-width: 1rem;
+  @media (max-width: 60rem) {
+    font-size: 0.7rem;
+    min-width: 0.7rem;
+  }
+  @media (max-width: 40rem) {
+    font-size: 0.4rem;
+    min-width: 0.4rem;
+  }
 `
 
 export const Times = () => {

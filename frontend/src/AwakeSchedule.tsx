@@ -8,8 +8,7 @@ const ScheduleBlock = styled(Area)`
   background: rgb(88, 149, 98);
   border-radius: 4px;
   font-weight: bold;
-  padding: 1em;
-  margin: 0.1em 0;
+  margin: 0.1rem 0;
   color: #eee;
   font-size: 0.5rem;
 `

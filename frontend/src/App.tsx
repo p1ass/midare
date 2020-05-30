@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Calendar } from './Calendar'
 import { Header } from './Header'
+import { Footer } from './Footer'
 import { ButtonTwitterLogin } from './ButtonTwitterLogin'
+import { Description } from './Description'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
@@ -16,6 +18,12 @@ const FlexContainer = styled.div`
   align-items: center;
   justify-content: center;
   color: #333;
+  margin: 0 1rem;
+`
+
+const Container = styled.div`
+  max-width: 1000px;
+  margin: 0 auto;
 `
 
 export function App() {
@@ -35,9 +43,14 @@ export function App() {
   return (
     <>
       <Header></Header>
-      <FlexContainer>
-        {user === null ? <ButtonTwitterLogin></ButtonTwitterLogin> : <Calendar />}
-      </FlexContainer>
+      <Container>
+        <FlexContainer>
+          <h1>生活習慣の乱れを可視化するやつ for ツイ廃</h1>
+          {!user ? <ButtonTwitterLogin></ButtonTwitterLogin> : <Calendar />}
+          <Description></Description>
+        </FlexContainer>
+      </Container>
+      <Footer></Footer>
     </>
   )
 }

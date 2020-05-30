@@ -3,17 +3,11 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getLoginUrl } from './api/client'
 
-const TwitterButton = styled.a`
+import { ButtonBase } from './ButtonBase'
+
+const TwitterButton = styled(ButtonBase)`
   background-color: #00acee;
   color: white;
-  padding: 1rem;
-  margin-top: 1rem;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  font-weight: bold;
-  &:visited {
-    color: white;
-  }
 `
 
 export const ButtonTwitterLogin = () => {

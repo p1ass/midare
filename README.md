@@ -11,6 +11,10 @@ TBD
 
 TBD
 
+## ブログ
+
+TBD
+
 ## Getting Started
 
 1. [Twitter Developer](https://developer.twitter.com/en) でアプリを作成して、Consumer KeyとConsumer Secretを取得。

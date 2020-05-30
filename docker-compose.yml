@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  midare:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: midare
+    restart: always
+    env_file:
+      - .env.prod
+    environment:
+      - TWITTER_CONSUMER_KEY=${TWITTER_CONSUMER_KEY}
+      - TWITTER_CONSUMER_SECRET=${TWITTER_CONSUMER_SECRET}
+    networks:
+      - caddy-network
+networks:
+  caddy-network:
+    external: true

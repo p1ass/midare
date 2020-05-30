@@ -119,7 +119,7 @@ func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, er
 	return twiUser, nil
 }
 
-func (cli *client) UserTimeLine(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error) {
+func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error) {
 	cached, ok := cli.tweetCache.Get(screenName + maxID)
 	if ok {
 		return cached.([]*Tweet), nil

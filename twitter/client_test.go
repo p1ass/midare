@@ -7,11 +7,10 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-
 	"github.com/mrjones/oauth"
 )
 
-func Test_client_UserTimeLine(t *testing.T) {
+func Test_client_GetUserTweets(t *testing.T) {
 
 	token := &oauth.AccessToken{
 		Token:          os.Getenv("TWITTER_ACCESS_TOKEN_FOR_TEST"),
@@ -42,13 +41,13 @@ func Test_client_UserTimeLine(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			cli := newClient(os.Getenv("TWITTER_CONSUMER_KEY"), os.Getenv("TWITTER_CONSUMER_SECRET"), "")
-			_, err := cli.UserTimeLine(token, tt.screenName, "")
+			_, err := cli.GetUserTweets(token, tt.screenName, "")
 			if (err != nil) != tt.wantErr {
-				t.Errorf("UserTimeLine() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetUserTweets() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !cmp.Equal(got, tt.want) {
-				t.Errorf("UserTimeLine() diff=%v", cmp.Diff(got, tt.want))
+				t.Errorf("GetUserTweets() diff=%v", cmp.Diff(got, tt.want))
 			}
 		})
 	}

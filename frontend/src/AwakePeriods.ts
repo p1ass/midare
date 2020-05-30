@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { Period } from './api/client'
 
 type Tweet = {
+  id: string
   text: string
   createdAt: dayjs.Dayjs
 }
@@ -16,15 +17,15 @@ const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: d
   let dividedTime = okiDate.add(1, 'date').startOf('date')
   while (!netaDate.isSame(dividedTime, 'date')) {
     awakePeriods.push({
-      okiTime: { text: period.okiTime.text, createdAt: okiDate },
-      neTime: { text: period.neTime.text, createdAt: dividedTime },
+      okiTime: { id: period.okiTime.id, text: period.okiTime.text, createdAt: okiDate },
+      neTime: { id: period.neTime.id, text: period.neTime.text, createdAt: dividedTime },
     })
     okiDate = dividedTime
     dividedTime = dividedTime.add(1, 'day')
   }
   awakePeriods.push({
-    okiTime: { text: period.okiTime.text, createdAt: dividedTime },
-    neTime: { text: period.neTime.text, createdAt: netaDate },
+    okiTime: { id: period.okiTime.id, text: period.okiTime.text, createdAt: dividedTime },
+    neTime: { id: period.neTime.id, text: period.neTime.text, createdAt: netaDate },
   })
   return awakePeriods
 }
@@ -36,8 +37,8 @@ export const convertPeriodsToAwakePeriods = (periods: Period[]) => {
     const netaDate = dayjs(period.neTime.createdAt)
     if (okiDate.isSame(netaDate, 'day')) {
       awakePeriods.push({
-        okiTime: { text: period.okiTime.text, createdAt: okiDate },
-        neTime: { text: period.neTime.text, createdAt: netaDate },
+        okiTime: { id: period.okiTime.id, text: period.okiTime.text, createdAt: okiDate },
+        neTime: { id: period.neTime.id, text: period.neTime.text, createdAt: netaDate },
       })
     } else {
       const divided = splitPeriodAtMidnight(period, okiDate, netaDate)

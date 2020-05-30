@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
+import Modal from 'react-modal'
+
 import { Area } from './Area'
 import { AwakePeriod } from './AwakePeriods'
 
@@ -11,16 +13,60 @@ const ScheduleBlock = styled(Area)`
   margin: 0.1rem 0;
   color: #eee;
   font-size: 0.5rem;
+  cursor: pointer;
 `
 
 interface AwakeScheduleProps {
-  start: string
-  end: string
-  name: string
+  awakePeriod: AwakePeriod
 }
 
-const AwakeSchedule = ({ start, end, name }: AwakeScheduleProps) => {
-  return <ScheduleBlock colStart={start} colEnd={end} row={name}></ScheduleBlock>
+Modal.setAppElement('#root')
+const customModalStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-40%',
+    // margin: '0 2rem',
+    transform: 'translate(-50%, -50%)',
+  },
+}
+
+const AwakeSchedule = ({ awakePeriod }: AwakeScheduleProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const okiTimeTrunate = truncateDate(awakePeriod.okiTime.createdAt)
+  const neTimeTruncate = truncateDate(awakePeriod.neTime.createdAt)
+  return (
+    <>
+      <ScheduleBlock
+        colStart={okiTimeTrunate.format('HHmm')}
+        colEnd={
+          okiTimeTrunate.hour() !== 0 && neTimeTruncate.hour() === 0
+            ? '2400'
+            : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
+        }
+        row={okiTimeTrunate.format('MMMMDD')}
+        onClick={() => {
+          setIsOpen(true)
+        }}
+      ></ScheduleBlock>
+      <Modal
+        isOpen={isOpen}
+        shouldCloseOnOverlayClick={true}
+        onRequestClose={() => setIsOpen(false)}
+        contentLabel="ツイート詳細"
+        style={customModalStyles}
+      >
+        <h3>起床後のツイート</h3>
+        <span>{awakePeriod.okiTime.createdAt.format('MM/DD HH:mm')}</span>
+        <p>{awakePeriod.okiTime.text}</p>
+        <h3>就寝前のツイート</h3>
+        <span>{awakePeriod.neTime.createdAt.format('MM/DD HH:mm')}</span>
+        <p>{awakePeriod.neTime.text}</p>
+      </Modal>
+    </>
+  )
 }
 
 interface AwakeSchedulesProps {
@@ -41,20 +87,7 @@ export const AwakeSchedules = ({ awakePeriods }: AwakeSchedulesProps) => {
   return (
     <>
       {awakePeriods.map((awakePeriod, idx) => {
-        const okiTimeTrunate = truncateDate(awakePeriod.okiTime.createdAt)
-        const neTimeTruncate = truncateDate(awakePeriod.neTime.createdAt)
-        return (
-          <AwakeSchedule
-            name={okiTimeTrunate.format('MMMMDD')}
-            start={okiTimeTrunate.format('HHmm')}
-            end={
-              okiTimeTrunate.hour() !== 0 && neTimeTruncate.hour() === 0
-                ? '2400'
-                : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
-            }
-            key={idx}
-          ></AwakeSchedule>
-        )
+        return <AwakeSchedule key={idx} awakePeriod={awakePeriod}></AwakeSchedule>
       })}
     </>
   )

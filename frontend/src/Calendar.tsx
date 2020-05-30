@@ -71,12 +71,15 @@ export const Calendar = () => {
   return (
     <>
       {rowTemplate.length !== 0 ? (
-        <Grid rowTemplate={rowTemplate}>
-          <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
-          <DateHeaders dateTexts={dateTexts} />
-          <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
-          <Times></Times>
-        </Grid>
+        <>
+          <p>クリックすることで起床後・就寝前のツイートを見ることができます。</p>
+          <Grid rowTemplate={rowTemplate}>
+            <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
+            <DateHeaders dateTexts={dateTexts} />
+            <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
+            <Times></Times>
+          </Grid>
+        </>
       ) : (
         <p>Now Loading...</p>
       )}

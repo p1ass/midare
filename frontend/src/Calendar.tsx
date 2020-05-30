@@ -56,8 +56,9 @@ export const Calendar = () => {
       })
       setDateLabels(dateLabels)
 
+      const daysOfTheWeek = ['日', '月', '火', '水', '木', '金', '土']
       const dateTexts = dates.map((date) => {
-        return date.format('MM/DD (dd)')
+        return date.format(`MM/DD (${daysOfTheWeek[date.day()]})`)
       })
       setDateTexts(dateTexts)
 

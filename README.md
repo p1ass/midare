@@ -2,6 +2,8 @@
 
 🕒 ツイートを使って生活習慣の乱れを可視化するWebアプリ
 
+![Build](https://github.com/p1ass/midare/workflows/Build/badge.svg)
+
 ## スクリーンショット
 
 TBD

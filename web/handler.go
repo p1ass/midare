@@ -25,7 +25,6 @@ const (
 type Handler struct {
 	twiCli              twitter.Client
 	frontendCallbackURL string
-	frontendDomain      string
 	accessTokens        map[string]*oauth.AccessToken
 	mu                  sync.Mutex
 }
@@ -35,7 +34,6 @@ func NewHandler(twiCli twitter.Client, frontendCallbackURL string, frontendDomai
 	return &Handler{
 		twiCli:              twiCli,
 		frontendCallbackURL: frontendCallbackURL,
-		frontendDomain:      frontendDomain,
 		accessTokens:        map[string]*oauth.AccessToken{},
 		mu:                  sync.Mutex{},
 	}

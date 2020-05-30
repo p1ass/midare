@@ -59,7 +59,7 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 	h.mu.Lock()
 	defer h.mu.Unlock()
 	h.accessTokens[twiUser.ID] = accessToken
-	if err := setSessionAndCookie(c, twiUser.ID, h.frontendDomain); err != nil {
+	if err := setSessionAndCookie(c, twiUser.ID); err != nil {
 		sendError(errors.Wrap(err, "failed to set session"), c)
 		return
 	}

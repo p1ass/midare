@@ -9,7 +9,7 @@ import (
 	"github.com/p1ass/midare/lib/errors"
 )
 
-func setSessionAndCookie(c *gin.Context, userID string, frontendDomain string) error {
+func setSessionAndCookie(c *gin.Context, userID string) error {
 	session := sessions.Default(c)
 	sessID := crypto.LongSecureRandomBase64()
 	session.Set(sessID, userID)
@@ -18,7 +18,7 @@ func setSessionAndCookie(c *gin.Context, userID string, frontendDomain string) e
 		return errors.Wrap(err, "failed to save session")
 	}
 
-	c.SetCookie(sessionIDKey, sessID, sevenDays, "/", frontendDomain, false, true)
+	c.SetCookie(sessionIDKey, sessID, sevenDays, "/", "", false, true)
 	c.SetSameSite(http.SameSiteNoneMode)
 	return nil
 }

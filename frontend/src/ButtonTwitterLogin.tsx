@@ -6,7 +6,7 @@ import { getLoginUrl } from './api/client'
 import { ButtonBase } from './ButtonBase'
 
 const TwitterButton = styled(ButtonBase)`
-  background-color: #00acee;
+  background-color: rgb(27, 149, 224);
   color: white;
 `
 

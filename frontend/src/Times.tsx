@@ -21,13 +21,11 @@ const Hour = styled(Area)`
 export const Times = () => {
   return (
     <>
-      {rangeTimes().map((time, i) => {
-        return (
-          <Hour colStart={`${time.hour}${time.min}`} row={'time'} key={i.toString()}>
-            {time.min === '00' ? time.hour : ''}
-          </Hour>
-        )
-      })}
+      {rangeTimes().map((time, i) => (
+        <Hour colStart={time.format('HHmm')} row={'time'} key={i.toString()}>
+          {time.minute() === 0 ? time.hour() : ''}
+        </Hour>
+      ))}
     </>
   )
 }

@@ -1,20 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
+import dayjs from 'dayjs'
 import { Area } from './Area'
-import { Time } from './Time'
 
-const Border = styled(Area)<{ min: string }>`
+const Border = styled(Area)<{ time: dayjs.Dayjs }>`
   border-top: solid 1px #ccc;
   min-height: 0.2rem;
-  border-left: ${({ min }) => {
-    return min === '00' ? `1px solid #ccc` : `none`
+  border-left: ${({ time }) => {
+    return time.minute() === 0 ? `1px solid #ccc` : `none`
   }};
   margin-top: -1px;
 `
 
 interface BordersProps {
   dateLabels: string[]
-  timesPerHalfHour: Time[]
+  timesPerHalfHour: dayjs.Dayjs[]
 }
 
 export const Borders = ({ dateLabels, timesPerHalfHour }: BordersProps) => {
@@ -24,8 +24,8 @@ export const Borders = ({ dateLabels, timesPerHalfHour }: BordersProps) => {
         return timesPerHalfHour.map((time, i) => (
           <Border
             row={dateText}
-            colStart={`${time.hour}${time.min}`}
-            min={time.min}
+            colStart={time.format('HHmm')}
+            time={time}
             key={`${dateText}-${i}`}
           />
         ))

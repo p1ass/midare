@@ -18,7 +18,7 @@ import { getLoginUrl, getPeriods } from './api/client'
 const timesPerHalfHour = rangeTimes()
 const columnTemplate =
   '[t-header] 5fr ' +
-  timesPerHalfHour.map((time) => `[t-${time.hour}${time.min}]`).join(' 0.5fr ') +
+  timesPerHalfHour.map((time) => `[t-${time.format('HHmm')}]`).join(' 0.5fr ') +
   ' 0.5fr '
 
 const Grid = styled.div<{ rowTemplate: string[] }>`

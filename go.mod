@@ -8,7 +8,7 @@ require (
 	github.com/gin-contrib/zap v0.0.1
 	github.com/gin-gonic/gin v1.6.3
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/google/go-cmp v0.4.0
+	github.com/google/go-cmp v0.4.1
 	github.com/google/uuid v1.1.1
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
 	github.com/patrickmn/go-cache v2.1.0+incompatible

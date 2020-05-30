@@ -19,7 +19,7 @@ func setSessionAndCookie(c *gin.Context, userID string, frontendDomain string) e
 	}
 
 	c.SetCookie(sessionIDKey, sessID, sevenDays, "/", frontendDomain, false, true)
-	c.SetSameSite(http.SameSiteDefaultMode)
+	c.SetSameSite(http.SameSiteNoneMode)
 	return nil
 }
 

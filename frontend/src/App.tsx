@@ -7,8 +7,7 @@ import { ButtonTwitterLogin } from './ButtonTwitterLogin'
 import { Description } from './Description'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { ErrorBoundary } from './ErrorBoundary'
-import AdSense from 'react-adsense'
+import AdCard from './AdsCard'
 import { getMe, User } from './api/client'
 
 library.add(fab)
@@ -49,15 +48,7 @@ export function App() {
           <h1>生活習慣の乱れを可視化するやつ</h1>
           {!user ? <ButtonTwitterLogin></ButtonTwitterLogin> : <Calendar />}
           <Description></Description>
-          <ErrorBoundary>
-            <AdSense.Google
-              client="ca-pub-4978327687969784"
-              slot="6211274963"
-              format="auto"
-              style={{ display: 'block' }}
-              responsive="true"
-            />
-          </ErrorBoundary>
+          <AdCard></AdCard>
         </FlexContainer>
       </Container>
       <Footer></Footer>

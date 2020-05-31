@@ -72,7 +72,12 @@ export const Calendar = () => {
     <>
       {rowTemplate.length !== 0 ? (
         <>
-          <p>💡クリックすることで起床後・就寝前のツイートを見ることができます。</p>
+          <p>
+            <span role="img" aria-label="Tips">
+              💡
+            </span>
+            クリックすることで起床後・就寝前のツイートを見ることができます。
+          </p>
           <Grid rowTemplate={rowTemplate}>
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
             <DateHeaders dateTexts={dateTexts} />

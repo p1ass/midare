@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import AdSense from 'react-adsense'
 import htmlToImage from 'html-to-image'
 import download from 'downloadjs'
 
@@ -15,7 +14,6 @@ import { Times } from './Times'
 import { Borders } from './Borders'
 import { AwakeSchedules } from './AwakeSchedule'
 import { DateHeaders } from './DateHeaders'
-import { ErrorBoundary } from './ErrorBoundary'
 
 import { getPeriods } from './api/client'
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import AdSense from 'react-adsense'
 
 import { rangeTimes } from './Time'
 import {
@@ -12,6 +13,7 @@ import { Times } from './Times'
 import { Borders } from './Borders'
 import { AwakeSchedules } from './AwakeSchedule'
 import { DateHeaders } from './DateHeaders'
+import { ErrorBoundary } from './ErrorBoundary'
 
 import { getPeriods } from './api/client'
 
@@ -85,6 +87,9 @@ export const Calendar = () => {
             <Times row="time-header"></Times>
             <Times row="time-footer"></Times>
           </Grid>
+          <ErrorBoundary>
+            <AdSense.Google client="ca-pub-4978327687969784" slot="6211274963" format="auto" />
+          </ErrorBoundary>
         </>
       ) : (
         <p>Now Loading...</p>

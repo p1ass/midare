@@ -44,6 +44,7 @@ export const Description = () => {
           GitHub : <a href="https://github.com/p1ass">@p1ass</a>
         </Li>
       </Ul>
+      <p>利用状況の計測のためにGoogle Analyticsを利用しています。</p>
     </>
   )
 }

@@ -7,7 +7,7 @@ import { ButtonTwitterLogin } from './ButtonTwitterLogin'
 import { Description } from './Description'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import AdCard from './AdsCard'
+
 import { getMe, User } from './api/client'
 
 library.add(fab)
@@ -48,7 +48,6 @@ export function App() {
           <h1>生活習慣の乱れを可視化するやつ</h1>
           {!user ? <ButtonTwitterLogin></ButtonTwitterLogin> : <Calendar />}
           <Description></Description>
-          <AdCard></AdCard>
         </FlexContainer>
       </Container>
       <Footer></Footer>

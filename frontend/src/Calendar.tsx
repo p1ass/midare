@@ -109,15 +109,6 @@ export const Calendar = () => {
           >
             画像として保存
           </button>
-          {/* <ErrorBoundary>
-            <AdSense.Google
-              client="ca-pub-4978327687969784"
-              slot="6211274963"
-              format="auto"
-              style={{ display: 'block' }}
-              responsive="true"
-            />
-          </ErrorBoundary> */}
         </>
       ) : (
         <p>Now Loading...</p>

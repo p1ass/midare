@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ButtonGitHub } from './ButtonGitHub'
 import { Share } from './Share'
+import AdCard from './AdsCard'
 
 const WhatIsThis = styled.p`
   text-align: center;
@@ -44,6 +45,7 @@ export const Description = () => {
           GitHub : <a href="https://github.com/p1ass">@p1ass</a>
         </Li>
       </Ul>
+      <AdCard></AdCard>
       <p>利用状況の計測のためにGoogle Analyticsを利用しています。</p>
     </>
   )

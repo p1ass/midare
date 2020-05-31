@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import AdSense from 'react-adsense'
 import htmlToImage from 'html-to-image'
+import download from 'downloadjs'
 
 import { rangeTimes } from './Time'
 import {
@@ -29,10 +30,7 @@ const handleSave = ({ dom }: { dom: HTMLElement }) => {
     return
   }
   htmlToImage.toJpeg(dom, { quality: 0.95 }).then(function (dataUrl) {
-    const link = document.createElement('a')
-    link.download = 'calendar.jpg'
-    link.href = dataUrl
-    link.click()
+    download(dataUrl, 'calendar.png', 'image/jpeg')
   })
 }
 

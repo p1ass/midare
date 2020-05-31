@@ -18,6 +18,7 @@
     "@types/styled-components": "^5.1.0",
     "axios": "^0.19.2",
     "dayjs": "^1.8.28",
+    "html-to-image": "^0.1.1",
     "react": "^16.13.1",
     "react-adsense": "^0.1.0",
     "react-dom": "^16.13.1",

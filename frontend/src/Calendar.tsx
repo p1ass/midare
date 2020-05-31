@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import AdSense from 'react-adsense'
+import htmlToImage from 'html-to-image'
 
 import { rangeTimes } from './Time'
 import {
@@ -23,14 +24,31 @@ const columnTemplate =
   timesPerHalfHour.map((time) => `[t-${time.format('HHmm')}]`).join(' 0.5fr ') +
   ' 0.5fr '
 
+const handleSave = ({ dom }: { dom: HTMLElement }) => {
+  if (!dom) {
+    return
+  }
+  htmlToImage.toJpeg(dom, { quality: 0.95 }).then(function (dataUrl) {
+    const link = document.createElement('a')
+    link.download = 'calendar.jpg'
+    link.href = dataUrl
+    link.click()
+  })
+}
+
 const Grid = styled.div<{ rowTemplate: string[] }>`
   display: grid;
   background: white;
   box-sizing: border-box;
-  margin: 16px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
   grid-template-rows: ${({ rowTemplate }) => rowTemplate};
   grid-template-columns: ${columnTemplate};
   border: 1px solid #ccc;
+
+  @media (max-width: 40rem) {
+    padding: 0rem;
+  }
 `
 
 export const Calendar = () => {
@@ -38,6 +56,7 @@ export const Calendar = () => {
   const [dateTexts, setDateTexts] = useState(new Array<string>())
   const [dateLabels, setDateLabels] = useState(new Array<string>())
   const [rowTemplate, setRowTemplate] = useState(new Array<string>())
+  const [gridDom, setGridDom] = useState<HTMLElement | null>(null)
 
   useEffect(() => {
     const getPeriodsAsync = async () => {
@@ -80,13 +99,20 @@ export const Calendar = () => {
             </span>
             クリックすることで起床後・就寝前のツイートを見ることができます。
           </p>
-          <Grid rowTemplate={rowTemplate}>
+          <Grid rowTemplate={rowTemplate} ref={(dom) => setGridDom(dom)}>
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
             <DateHeaders dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
             <Times row="time-header"></Times>
             <Times row="time-footer"></Times>
           </Grid>
+          <button
+            onClick={() => {
+              if (gridDom) handleSave({ dom: gridDom })
+            }}
+          >
+            画像として保存
+          </button>
           <ErrorBoundary>
             <AdSense.Google client="ca-pub-4978327687969784" slot="6211274963" format="auto" />
           </ErrorBoundary>

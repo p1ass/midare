@@ -111,7 +111,7 @@ export const Calendar = () => {
           >
             画像として保存
           </button>
-          <ErrorBoundary>
+          {/* <ErrorBoundary>
             <AdSense.Google
               client="ca-pub-4978327687969784"
               slot="6211274963"
@@ -119,7 +119,7 @@ export const Calendar = () => {
               style={{ display: 'block' }}
               responsive="true"
             />
-          </ErrorBoundary>
+          </ErrorBoundary> */}
         </>
       ) : (
         <p>Now Loading...</p>

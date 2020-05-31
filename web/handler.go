@@ -30,7 +30,7 @@ type Handler struct {
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiCli twitter.Client, frontendCallbackURL string, frontendDomain string) *Handler {
+func NewHandler(twiCli twitter.Client, frontendCallbackURL string) *Handler {
 	return &Handler{
 		twiCli:              twiCli,
 		frontendCallbackURL: frontendCallbackURL,

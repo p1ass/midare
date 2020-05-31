@@ -18,11 +18,11 @@ const Hour = styled(Area)`
   }
 `
 
-export const Times = () => {
+export const Times = ({ row }: { row: string }) => {
   return (
     <>
       {rangeTimes().map((time, i) => (
-        <Hour colStart={time.format('HHmm')} row={'time'} key={i.toString()}>
+        <Hour colStart={time.format('HHmm')} row={row} key={i.toString()}>
           {time.minute() === 0 ? time.hour() : ''}
         </Hour>
       ))}

@@ -5,7 +5,7 @@ import { Area } from './Area'
 const HeaderCell = styled(Area)`
   height: 100%;
   padding: 0 8px;
-  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
   margin-top: -1px;
 `
 

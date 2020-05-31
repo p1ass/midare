@@ -31,9 +31,6 @@ const Grid = styled.div<{ rowTemplate: string[] }>`
   border: 1px solid #ccc;
 `
 
-// TODO : 時間の四捨五入をしっかりする
-// TODO : 3時間半時間が空いていないところがあるのでチェック
-
 export const Calendar = () => {
   const [awakePeriods, setAwakePeriods] = useState(new Array<AwakePeriod>())
   const [dateTexts, setDateTexts] = useState(new Array<string>())
@@ -62,7 +59,10 @@ export const Calendar = () => {
       })
       setDateTexts(dateTexts)
 
-      const rowTemplate = ['time'].concat(dateLabels).map((dateLabel) => `[${dateLabel}] 0.5fr `)
+      const rowTemplate = ['time-header']
+        .concat(dateLabels)
+        .concat('time-footer')
+        .map((dateLabel) => `[${dateLabel}] 0.5fr `)
       setRowTemplate(rowTemplate)
     }
     getPeriodsAsync()
@@ -77,7 +77,8 @@ export const Calendar = () => {
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
             <DateHeaders dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
-            <Times></Times>
+            <Times row="time-header"></Times>
+            <Times row="time-footer"></Times>
           </Grid>
         </>
       ) : (

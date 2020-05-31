@@ -5,6 +5,7 @@ import { Area } from './Area'
 
 const Border = styled(Area)<{ time: dayjs.Dayjs }>`
   border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
   min-height: 0.2rem;
   border-left: ${({ time }) => {
     return time.minute() === 0 ? `1px solid #ccc` : `none`

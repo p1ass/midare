@@ -33,7 +33,7 @@ export const Description = () => {
       </ol>
       <h2>シェア</h2>
       <Share></Share>
-      <h2>GitHubのスターお願いします↓</h2>
+      <h2>ソースコードはこちら↓</h2>
       <ButtonGitHub></ButtonGitHub>
       <h2>作成者</h2>
       <Ul>

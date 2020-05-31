@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const FooterWrapper = styled.footer`
-  width: 100vw;
+  width: 100%;
   height: 2rem;
   line-height: 2rem;
   background-color: rgb(88, 149, 98);

@@ -16,10 +16,6 @@ const ScheduleBlock = styled(Area)`
   cursor: pointer;
 `
 
-interface AwakeScheduleProps {
-  awakePeriod: AwakePeriod
-}
-
 Modal.setAppElement('#root')
 const customModalStyles = {
   content: {
@@ -28,15 +24,26 @@ const customModalStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-40%',
-    // margin: '0 2rem',
     transform: 'translate(-50%, -50%)',
   },
 }
 
+interface AwakeScheduleProps {
+  awakePeriod: AwakePeriod
+}
+
 const AwakeSchedule = ({ awakePeriod }: AwakeScheduleProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const okiTimeTrunate = truncateDate(awakePeriod.okiTime.createdAt)
-  const neTimeTruncate = truncateDate(awakePeriod.neTime.createdAt)
+
+  const okiTime = awakePeriod.okiTime.splitDate
+    ? awakePeriod.okiTime.splitDate
+    : awakePeriod.okiTime.createdAt
+  const neTime = awakePeriod.neTime.splitDate
+    ? awakePeriod.neTime.splitDate
+    : awakePeriod.neTime.createdAt
+
+  const okiTimeTrunate = truncateDate(okiTime)
+  const neTimeTruncate = truncateDate(neTime)
   return (
     <>
       <ScheduleBlock
@@ -58,10 +65,10 @@ const AwakeSchedule = ({ awakePeriod }: AwakeScheduleProps) => {
         contentLabel="ツイート詳細"
         style={customModalStyles}
       >
-        <h3>起床後のツイート</h3>
+        <h3>起床直後のツイート</h3>
         <span>{awakePeriod.okiTime.createdAt.format('MM/DD HH:mm')}</span>
         <p>{awakePeriod.okiTime.text}</p>
-        <h3>就寝前のツイート</h3>
+        <h3>就寝直前のツイート</h3>
         <span>{awakePeriod.neTime.createdAt.format('MM/DD HH:mm')}</span>
         <p>{awakePeriod.neTime.text}</p>
       </Modal>

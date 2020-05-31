@@ -5,6 +5,7 @@ type Tweet = {
   id: string
   text: string
   createdAt: dayjs.Dayjs
+  splitDate: dayjs.Dayjs | null
 }
 
 export type AwakePeriod = {
@@ -17,15 +18,34 @@ const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: d
   let dividedTime = okiDate.add(1, 'date').startOf('date')
   while (!netaDate.isSame(dividedTime, 'date')) {
     awakePeriods.push({
-      okiTime: { id: period.okiTime.id, text: period.okiTime.text, createdAt: okiDate },
-      neTime: { id: period.neTime.id, text: period.neTime.text, createdAt: dividedTime },
+      okiTime: {
+        id: period.okiTime.id,
+        text: period.okiTime.text,
+        createdAt: okiDate,
+        splitDate: null,
+      },
+      neTime: {
+        id: period.neTime.id,
+        text: period.neTime.text,
+        createdAt: netaDate,
+        splitDate: dividedTime,
+      },
     })
-    okiDate = dividedTime
     dividedTime = dividedTime.add(1, 'day')
   }
   awakePeriods.push({
-    okiTime: { id: period.okiTime.id, text: period.okiTime.text, createdAt: dividedTime },
-    neTime: { id: period.neTime.id, text: period.neTime.text, createdAt: netaDate },
+    okiTime: {
+      id: period.okiTime.id,
+      text: period.okiTime.text,
+      createdAt: okiDate,
+      splitDate: dividedTime,
+    },
+    neTime: {
+      id: period.neTime.id,
+      text: period.neTime.text,
+      createdAt: netaDate,
+      splitDate: null,
+    },
   })
   return awakePeriods
 }
@@ -37,8 +57,18 @@ export const convertPeriodsToAwakePeriods = (periods: Period[]) => {
     const netaDate = dayjs(period.neTime.createdAt)
     if (okiDate.isSame(netaDate, 'day')) {
       awakePeriods.push({
-        okiTime: { id: period.okiTime.id, text: period.okiTime.text, createdAt: okiDate },
-        neTime: { id: period.neTime.id, text: period.neTime.text, createdAt: netaDate },
+        okiTime: {
+          id: period.okiTime.id,
+          text: period.okiTime.text,
+          createdAt: okiDate,
+          splitDate: null,
+        },
+        neTime: {
+          id: period.neTime.id,
+          text: period.neTime.text,
+          createdAt: netaDate,
+          splitDate: null,
+        },
       })
     } else {
       const divided = splitPeriodAtMidnight(period, okiDate, netaDate)

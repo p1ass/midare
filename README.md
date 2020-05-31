@@ -16,7 +16,7 @@ https://midare.p1ass.com
 
 ## 登壇資料
 
-TBD
+ [うじまる君の生活習慣の乱れを可視化したい！ / uzimaru birthday LT - Speaker Deck](https://speakerdeck.com/p1ass/uzimaru-birthday-lt )
 
 ## ブログ
 

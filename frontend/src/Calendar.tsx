@@ -32,6 +32,10 @@ const handleSave = ({ dom }: { dom: HTMLElement }) => {
   })
 }
 
+const Attention = styled.p`
+font-size: 0.7rem;
+`
+
 const Grid = styled.div<{ rowTemplate: string[] }>`
   display: grid;
   background: white;
@@ -53,6 +57,8 @@ export const Calendar = () => {
   const [dateLabels, setDateLabels] = useState(new Array<string>())
   const [rowTemplate, setRowTemplate] = useState(new Array<string>())
   const [gridDom, setGridDom] = useState<HTMLElement | null>(null)
+
+  const [buttonLabel,setButtonLabel] =  useState('画像として保存')
 
   useEffect(() => {
     const getPeriodsAsync = async () => {
@@ -95,7 +101,9 @@ export const Calendar = () => {
             </span>
             クリックすることで起床後・就寝前のツイートを見ることができます。
           </p>
-          <Grid rowTemplate={rowTemplate} ref={(dom) => setGridDom(dom)}>
+          <Grid rowTemplate={rowTemplate} ref={(dom) => {
+            setGridDom(dom)}
+          }>
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
             <DateHeaders dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
@@ -104,11 +112,14 @@ export const Calendar = () => {
           </Grid>
           <button
             onClick={() => {
-              if (gridDom) handleSave({ dom: gridDom })
+              if (gridDom) {
+                handleSave({ dom: gridDom })
+              }
             }}
           >
-            画像として保存
+            {buttonLabel}
           </button>
+          <Attention>生成に少し時間がかかります。</Attention>
         </>
       ) : (
         <p>Now Loading...</p>

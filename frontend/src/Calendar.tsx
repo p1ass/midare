@@ -28,7 +28,7 @@ const handleSave = ({ dom }: { dom: HTMLElement }) => {
     return
   }
   htmlToImage.toJpeg(dom, { quality: 0.95 }).then(function (dataUrl) {
-    download(dataUrl, 'calendar.png', 'image/jpeg')
+    download(dataUrl, 'calendar.jpeg', 'image/jpeg')
   })
 }
 

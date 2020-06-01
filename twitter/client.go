@@ -46,7 +46,7 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 		callbackURL:   callbackURL,
 		requestTokens: map[string]*oauth.RequestToken{},
 		mu:            sync.Mutex{},
-		tweetCache:    cache.New(15*time.Minute, 15*time.Minute),
+		tweetCache:    cache.New(5*time.Minute, 5*time.Minute),
 	}
 }
 

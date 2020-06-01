@@ -1,37 +1,37 @@
-name: deploy
-on:
-  push:
-    branches:
-      - master
-jobs:
-  deplpy-production:
-    name: Deploy to production environment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v1
-        with:
-          private-key: ${{ secrets.SSH_KEY }}
-          public-key: ${{ secrets.SSH_KEY_PUBLIC }}
-          name: id_rsa
-          known-hosts: ${{ secrets.KNOWN_HOSTS }}
-      - name: Install pre release docker-compose
-        run: |
-          curl -L https://github.com/docker/compose/releases/download/1.26.0-rc4/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-          chmod +x ~/docker-compose
-          sudo mv ~/docker-compose /usr/local/bin/docker-compose
-      - name: Set docker context
-        run: |
-          docker context create --default-stack-orchestrator=swarm --docker "host=ssh://${SSH_USERNAME}@${SSH_IP}:${SSH_PORT}" remote
-          docker context use remote
-        env:
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_IP: ${{ secrets.SSH_IP }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-      - name: Check out
-        uses: actions/checkout@v1
-      - name: Deploy
-        run: docker-compose --context remote up -d --build
-        env:
-          TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
-          TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+# name: deploy
+# on:
+#   push:
+#     branches:
+#       - master
+# jobs:
+#   deplpy-production:
+#     name: Deploy to production environment
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Install SSH key
+#         uses: shimataro/ssh-key-action@v1
+#         with:
+#           private-key: ${{ secrets.SSH_KEY }}
+#           public-key: ${{ secrets.SSH_KEY_PUBLIC }}
+#           name: id_rsa
+#           known-hosts: ${{ secrets.KNOWN_HOSTS }}
+#       - name: Install pre release docker-compose
+#         run: |
+#           curl -L https://github.com/docker/compose/releases/download/1.26.0-rc4/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+#           chmod +x ~/docker-compose
+#           sudo mv ~/docker-compose /usr/local/bin/docker-compose
+#       - name: Set docker context
+#         run: |
+#           docker context create --default-stack-orchestrator=swarm --docker "host=ssh://${SSH_USERNAME}@${SSH_IP}:${SSH_PORT}" remote
+#           docker context use remote
+#         env:
+#           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+#           SSH_IP: ${{ secrets.SSH_IP }}
+#           SSH_PORT: ${{ secrets.SSH_PORT }}
+#       - name: Check out
+#         uses: actions/checkout@v1
+#       - name: Deploy
+#         run: docker-compose --context remote up -d --build
+#         env:
+#           TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+#           TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}

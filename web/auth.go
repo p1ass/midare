@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/go-redis/redis"
+
 	"github.com/mrjones/oauth"
 
 	"github.com/gin-gonic/gin"
@@ -86,6 +88,10 @@ func (h *Handler) getAccessToken(c *gin.Context) *oauth.AccessToken {
 	logger := logging.New()
 
 	val, err := h.redisCli.Get(userID).Result()
+	if err == redis.Nil {
+		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
+		return nil
+	}
 	if err != nil {
 		logger.Error("failed to get access token", logging.Error(err))
 		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)

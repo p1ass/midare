@@ -123,7 +123,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 		}
 	}
 	if neTweet == nil {
-		return nil
+		return periods
 	}
 
 	for _, t := range ts[startIdx:] {

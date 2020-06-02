@@ -33,7 +33,7 @@ const handleSave = ({ dom }: { dom: HTMLElement }) => {
 }
 
 const Attention = styled.p`
-font-size: 0.7rem;
+  font-size: 0.7rem;
 `
 
 const Grid = styled.div<{ rowTemplate: string[] }>`
@@ -58,11 +58,17 @@ export const Calendar = () => {
   const [rowTemplate, setRowTemplate] = useState(new Array<string>())
   const [gridDom, setGridDom] = useState<HTMLElement | null>(null)
 
-  const [buttonLabel,setButtonLabel] =  useState('画像として保存')
+  const [infoMsg, setInfoMsg] = useState('Now Loading...')
+
+  const [buttonLabel, setButtonLabel] = useState('画像として保存')
 
   useEffect(() => {
     const getPeriodsAsync = async () => {
       const res = await getPeriods()
+      if (res.periods.length > 0) {
+        setInfoMsg('直近のツイートが存在しません')
+        return
+      }
       const awakePeriods = convertPeriodsToAwakePeriods(res.periods)
       setAwakePeriods(awakePeriods)
 
@@ -101,9 +107,12 @@ export const Calendar = () => {
             </span>
             クリックすることで起床後・就寝前のツイートを見ることができます。
           </p>
-          <Grid rowTemplate={rowTemplate} ref={(dom) => {
-            setGridDom(dom)}
-          }>
+          <Grid
+            rowTemplate={rowTemplate}
+            ref={(dom) => {
+              setGridDom(dom)
+            }}
+          >
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
             <DateHeaders dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
@@ -122,7 +131,7 @@ export const Calendar = () => {
           <Attention>生成に少し時間がかかります。</Attention>
         </>
       ) : (
-        <p>Now Loading...</p>
+        <p>{infoMsg}</p>
       )}
     </>
   )

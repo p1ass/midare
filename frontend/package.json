@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cp _redirects build/",
     "test": "react-scripts test",
     "lint": "eslint src --ext .ts,.tsx",
     "eject": "react-scripts eject"

@@ -64,35 +64,40 @@ export const Calendar = () => {
 
   useEffect(() => {
     const getPeriodsAsync = async () => {
-      const res = await getPeriods()
-      if (res.periods.length === 0) {
-        setInfoMsg('直近のツイートが存在しません')
+      try {
+        const res = await getPeriods()
+        if (res.periods.length === 0) {
+          setInfoMsg('直近のツイートが存在しません')
+          return
+        }
+        const awakePeriods = convertPeriodsToAwakePeriods(res.periods)
+        setAwakePeriods(awakePeriods)
+
+        const dates = getDatesBetweenLatestAndOldest(
+          awakePeriods[awakePeriods.length - 1].okiTime.createdAt,
+          awakePeriods[0].neTime.createdAt
+        )
+
+        const dateLabels = dates.map((date) => {
+          return date.format('MMMMDD')
+        })
+        setDateLabels(dateLabels)
+
+        const daysOfTheWeek = ['日', '月', '火', '水', '木', '金', '土']
+        const dateTexts = dates.map((date) => {
+          return date.format(`MM/DD (${daysOfTheWeek[date.day()]})`)
+        })
+        setDateTexts(dateTexts)
+
+        const rowTemplate = ['time-header']
+          .concat(dateLabels)
+          .concat('time-footer')
+          .map((dateLabel) => `[${dateLabel}] 0.5fr `)
+        setRowTemplate(rowTemplate)
+      } catch (e) {
+        setInfoMsg('ツイートの取得に失敗しました。時間を空けてもう一度お試しください。')
         return
       }
-      const awakePeriods = convertPeriodsToAwakePeriods(res.periods)
-      setAwakePeriods(awakePeriods)
-
-      const dates = getDatesBetweenLatestAndOldest(
-        awakePeriods[awakePeriods.length - 1].okiTime.createdAt,
-        awakePeriods[0].neTime.createdAt
-      )
-
-      const dateLabels = dates.map((date) => {
-        return date.format('MMMMDD')
-      })
-      setDateLabels(dateLabels)
-
-      const daysOfTheWeek = ['日', '月', '火', '水', '木', '金', '土']
-      const dateTexts = dates.map((date) => {
-        return date.format(`MM/DD (${daysOfTheWeek[date.day()]})`)
-      })
-      setDateTexts(dateTexts)
-
-      const rowTemplate = ['time-header']
-        .concat(dateLabels)
-        .concat('time-footer')
-        .map((dateLabel) => `[${dateLabel}] 0.5fr `)
-      setRowTemplate(rowTemplate)
     }
     getPeriodsAsync()
   }, [])

@@ -27,26 +27,33 @@ const Container = styled.div`
 `
 
 export function App() {
-  const [user, setUser] = useState<User | null>({ id: '', name: '', screenName: '', imageUrl: '' })
+  const [user, setUser] = useState<User | null>(null)
+  const [isFetchUser, setIsFetchUser] = useState(true)
 
   useEffect(() => {
     const getUserAsync = async () => {
       try {
+        setIsFetchUser(true)
         const res = await getMe()
         setUser(res)
+        setIsFetchUser(false)
       } catch (e) {
         setUser(null)
+        setIsFetchUser(false)
       }
     }
     getUserAsync()
   }, [])
+
+  const SwitchWhetherLogin = !user ? ButtonTwitterLogin : Calendar
+
   return (
     <>
       <Header></Header>
       <Container>
         <FlexContainer>
           <h1>生活習慣の乱れを可視化するやつ</h1>
-          {!user ? <ButtonTwitterLogin></ButtonTwitterLogin> : <Calendar />}
+          {!isFetchUser ? <SwitchWhetherLogin /> : null}
           <Description></Description>
         </FlexContainer>
       </Container>

@@ -95,12 +95,12 @@ export const Calendar = () => {
     const handleSaveAsync = async () => {
       await sleep(1000)
       switch (generatingType) {
-        case 'SAVE':
+      case 'SAVE':
           await handleSave(gridDom)
-          break
-        case 'TWITTER':
-        await shareWithOGP(gridDom)
         break
+      case 'TWITTER':
+          await shareWithOGP(gridDom)
+          break
       }
       setGeneratingImage(false)
     }
@@ -155,10 +155,10 @@ export const Calendar = () => {
 
           <Grid rowTemplate={rowTemplate} generatingImage={generatingImage}>
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
-            <DateHeaders generatingImage={false} dateTexts={dateTexts} />
+            <DateHeaders generatingImage={generatingImage} dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
-            <Times generatingImage={false} row="time-header"></Times>
-            <Times generatingImage={false} row="time-footer"></Times>
+            <Times generatingImage={generatingImage} row="time-header"></Times>
+            <Times generatingImage={generatingImage} row="time-footer"></Times>
           </Grid>
           {/* 画像生成用用DOM */}
           {generatingImage ? (

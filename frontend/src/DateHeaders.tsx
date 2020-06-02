@@ -16,7 +16,7 @@ const DateText = styled.p<{ generatingImage: boolean }>`
     font-size: 0.7rem;
   }
   @media (max-width: 40rem) {
-    font-size: ${({ generatingImage }) => (generatingImage ? '0.9rem' : '0.4rem')};
+    font-size: ${({ generatingImage }) => (generatingImage ? '0.1rem' : '0.4rem')};
   }
 `
 

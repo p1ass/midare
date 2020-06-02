@@ -95,12 +95,12 @@ export const Calendar = () => {
     const handleSaveAsync = async () => {
       await sleep(1000)
       switch (generatingType) {
-      case 'SAVE':
-          await handleSave(gridDom)
-        break
-      case 'TWITTER':
-          await shareWithOGP(gridDom)
+        case 'SAVE':
+        await handleSave(gridDom)
           break
+        case 'TWITTER':
+        await shareWithOGP(gridDom)
+        break
       }
       setGeneratingImage(false)
     }
@@ -177,14 +177,14 @@ export const Calendar = () => {
               </Grid>
             </>
           ) : null}
-          <Button
+          {/* <Button
             onClick={async () => {
               setGeneratingType('TWITTER')
               setGeneratingImage(true)
             }}
           >
             結果をTwitterにシェア
-          </Button>
+          </Button> */}
           <Button
             onClick={async () => {
               setGeneratingImage(true)

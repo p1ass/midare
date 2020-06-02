@@ -39,7 +39,7 @@ const shareWithOGP = async (dom: HTMLElement | null) => {
   if (blob) {
     const res = await uploadImage(blob)
     const a = document.createElement('a')
-    a.href = `http://twitter.com/intent/tweet?url=${res.shareUrl}&text=生活習慣の乱れを可視化するやつ`
+    a.href = `http://twitter.com/intent/tweet?url=${res.shareUrl}&text=あなたも生活習慣の乱れを可視化してみませんか？&hashtags=生活習慣の乱れを可視化するやつ`
     a.click()
   }
 }

@@ -1,0 +1,9 @@
+version: "3"
+services:
+  redis-redis:
+    container_name: "redis"
+    image: "redis:latest"
+    restart: always
+    command: redis-server --requirepass hoge
+    ports:
+      - "6379:6379"

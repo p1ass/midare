@@ -108,7 +108,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 }
 
 func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
-	var periods []*period
+	periods := []*period{}
 	var neTweet *twitter.Tweet
 	var okiTweet *twitter.Tweet
 	var lastTweet *twitter.Tweet

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { rangeTimes } from './Time'
 import { Area } from './Area'
 
-const Hour = styled(Area)`
+const Hour = styled(Area)<{ generatingImage: boolean }>`
   margin: 4px 0;
   font-size: 1rem;
   min-width: 1rem;
@@ -13,16 +13,21 @@ const Hour = styled(Area)`
     min-width: 0.7rem;
   }
   @media (max-width: 40rem) {
-    font-size: 0.4rem;
-    min-width: 0.4rem;
+    font-size: ${({ generatingImage }) => (generatingImage ? '1rem' : '0.4rem')};
+    min-width: ${({ generatingImage }) => (generatingImage ? '1rem' : '0.4rem')};
   }
 `
 
-export const Times = ({ row }: { row: string }) => {
+export const Times = ({ row, generatingImage }: { row: string; generatingImage: boolean }) => {
   return (
     <>
       {rangeTimes().map((time, i) => (
-        <Hour colStart={time.format('HHmm')} row={row} key={i.toString()}>
+        <Hour
+          generatingImage={generatingImage}
+          colStart={time.format('HHmm')}
+          row={row}
+          key={i.toString()}
+        >
           {time.minute() === 0 ? time.hour() : ''}
         </Hour>
       ))}

@@ -23,20 +23,29 @@ const columnTemplate =
   timesPerHalfHour.map((time) => `[t-${time.format('HHmm')}]`).join(' 0.5fr ') +
   ' 0.5fr '
 
-const handleSave = ({ dom }: { dom: HTMLElement }) => {
+const handleSave = async (dom: HTMLElement | null) => {
+  console.log(dom)
   if (!dom) {
     return
   }
-  htmlToImage.toJpeg(dom, { quality: 0.95 }).then(function (dataUrl) {
-    download(dataUrl, 'calendar.jpeg', 'image/jpeg')
-  })
+  const dataUrl = await htmlToImage.toJpeg(dom, { quality: 0.95 })
+  download(dataUrl, 'calendar.jpeg', 'image/jpeg')
 }
 
-const Attention = styled.p`
-  font-size: 0.7rem;
-`
+const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 
-const Grid = styled.div<{ rowTemplate: string[] }>`
+const Tips = () => {
+  return (
+    <p>
+      <span role="img" aria-label="Tips">
+        💡
+      </span>
+      クリックすることで起床後・就寝前のツイートを見ることができます。
+    </p>
+  )
+}
+
+const Grid = styled.div<{ rowTemplate: string[]; generatingImage: boolean }>`
   display: grid;
   background: white;
   box-sizing: border-box;
@@ -47,7 +56,7 @@ const Grid = styled.div<{ rowTemplate: string[] }>`
   border: 1px solid #ccc;
 
   @media (max-width: 40rem) {
-    padding: 0rem;
+    padding: ${({ generatingImage }) => (generatingImage ? '1rem' : '0rem')};
   }
 `
 
@@ -60,7 +69,19 @@ export const Calendar = () => {
 
   const [infoMsg, setInfoMsg] = useState('Now Loading...')
 
-  const [buttonLabel, setButtonLabel] = useState('画像として保存')
+  const [generatingImage, setGeneratingImage] = useState(false)
+
+  useEffect(() => {
+    if (!gridDom) {
+      return
+    }
+    const handleSaveAsync = async () => {
+      await sleep(1000)
+      await handleSave(gridDom)
+      setGeneratingImage(false)
+    }
+    handleSaveAsync()
+  }, [gridDom])
 
   useEffect(() => {
     const getPeriodsAsync = async () => {
@@ -106,34 +127,39 @@ export const Calendar = () => {
     <>
       {rowTemplate.length !== 0 ? (
         <>
-          <p>
-            <span role="img" aria-label="Tips">
-              💡
-            </span>
-            クリックすることで起床後・就寝前のツイートを見ることができます。
-          </p>
-          <Grid
-            rowTemplate={rowTemplate}
-            ref={(dom) => {
-              setGridDom(dom)
-            }}
-          >
+          <Tips />
+
+          <Grid rowTemplate={rowTemplate} generatingImage={generatingImage}>
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
-            <DateHeaders dateTexts={dateTexts} />
+            <DateHeaders generatingImage={false} dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
-            <Times row="time-header"></Times>
-            <Times row="time-footer"></Times>
+            <Times generatingImage={false} row="time-header"></Times>
+            <Times generatingImage={false} row="time-footer"></Times>
           </Grid>
+          {/* 画像生成用用DOM */}
+          {generatingImage ? (
+            <>
+              <p>画像生成中...</p>
+              <Grid
+                rowTemplate={rowTemplate}
+                generatingImage={generatingImage}
+                ref={(dom) => setGridDom(dom)}
+              >
+                <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
+                <DateHeaders generatingImage={generatingImage} dateTexts={dateTexts} />
+                <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
+                <Times generatingImage={generatingImage} row="time-header"></Times>
+                <Times generatingImage={generatingImage} row="time-footer"></Times>
+              </Grid>
+            </>
+          ) : null}
           <button
-            onClick={() => {
-              if (gridDom) {
-                handleSave({ dom: gridDom })
-              }
+            onClick={async () => {
+              setGeneratingImage(true)
             }}
           >
-            {buttonLabel}
+            画像として保存
           </button>
-          <Attention>生成に少し時間がかかります。</Attention>
         </>
       ) : (
         <p>{infoMsg}</p>

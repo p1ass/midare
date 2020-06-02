@@ -2,15 +2,17 @@ package web
 
 import (
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/mrjones/oauth"
-
-	"github.com/p1ass/midare/twitter"
+	"github.com/p1ass/midare/lib/logging"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
+	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/twitter"
 )
 
 const (
@@ -25,18 +27,26 @@ const (
 type Handler struct {
 	twiCli              twitter.Client
 	frontendCallbackURL string
-	accessTokens        map[string]*oauth.AccessToken
 	mu                  sync.Mutex
+	redisCli            *redis.Client
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiCli twitter.Client, frontendCallbackURL string) *Handler {
+func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, error) {
+	redisCli := redis.NewClient(&redis.Options{
+		Addr:     os.Getenv("REDIS_ADDR") + ":6379",
+		Password: os.Getenv("REDIS_PASS"),
+	})
+	if err := redisCli.Ping().Err(); err != nil {
+		logging.New().Error("failed to ping to redis", logging.Error(err))
+		return nil, err
+	}
 	return &Handler{
 		twiCli:              twiCli,
 		frontendCallbackURL: frontendCallbackURL,
-		accessTokens:        map[string]*oauth.AccessToken{},
 		mu:                  sync.Mutex{},
-	}
+		redisCli:            redisCli,
+	}, nil
 }
 
 // GetMe gets my profile.
@@ -86,7 +96,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 			return nil, err
 		}
 		allTweets = append(allTweets, tweets...)
-		if len(allTweets) > 2000 || time.Now().Sub(tweets[len(tweets)-1].Created) > 21*24*time.Hour {
+		if len(allTweets) > 1000 || time.Now().Sub(tweets[len(tweets)-1].Created) > 21*24*time.Hour {
 			break
 		}
 		maxID = allTweets[len(allTweets)-1].ID

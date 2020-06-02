@@ -2,13 +2,14 @@ package web
 
 import (
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/p1ass/midare/lib/logging"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/memstore"
+	"github.com/gin-contrib/sessions/redis"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 )
@@ -23,7 +24,11 @@ func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	r.Use(ginzap.RecoveryWithZap(logger, true))
 
-	store := memstore.NewStore([]byte("secret"))
+	store, err := redis.NewStore(256, "tcp", os.Getenv("REDIS_ADDR")+":6379", os.Getenv("REDIS_PASS"), []byte("secret"))
+	if err != nil {
+		logging.New().Error("failed to prepare redis", logging.Error(err))
+		return nil, err
+	}
 	r.Use(sessions.Sessions("session-store", store))
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{allowOrigin},

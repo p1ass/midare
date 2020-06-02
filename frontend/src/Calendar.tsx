@@ -183,7 +183,7 @@ export const Calendar = () => {
               setGeneratingImage(true)
             }}
           >
-            Twitterに画像付きでシェア
+            結果をTwitterにシェア
           </Button>
           <Button
             onClick={async () => {

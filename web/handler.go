@@ -169,9 +169,15 @@ func (h *Handler) containExcludeWord(text string) bool {
 }
 
 func (h *Handler) UploadImage(c *gin.Context) {
-	file, _, err := c.Request.FormFile("file")
+	file, header, err := c.Request.FormFile("file")
 	if err != nil {
 		sendError(err, c)
+		return
+	}
+	if header.Size > 1000000 {
+		sendServiceError(&errors.ServiceError{
+			Code: http.StatusBadRequest,
+		}, c)
 		return
 	}
 	binary, err := ioutil.ReadAll(file)

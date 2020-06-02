@@ -1,17 +1,22 @@
 package web
 
 import (
+	"context"
+	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/p1ass/midare/lib/logging"
-
+	"cloud.google.com/go/storage"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
+	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/lib/errors"
+	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
 )
 
@@ -161,6 +166,59 @@ func (h *Handler) containExcludeWord(text string) bool {
 		}
 	}
 	return false
+}
+
+func (h *Handler) UploadImage(c *gin.Context) {
+	file, _, err := c.Request.FormFile("file")
+	if err != nil {
+		sendError(err, c)
+		return
+	}
+	binary, err := ioutil.ReadAll(file)
+	if err != nil {
+		sendError(err, c)
+		return
+	}
+
+	fileName := uuid.New().String() + ".jpeg"
+
+	if err := h.uploadImageToCloudStorage(fileName, binary); err != nil {
+		sendError(err, c)
+		return
+	}
+
+	type response struct {
+		ShareURL string `json:"shareUrl"`
+	}
+	res := &response{
+		ShareURL: os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + fileName,
+	}
+	c.JSON(http.StatusOK, res)
+	return
+}
+
+func (h *Handler) uploadImageToCloudStorage(fileName string, image []byte) error {
+	ctx := context.Background()
+
+	client, err := storage.NewClient(ctx)
+	if err != nil {
+		return errors.Wrap(err, "new storage client")
+	}
+
+	bucketName := os.Getenv("BUCKET_NAME")
+	bucket := client.Bucket(bucketName)
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	defer cancel()
+	wc := bucket.Object(fileName).NewWriter(ctx)
+	if _, err = io.WriteString(wc, string(image)); err != nil {
+		return errors.Wrap(err, "upload image: %s", fileName)
+	}
+	if err := wc.Close(); err != nil {
+		return errors.Wrap(err, "close writer: %s", fileName)
+	}
+
+	return nil
 }
 
 type period struct {

@@ -47,6 +47,7 @@ func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 	withAuthGrp.Use(AuthMiddleware())
 	withAuthGrp.GET("/me", twiHandler.GetMe)
 	withAuthGrp.GET("/periods", twiHandler.GetAwakePeriods)
+	withAuthGrp.POST("images", twiHandler.UploadImage)
 
 	return r, nil
 }

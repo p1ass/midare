@@ -13,18 +13,18 @@ export const ShareRouter = ({ match }: RouteComponentProps<{ id: string }>) => {
       continue
     }
 
-    if (nameVal.indexOf('og:title') !== -1) {
-      headData[i].setAttribute('content', title)
-    }
+    // if (nameVal.indexOf('og:title') !== -1) {
+    //   headData[i].setAttribute('content', title)
+    // }
     if (nameVal.indexOf('og:image') !== -1) {
       headData[i].setAttribute(
         'content',
         `https://storage.googleapis.com/midare-share/${match.params.id}.jpeg`
       )
     }
-    if (nameVal.indexOf('og:description') !== -1) {
-      headData[i].setAttribute('content', description)
-    }
+    // if (nameVal.indexOf('og:description') !== -1) {
+    //   headData[i].setAttribute('content', description)
+    // }
   }
   return null
 }

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter, Route, RouteComponentProps } from 'react-router-dom'
+
 import styled from 'styled-components'
 import { Calendar } from './Calendar'
 import { Header } from './Header'
@@ -47,17 +49,41 @@ export function App() {
 
   const SwitchWhetherLogin = !user ? ButtonTwitterLogin : Calendar
 
+  const Share = ({ match }: RouteComponentProps<{ id: string }>) => {
+    const headData = document.head.children
+    for (let i = 0; i < headData.length; i++) {
+      const nameVal = headData[i].getAttribute('name')
+      // OGP(twitter)の設定
+      if (nameVal?.indexOf('twitter:image') !== -1) {
+        headData[i].setAttribute(
+          'content',
+          `https://storage.googleapis.com/midare-share/${match.params.id}.jpeg`
+        )
+      }
+    }
+    return null
+  }
+
+  const Main = () => {
+    return (
+      <>
+        <Header></Header>
+        <Container>
+          <FlexContainer>
+            <h1>生活習慣の乱れを可視化するやつ</h1>
+            {!isFetchUser ? <SwitchWhetherLogin /> : null}
+            <Description></Description>
+          </FlexContainer>
+        </Container>
+        <Footer></Footer>
+      </>
+    )
+  }
+
   return (
-    <>
-      <Header></Header>
-      <Container>
-        <FlexContainer>
-          <h1>生活習慣の乱れを可視化するやつ</h1>
-          {!isFetchUser ? <SwitchWhetherLogin /> : null}
-          <Description></Description>
-        </FlexContainer>
-      </Container>
-      <Footer></Footer>
-    </>
+    <BrowserRouter>
+      <Route path="/share/:id" component={Share} />
+      <Route path="/" component={Main}></Route>
+    </BrowserRouter>
   )
 }

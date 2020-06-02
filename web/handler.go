@@ -186,9 +186,10 @@ func (h *Handler) UploadImage(c *gin.Context) {
 		return
 	}
 
-	fileName := uuid.New().String() + ".jpeg"
+	fileName := uuid.New().String()
+	fileNameWithExt := fileName + ".jpeg"
 
-	if err := h.uploadImageToCloudStorage(fileName, binary); err != nil {
+	if err := h.uploadImageToCloudStorage(fileNameWithExt, binary); err != nil {
 		sendError(err, c)
 		return
 	}

@@ -42,3 +42,16 @@ export const getPeriods = async () => {
   const res = await instance.get<GetPeriodsResponse>('/periods')
   return res.data
 }
+
+interface UploadImageResponse {
+  shareUrl: string
+}
+
+export const uploadImage = async (image: Blob) => {
+  const params = new FormData()
+
+  params.append('file', image)
+  const res = await instance.post<UploadImageResponse>('/images', params)
+
+  return res.data
+}

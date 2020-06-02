@@ -3,7 +3,6 @@ package web
 import (
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/p1ass/midare/lib/logging"
 
@@ -21,7 +20,7 @@ func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 	r.Use(gin.Recovery())
 
 	logger := logging.New()
-	r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+	// r.Use(ginzap.Ginzap(logger, time.RFC3339, true))
 	r.Use(ginzap.RecoveryWithZap(logger, true))
 
 	store, err := redis.NewStore(256, "tcp", os.Getenv("REDIS_ADDR")+":6379", os.Getenv("REDIS_PASS"), []byte("secret"))

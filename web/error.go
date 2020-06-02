@@ -16,7 +16,7 @@ func sendError(err error, c *gin.Context) {
 		// logger.Warn(err.Error(), logging.Error(err))
 		sendServiceError(e, c)
 	default:
-		logger.Warn(err.Error(), logging.Error(err))
+		logger.Error(err.Error(), logging.Error(err))
 		c.String(http.StatusInternalServerError, "internal error")
 	}
 }

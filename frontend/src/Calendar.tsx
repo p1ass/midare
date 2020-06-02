@@ -65,7 +65,7 @@ export const Calendar = () => {
   useEffect(() => {
     const getPeriodsAsync = async () => {
       const res = await getPeriods()
-      if (res.periods.length > 0) {
+      if (res.periods.length === 0) {
         setInfoMsg('直近のツイートが存在しません')
         return
       }

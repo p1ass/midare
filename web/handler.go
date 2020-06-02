@@ -95,6 +95,9 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 		if err != nil {
 			return nil, err
 		}
+		if len(tweets) == 0 {
+			return []*twitter.Tweet{}, nil
+		}
 		allTweets = append(allTweets, tweets...)
 		if len(allTweets) > 1000 || time.Now().Sub(tweets[len(tweets)-1].Created) > 21*24*time.Hour {
 			break

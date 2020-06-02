@@ -153,12 +153,12 @@ export const Calendar = () => {
         <>
           <Tips />
 
-          <Grid rowTemplate={rowTemplate} generatingImage={generatingImage}>
+          <Grid rowTemplate={rowTemplate} generatingImage={false}>
             <Borders dateLabels={dateLabels} timesPerHalfHour={timesPerHalfHour} />
-            <DateHeaders generatingImage={generatingImage} dateTexts={dateTexts} />
+            <DateHeaders generatingImage={false} dateTexts={dateTexts} />
             <AwakeSchedules awakePeriods={awakePeriods}></AwakeSchedules>
-            <Times generatingImage={generatingImage} row="time-header"></Times>
-            <Times generatingImage={generatingImage} row="time-footer"></Times>
+            <Times generatingImage={false} row="time-header"></Times>
+            <Times generatingImage={false} row="time-footer"></Times>
           </Grid>
           {/* 画像生成用用DOM */}
           {generatingImage ? (

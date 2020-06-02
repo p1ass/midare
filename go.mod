@@ -7,6 +7,7 @@ require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-contrib/zap v0.0.1
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-redis/redis v6.15.8+incompatible
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/google/go-cmp v0.4.1
 	github.com/google/uuid v1.1.1

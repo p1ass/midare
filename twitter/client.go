@@ -3,14 +3,20 @@ package twitter
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
+	"strconv"
 	"sync"
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/lib/errors"
+	"github.com/p1ass/midare/lib/logging"
 	"github.com/patrickmn/go-cache"
+	"go.uber.org/zap"
 )
 
 const (
@@ -25,11 +31,11 @@ var (
 )
 
 type client struct {
-	consumer      *oauth.Consumer
-	callbackURL   string
-	requestTokens map[string]*oauth.RequestToken
-	mu            sync.Mutex
-	tweetCache    *cache.Cache
+	consumer    *oauth.Consumer
+	callbackURL string
+	mu          sync.Mutex
+	tweetCache  *cache.Cache
+	redisCli    *redis.Client
 }
 
 func newClient(consumerKey, consumerSecret, callbackURL string) *client {
@@ -41,12 +47,16 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 			AuthorizeTokenUrl: authorizationURL,
 			AccessTokenUrl:    accessTokenURL,
 		})
+	redisCli := redis.NewClient(&redis.Options{
+		Addr:     os.Getenv("REDIS_ADDR") + ":6379",
+		Password: os.Getenv("REDIS_PASS"),
+	})
 	return &client{
-		consumer:      consumer,
-		callbackURL:   callbackURL,
-		requestTokens: map[string]*oauth.RequestToken{},
-		mu:            sync.Mutex{},
-		tweetCache:    cache.New(5*time.Minute, 5*time.Minute),
+		consumer:    consumer,
+		callbackURL: callbackURL,
+		mu:          sync.Mutex{},
+		tweetCache:  cache.New(5*time.Minute, 5*time.Minute),
+		redisCli:    redisCli,
 	}
 }
 
@@ -59,7 +69,15 @@ func (cli *client) GetRequestTokenAndURL() (loginURL string, err error) {
 
 	cli.mu.Lock()
 	cli.mu.Unlock()
-	cli.requestTokens[rToken.Token] = rToken
+
+	v, err := json.Marshal(rToken)
+	if err != nil {
+		panic(err)
+	}
+	if err := cli.redisCli.Set(rToken.Token, string(v), 10*time.Minute).Err(); err != nil {
+		logging.New().Error("failed to set request token to redis", logging.Error(err))
+		return "", err
+	}
 
 	return loginURL, nil
 }
@@ -68,8 +86,14 @@ func (cli *client) GetRequestTokenAndURL() (loginURL string, err error) {
 func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {
 	cli.mu.Lock()
 	defer cli.mu.Unlock()
-	rToken, ok := cli.requestTokens[token]
-	if !ok {
+	var rToken *oauth.RequestToken
+	v, err := cli.redisCli.Get(token).Result()
+	if err != nil {
+		logging.New().Error("failed to get request token from redis", logging.Error(err))
+		return nil, err
+	}
+	if err := json.Unmarshal([]byte(v), &rToken); err != nil {
+		logging.New().Error("failed to unmarshal request token", logging.Error(err))
 		return nil, errors.New(errors.Unauthorized, "token secret not found")
 	}
 
@@ -145,9 +169,19 @@ func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID str
 	}
 	defer resp.Body.Close()
 
+	remain, err := strconv.Atoi(resp.Header.Get("X-App-Rate-Limit-Remaining"))
+	if remain%100 == 0 || remain <= 10000 {
+		logging.New().Info(resp.Status+resp.Header.Get("X-App-Rate-Limit-Limit")+":"+resp.Header.Get("X-App-Rate-Limit-Remaining")+":"+resp.Header.Get("X-App-Rate-Limit-Reset"), zap.Int("rate_limit", remain))
+	}
+
 	if resp.StatusCode != 200 {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		logging.New().Error(resp.Status + resp.Header.Get(" x-rate-limit-limit,") + ":" + resp.Header.Get("x-rate-limit-remaining ") + ":" + resp.Header.Get("x-rate-limit-reset") + string(body))
 		errMsg := &twitterError{}
-		err = json.NewDecoder(resp.Body).Decode(errMsg)
+		err = json.Unmarshal(body, err)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to decode twitter api response")
 		}

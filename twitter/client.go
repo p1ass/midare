@@ -181,7 +181,7 @@ func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID str
 		}
 		logging.New().Error(resp.Status + resp.Header.Get(" x-rate-limit-limit,") + ":" + resp.Header.Get("x-rate-limit-remaining ") + ":" + resp.Header.Get("x-rate-limit-reset") + string(body))
 		errMsg := &twitterError{}
-		err = json.Unmarshal(body, err)
+		err = json.Unmarshal(body, &errMsg)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to decode twitter api response")
 		}

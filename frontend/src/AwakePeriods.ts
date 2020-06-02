@@ -15,30 +15,48 @@ export type AwakePeriod = {
 
 const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: dayjs.Dayjs) => {
   const awakePeriods: AwakePeriod[] = []
-  let dividedTime = okiDate.add(1, 'date').startOf('date')
-  while (!netaDate.isSame(dividedTime, 'date')) {
+  let slideOkiDate = okiDate
+  let slideNetaDate = okiDate.add(1, 'day').startOf('date')
+  while (!netaDate.isSame(slideNetaDate, 'date')) {
     awakePeriods.push({
       okiTime: {
         id: period.okiTime.id,
         text: period.okiTime.text,
         createdAt: okiDate,
-        splitDate: null,
+        splitDate: slideOkiDate,
       },
       neTime: {
         id: period.neTime.id,
         text: period.neTime.text,
         createdAt: netaDate,
-        splitDate: dividedTime,
+        splitDate: slideNetaDate,
       },
     })
-    dividedTime = dividedTime.add(1, 'day')
+    slideOkiDate = slideNetaDate
+    slideNetaDate = slideOkiDate.add(1, 'day')
+  }
+  if (!slideOkiDate.isSame(slideNetaDate, 'date')) {
+    awakePeriods.push({
+      okiTime: {
+        id: period.okiTime.id,
+        text: period.okiTime.text,
+        createdAt: okiDate,
+        splitDate: slideOkiDate,
+      },
+      neTime: {
+        id: period.neTime.id,
+        text: period.neTime.text,
+        createdAt: netaDate,
+        splitDate: slideNetaDate,
+      },
+    })
   }
   awakePeriods.push({
     okiTime: {
       id: period.okiTime.id,
       text: period.okiTime.text,
       createdAt: okiDate,
-      splitDate: dividedTime,
+      splitDate: slideNetaDate,
     },
     neTime: {
       id: period.neTime.id,

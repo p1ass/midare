@@ -13,7 +13,7 @@ func sendError(err error, c *gin.Context) {
 
 	switch e := errors.Cause(err).(type) {
 	case *errors.ServiceError:
-		logger.Warn(err.Error(), logging.Error(err))
+		// logger.Warn(err.Error(), logging.Error(err))
 		sendServiceError(e, c)
 	default:
 		logger.Warn(err.Error(), logging.Error(err))

@@ -1,7 +1,9 @@
 package web
 
 import (
+	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/mrjones/oauth"
 
@@ -30,35 +32,42 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 
 	token := c.DefaultQuery("oauth_token", "")
 	if token == "" {
-		logger.Warn("oauth token should be not empty")
+		logger.Error("oauth token should be not empty")
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
 	ov := c.DefaultQuery("oauth_verifier", "")
 	if ov == "" {
-		logger.Warn("oauth verifier should be not empty")
+		logger.Error("oauth verifier should be not empty")
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
 	accessToken, err := h.twiCli.AuthorizeToken(token, ov)
 	if err != nil {
-		logger.Warn("failed to authorize", logging.Error(err))
+		logger.Error("failed to authorize", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
 	twiUser, err := h.twiCli.AccountVerifyCredentials(accessToken)
 	if err != nil {
-		logger.Warn("failed to get twitter user", logging.Error(err))
+		logger.Error("failed to get twitter user", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	h.accessTokens[twiUser.ID] = accessToken
+	marshaled, err := json.Marshal(accessToken)
+	if err != nil {
+		logger.Error("failed to marshal access token", logging.Error(err))
+		c.Redirect(http.StatusFound, h.frontendCallbackURL)
+
+	}
+
+	h.redisCli.Set(twiUser.ID, string(marshaled), 30*time.Minute)
 	if err := setSessionAndCookie(c, twiUser.ID); err != nil {
 		sendError(errors.Wrap(err, "failed to set session"), c)
 		return
@@ -74,7 +83,22 @@ func (h *Handler) getAccessToken(c *gin.Context) *oauth.AccessToken {
 	}
 	userID := v.(string)
 
-	accessToken, ok := h.accessTokens[userID]
+	logger := logging.New()
+
+	val, err := h.redisCli.Get(userID).Result()
+	if err != nil {
+		logger.Error("failed to get access token", logging.Error(err))
+		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
+		return nil
+	}
+	var accessToken *oauth.AccessToken
+	if err := json.Unmarshal([]byte(val), &accessToken); err != nil {
+		logger.Error("failed to unmarshal access token", logging.Error(err))
+		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
+		return nil
+
+	}
+
 	if !ok {
 		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
 		return nil

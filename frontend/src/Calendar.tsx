@@ -86,7 +86,7 @@ export const Calendar = () => {
   const [infoMsg, setInfoMsg] = useState('Now Loading...')
 
   const [generatingImage, setGeneratingImage] = useState(false)
-  const [generatingType, setGeneratingType] = useState<'SAVE' | 'TWITTER'>('SAVE')
+  const [generatingType] = useState<'SAVE' | 'TWITTER'>('SAVE')
 
   useEffect(() => {
     if (!gridDom) {

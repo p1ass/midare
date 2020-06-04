@@ -104,7 +104,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 			return []*twitter.Tweet{}, nil
 		}
 		allTweets = append(allTweets, tweets...)
-		if len(allTweets) > 1000 || time.Now().Sub(tweets[len(tweets)-1].Created) > 21*24*time.Hour {
+		if len(allTweets) > 1500 || time.Now().Sub(tweets[len(tweets)-1].Created) > 21*24*time.Hour {
 			break
 		}
 		maxID = allTweets[len(allTweets)-1].ID

@@ -3,6 +3,8 @@ name: Deploy
 on:
   push:
     branches:
+      - master
+
 
 env:
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}

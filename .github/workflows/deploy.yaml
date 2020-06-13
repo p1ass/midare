@@ -32,7 +32,7 @@ jobs:
           gcloud config set run/platform managed
           gcloud config set run/region ${GCP_REGION}
           gcloud auth configure-docker --quiet
-          yes | gcloud beta init --skip-diagnostics
+          gcloud beta init --skip-diagnostics --quiet
 
       - name: Build a docker image
         run: docker build . -t $IMAGE

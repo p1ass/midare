@@ -26,10 +26,10 @@ jobs:
 
       - name: Configure docker to use the gcloud cli
         run: |
-     	  	gcloud config set project ${GCP_PROJECT}
-	  		gcloud config set run/platform managed
-	  		gcloud config set run/region ${GCP_REGION}
-        	gcloud auth configure-docker --quiet
+          gcloud config set project ${GCP_PROJECT}
+          gcloud config set run/platform managed
+          gcloud config set run/region ${GCP_REGION}
+          gcloud auth configure-docker --quiet
 
       - name: Build a docker image
         run: docker build . -t $IMAGE

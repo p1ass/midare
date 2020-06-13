@@ -32,7 +32,6 @@ jobs:
           gcloud config set run/platform managed
           gcloud config set run/region ${GCP_REGION}
           gcloud auth configure-docker --quiet
-          yes | gcloud beta init --skip-diagnostics
 
       - name: Build a docker image
         run: docker build . -t $IMAGE
@@ -51,4 +50,4 @@ jobs:
             --set-env-vars `cat .env.prod | tr '\n' ','`REDIS_ADDR=${{ secrets.REDIS_ADDR }},REDIS_PASS=${{ secrets.REDIS_PASS }},TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }},TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }} \
             --allow-unauthenticated \
             --no-traffic
-            gcloud beta run services update-traffic ${{ secrets.SERVICE_NAME }} --to-latest
+            gcloud beta run services update-traffic ${{ secrets.SERVICE_NAME }} --to-latest --quiet

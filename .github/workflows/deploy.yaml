@@ -48,4 +48,5 @@ jobs:
             --max-instances 10 \
             --memory 512Mi \
             --set-env-vars `cat .env.prod | tr '\n' ','`REDIS_ADDR=${{ secrets.REDIS_ADDR }},REDIS_PASS=${{ secrets.REDIS_PASS }},TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }},TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }} \
-            --allow-unauthenticated
+            --allow-unauthenticated \
+            --no-traffic

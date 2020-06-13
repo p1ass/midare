@@ -39,7 +39,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-            gcloud run deploy foobar \
+            gcloud run deploy ${{ secrets.SERVICE_NAME }} \
               --image $IMAGE \
                --allow-unauthenticated \
               --quiet

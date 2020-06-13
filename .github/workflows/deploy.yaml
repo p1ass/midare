@@ -1,4 +1,4 @@
-name: Delivery
+name: Deploy
 
 on:
   push:

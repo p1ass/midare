@@ -32,8 +32,8 @@ jobs:
       - name: Build
         run: go build -v .
       - name: Get tools
-          run: |
-            curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.0
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.0
       - name: Test
         run: make test
 

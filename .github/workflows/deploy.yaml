@@ -7,7 +7,7 @@ on:
 env:
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
   GCP_REGION: ${{ secrets.GCP_REGION }}
-  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT }}/${ secrets.SERVICE }:${{ github.sha }}
+  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT }}/${ secrets.SERVICE_NAME }:${{ github.sha }}
 
 jobs:
   deploy:

@@ -40,6 +40,10 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
             gcloud run deploy ${{ secrets.SERVICE_NAME }} \
-              --image $IMAGE \
-               --allow-unauthenticated \
-              --quiet
+            --image $IMAGE \
+            --concurrency 40 \
+            --cpu 1 \
+            --max-instances 10 \
+            --memory 512Mi \
+            --set-env-vars `cat .env.prod | tr '\n' ','`REDIS_ADDR=${{ secrets.REDIS_ADDR }},REDIS_PASS=${{ secrests.REDIS_PASS }},TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }},TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }}
+            --allow-unauthenticated

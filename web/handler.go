@@ -95,7 +95,6 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 	var allTweets []*twitter.Tweet
 	maxID := ""
 	for {
-		// tweets, err := h.twiCli.GetUserTweets(accessToken, "uzimaru0000", maxID)
 		tweets, err := h.twiCli.GetUserTweets(accessToken, accessToken.AdditionalData["screen_name"], maxID)
 		if err != nil {
 			return nil, err
@@ -103,13 +102,26 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 		if len(tweets) == 0 {
 			return []*twitter.Tweet{}, nil
 		}
-		allTweets = append(allTweets, tweets...)
-		if len(allTweets) > 1500 || time.Now().Sub(tweets[len(tweets)-1].Created) > 21*24*time.Hour {
+		filtered := h.filterByCreated(tweets)
+		allTweets = append(allTweets, filtered...)
+		if len(allTweets) > 1500 || len(filtered) < 200 {
 			break
 		}
 		maxID = allTweets[len(allTweets)-1].ID
 	}
 	return allTweets, nil
+}
+
+func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
+	var filtered []*twitter.Tweet
+
+	for _, t := range tweets {
+		if time.Now().Sub(t.Created) <= 21*24*time.Hour {
+			filtered = append(filtered, t)
+		}
+	}
+
+	return filtered
 }
 
 func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {

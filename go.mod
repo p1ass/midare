@@ -12,6 +12,7 @@ require (
 	github.com/google/go-cmp v0.4.1
 	github.com/google/uuid v1.1.1
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
+	github.com/onsi/ginkgo v1.13.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/tommy351/zap-stackdriver v0.1.3

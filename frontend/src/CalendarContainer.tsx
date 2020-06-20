@@ -1,0 +1,98 @@
+import React, { useState, useEffect } from 'react'
+import styled from 'styled-components'
+import htmlToImage from 'html-to-image'
+import download from 'downloadjs'
+
+import { Calendar } from './Calendar'
+import { Period } from './api/client'
+
+import { getPeriods } from './api/client'
+
+const handleSave = async (dom: HTMLDivElement | null) => {
+  console.log(dom)
+  if (!dom) {
+    return
+  }
+  const dataUrl = await htmlToImage.toJpeg(dom, { quality: 0.95 })
+  download(dataUrl, 'calendar.jpeg', 'image/jpeg')
+}
+
+const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
+
+const Tips = () => {
+  return (
+    <p>
+      <span role="img" aria-label="Tips">
+        💡
+      </span>
+      クリックすることで起床後・就寝前のツイートを見ることができます。
+    </p>
+  )
+}
+
+const Button = styled.button`
+  margin: 0.5rem 0;
+`
+
+export const CalendarContainer = () => {
+  const [periods, setPeriods] = useState(new Array<Period>())
+
+  const [infoMsg, setInfoMsg] = useState('Now Loading...')
+
+  const [generatingImage, setGeneratingImage] = useState(false)
+
+  const ref = React.createRef<HTMLDivElement>()
+
+  useEffect(() => {
+    const handleSaveAsync = async () => {
+      await sleep(1000)
+      await handleSave(ref.current)
+      setGeneratingImage(false)
+    }
+    handleSaveAsync()
+  }, [ref])
+
+  useEffect(() => {
+    const getPeriodsAsync = async () => {
+      try {
+        const res = await getPeriods()
+        console.log(res)
+        if (res.periods.length === 0) {
+          setInfoMsg('直近のツイートが存在しません')
+          return
+        }
+        setPeriods(res.periods)
+      } catch (e) {
+        setInfoMsg('ツイートの取得に失敗しました。時間を空けてもう一度お試しください。')
+        return
+      }
+    }
+    getPeriodsAsync()
+  }, [])
+
+  return (
+    <>
+      {periods.length !== 0 ? (
+        <>
+          <Tips />
+          <Calendar periods={periods} generatingImage={false}></Calendar>
+          <Button
+            onClick={async () => {
+              setGeneratingImage(true)
+            }}
+          >
+            画像ファイルとして保存
+          </Button>
+          {generatingImage ? (
+            <>
+              <p>画像生成中...</p>
+              <Calendar periods={periods} generatingImage={generatingImage} ref={ref}></Calendar>
+            </>
+          ) : null}
+        </>
+      ) : (
+        <p>{infoMsg}</p>
+      )}
+    </>
+  )
+}

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { ShareRouter } from './ShareRouter'
-import { Calendar } from './Calendar'
+import { CalendarContainer } from './CalendarContainer'
 import { Header } from './Header'
 import { Footer } from './Footer'
 import { ButtonTwitterLogin } from './ButtonTwitterLogin'
 import { Description } from './Description'
+import { OGPCalendar } from './OGP'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
@@ -47,7 +48,7 @@ export function App() {
     getUserAsync()
   }, [])
 
-  const SwitchWhetherLogin = !user ? ButtonTwitterLogin : Calendar
+  const SwitchWhetherLogin = !user ? ButtonTwitterLogin : CalendarContainer
 
   const Main = () => {
     return (
@@ -67,8 +68,10 @@ export function App() {
 
   return (
     <BrowserRouter>
-      <Route path="/share/:id" component={ShareRouter} />
-      <Route path="/" component={Main}></Route>
+      <Switch>
+        <Route path="/ogp" component={OGPCalendar}></Route>
+        <Route path="/" component={Main}></Route>
+      </Switch>
     </BrowserRouter>
   )
 }

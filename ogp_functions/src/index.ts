@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import puppeteer from 'puppeteer';
 import {Storage} from '@google-cloud/storage'
-import { SSL_OP_TLS_BLOCK_PADDING_BUG } from 'constants';
 
 interface Body{
     uuid: string
@@ -16,6 +15,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
 
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
+    await page.emulateTimezone('Asia/Tokyo')
     page.setViewport(viewport)
 
     const filename = req.body.uuid + '.jpg'

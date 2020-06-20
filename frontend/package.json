@@ -24,6 +24,7 @@
     "html-to-image": "^0.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-ads": "^1.0.5",
     "react-modal": "^3.11.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",

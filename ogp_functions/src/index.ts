@@ -50,10 +50,10 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
 
     try{
         await blob.save(binary)
-        res.status(200)
+        res.status(200).send({})
         return
     }catch(e){
-        res.send(e)
+        res.status(500).send(e)
         console.log(e)
         return
     }

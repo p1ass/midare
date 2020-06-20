@@ -19,13 +19,16 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
 
     const filename = req.body.uuid + '.jpg'
 
+    let binary : Buffer
+
     try{
         await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
         await page.exposeFunction('getPeriods', ()=> req.body.periods)
         await page.waitFor(800)
-        await page.screenshot({path: filename});
+        binary = await page.screenshot({path: filename,encoding: 'binary'});
         await browser.close();
     }catch(e){
+        console.log(e)
         res.status(500).send(e)
         return
     }
@@ -42,18 +45,21 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
 
     const bucket = storage.bucket(bucketName)
 
+    const blob = bucket.file(filename);
+    const blobStream = blob.createWriteStream();
 
-    try{
-        const uploadRes = await bucket.upload(filename,{gzip:true})
-        await uploadRes[0].makePublic()
-        console.log(uploadRes[0].metadata)
-        return res.status(200)
-    }catch(e){
+    blobStream.on('error', (e) => {
         res.status(500)
         res.send(e)
         console.log(e)
         return
-    }
+    });
+  
+    blobStream.on('finish', () => {
+        return res.status(200)
+    });
+  
+    blobStream.end(binary);
 }
 
 

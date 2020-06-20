@@ -65,16 +65,16 @@ export function App() {
               </span>
             </p>
             {!isFetchUser ? <SwitchWhetherLogin /> : null}
+            <GoogleAds
+              client="ca-pub-4978327687969784"
+              slot="6211274963"
+              className="adsbygoogle"
+              format="auto"
+              style={{ display: 'block' }}
+            />
             <Description></Description>
           </FlexContainer>
         </Container>
-        <GoogleAds
-          client="ca-pub-4978327687969784"
-          slot="6211274963"
-          className="adsbygoogle"
-          format="auto"
-          style={{ display: 'block' }}
-        />
         <Footer></Footer>
       </>
     )

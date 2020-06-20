@@ -30,6 +30,10 @@ const Container = styled.div`
   margin: 0 auto;
 `
 
+const NewRelease = styled.p`
+  font-weight: bold;
+`
+
 export function App() {
   const [user, setUser] = useState<User | null>(null)
   const [isFetchUser, setIsFetchUser] = useState(true)
@@ -58,12 +62,12 @@ export function App() {
         <Container>
           <FlexContainer>
             <h1>生活習慣の乱れを可視化するやつ</h1>
-            <p>
+            <NewRelease>
               新機能 : Twitterに画像付きでシェア出来るようになりました！
               <span role="img" aria-label="クラッカー">
                 🎉
               </span>
-            </p>
+            </NewRelease>
             {!isFetchUser ? <SwitchWhetherLogin /> : null}
             <GoogleAds
               client="ca-pub-4978327687969784"

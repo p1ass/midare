@@ -6,6 +6,8 @@ import GoogleAds from 'react-google-ads'
 
 import { Calendar } from './Calendar'
 import { Period } from './api/client'
+import { ButtonSaveImage } from './ButtonSaveImage'
+import { ButtonShareTwitter } from './ButtonShareTwitter'
 
 import { getPeriods } from './api/client'
 
@@ -30,10 +32,6 @@ const Tips = () => {
     </p>
   )
 }
-
-const Button = styled.button`
-  margin: 0.5rem 0;
-`
 
 export const CalendarContainer = () => {
   const [periods, setPeriods] = useState(new Array<Period>())
@@ -80,18 +78,14 @@ export const CalendarContainer = () => {
         <>
           <Tips />
           <Calendar periods={periods} generatingImage={false}></Calendar>
-          <a
-            href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=あなたも生活習慣の乱れを可視化してみませんか？&hashtags=生活習慣の乱れを可視化するやつ`}
-          >
-            Twitterに画像つきでシェア
-          </a>
-          <Button
+          <ButtonShareTwitter
+            href={`https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=生活習慣の乱れを可視化するやつ`}
+          />
+          <ButtonSaveImage
             onClick={async () => {
               setGeneratingImage(true)
             }}
-          >
-            画像ファイルとして保存
-          </Button>
+          ></ButtonSaveImage>
           <GoogleAds
             client="ca-pub-4978327687969784"
             slot="6211274963"

@@ -54,7 +54,7 @@ export const Share = () => {
         href="http://b.hatena.ne.jp/add?mode=confirm&url=https%3A%2F%2Fmidare.p1ass.com&title=生活習慣の乱れを可視化するやつ"
         target="_blank"
         rel="noopener noreferrer"
-        title="Facebook"
+        title="はてな"
       >
         <Hatena></Hatena>
       </ShareButton>

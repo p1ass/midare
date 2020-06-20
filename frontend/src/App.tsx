@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import styled from 'styled-components'
-import GoogleAds from 'react-google-ads'
+
 import { CalendarContainer } from './CalendarContainer'
 import { Header } from './Header'
 import { Footer } from './Footer'
@@ -62,13 +62,6 @@ export function App() {
             <Description></Description>
           </FlexContainer>
         </Container>
-        <GoogleAds
-          client="ca-pub-4978327687969784"
-          slot="6211274963"
-          className="adsbygoogle"
-          format="auto"
-          style={{ display: 'block' }}
-        />
         <Footer></Footer>
       </>
     )

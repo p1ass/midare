@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import htmlToImage from 'html-to-image'
 import download from 'downloadjs'
-import GoogleAds from 'react-google-ads'
 
 import { Calendar } from './Calendar'
 import { Period } from './api/client'
@@ -11,7 +10,6 @@ import { ButtonShareTwitter } from './ButtonShareTwitter'
 import { getPeriods } from './api/client'
 
 const handleSave = async (dom: HTMLDivElement | null) => {
-  console.log(dom)
   if (!dom) {
     return
   }
@@ -56,7 +54,6 @@ export const CalendarContainer = () => {
     const getPeriodsAsync = async () => {
       try {
         const res = await getPeriods()
-        console.log(res)
         if (res.periods.length === 0) {
           setInfoMsg('直近のツイートが存在しません')
           return
@@ -85,13 +82,6 @@ export const CalendarContainer = () => {
               setGeneratingImage(true)
             }}
           ></ButtonSaveImage>
-          <GoogleAds
-            client="ca-pub-4978327687969784"
-            slot="6211274963"
-            className="adsbygoogle"
-            format="auto"
-            style={{ display: 'block' }}
-          />
           {generatingImage ? (
             <>
               <p>画像生成中...</p>

@@ -25,7 +25,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
         await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
         await page.exposeFunction('getPeriods', ()=> req.body.periods)
         await page.waitFor(800)
-        binary = await page.screenshot({path: filename,encoding: 'binary'});
+        binary = await page.screenshot({encoding: 'binary'});
         await browser.close();
     }catch(e){
         console.log(e)

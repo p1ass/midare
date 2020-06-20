@@ -13,6 +13,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import { getMe, User } from './api/client'
+import { ShareRouter } from './ShareRouter'
 
 library.add(fab)
 
@@ -70,6 +71,7 @@ export function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/ogp" component={OGPCalendar}></Route>
+        <Route path="/share/:id" component={ShareRouter}></Route>
         <Route path="/" component={Main}></Route>
       </Switch>
     </BrowserRouter>

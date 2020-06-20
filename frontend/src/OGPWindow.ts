@@ -1,7 +1,8 @@
 import { Period } from './api/client'
 
-interface OGPWindow extends Window {
-  periods: Period[]
+declare global {
+  interface Window {
+    periods: Period[]
+    getPeriods: () => Period[]
+  }
 }
-declare let window: OGPWindow
-export default window

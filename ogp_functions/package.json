@@ -15,7 +15,7 @@
         "cp-package": "copyfiles package.json functions/src",
         "local": "yarn build && cd functions && npx @google-cloud/functions-framework --target=$npm_package_config_function_name --port=8081 ",
         "build": "run-s clean tsc cp-package",
-        "deploy": "cd functions && gcloud functions deploy $npm_package_config_function_name --runtime $npm_package_config_runtime --region=$npm_package_config_region --allow-unauthenticated --max-instances=10 --memory=1024MB --trigger-http --project ${GCP_PROJECT}"
+        "deploy": "cd functions && gcloud functions deploy $npm_package_config_function_name --runtime $npm_package_config_runtime --region=$npm_package_config_region --max-instances=10 --memory=1024MB --trigger-http --project ${GCP_PROJECT}"
     },
     "bin": {
         "create-project": "./cli.js"
@@ -23,6 +23,7 @@
     "license": "MIT",
     "dependencies": {
         "@google-cloud/functions-framework": "^1.6.0",
+        "@google-cloud/storage": "^5.1.1",
         "puppeteer": "^4.0.0"
     },
     "devDependencies": {

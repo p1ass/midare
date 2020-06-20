@@ -58,6 +58,12 @@ export function App() {
         <Container>
           <FlexContainer>
             <h1>生活習慣の乱れを可視化するやつ</h1>
+            <p>
+              新機能 : Twitterに画像付きでシェア出来るようになりました！
+              <span role="img" aria-label="クラッカー">
+                🎉
+              </span>
+            </p>
             {!isFetchUser ? <SwitchWhetherLogin /> : null}
             <Description></Description>
           </FlexContainer>

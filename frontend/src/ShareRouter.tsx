@@ -1,4 +1,5 @@
-import { RouteComponentProps } from 'react-router-dom'
+import React from 'react'
+import { RouteComponentProps, Redirect } from 'react-router-dom'
 
 const title = '生活習慣の乱れを可視化するやつ'
 
@@ -18,5 +19,5 @@ export const ShareRouter = ({ match }: RouteComponentProps<{ id: string }>) => {
       )
     }
   }
-  return null
+  return <Redirect to="/"></Redirect>
 }

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
 import htmlToImage from 'html-to-image'
 import download from 'downloadjs'
 import GoogleAds from 'react-google-ads'

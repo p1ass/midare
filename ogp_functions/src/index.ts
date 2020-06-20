@@ -20,7 +20,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     const filename = req.body.uuid + '.jpg'
 
     try{
-        await page.goto('http://localhost.local:3000/ogp');
+        await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
         await page.exposeFunction('getPeriods', ()=> req.body.periods)
         await page.waitFor(800)
         await page.screenshot({path: filename});

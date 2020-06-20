@@ -14,7 +14,7 @@ export const ShareRouter = ({ match }: RouteComponentProps<{ id: string }>) => {
     if (nameVal.indexOf('og:image') !== -1) {
       headData[i].setAttribute(
         'content',
-        `https://storage.googleapis.com/midare-share/${match.params.id}.jpeg`
+        `https://storage.googleapis.com/midare-share/${match.params.id}.jpg`
       )
     }
   }

@@ -27,6 +27,7 @@ export interface User {
 
 interface GetPeriodsResponse {
   periods: Period[]
+  shareUrl: string
 }
 
 export const getLoginUrl = () => {

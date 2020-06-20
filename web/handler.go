@@ -1,16 +1,14 @@
 package web
 
 import (
-	"context"
-	"io"
-	"io/ioutil"
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
 	"time"
 
-	"cloud.google.com/go/storage"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	"github.com/google/uuid"
@@ -84,10 +82,18 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	}
 
 	type getAwakePeriodsRes struct {
-		Periods []*period `json:"periods"`
+		Periods  []*period `json:"periods"`
+		ShareURL string    `json:"shareUrl"`
 	}
 
-	c.JSON(http.StatusOK, &getAwakePeriodsRes{Periods: h.calcAwakePeriods(tweets)})
+	periods := h.calcAwakePeriods(tweets)
+
+	url, err := h.uploadImage(periods)
+	if err != nil {
+		c.Status(http.StatusInternalServerError)
+	}
+
+	c.JSON(http.StatusOK, &getAwakePeriodsRes{Periods: periods, ShareURL: url})
 }
 
 // getTweets gets more than 1000 tweets.
@@ -180,61 +186,30 @@ func (h *Handler) containExcludeWord(text string) bool {
 	return false
 }
 
-func (h *Handler) UploadImage(c *gin.Context) {
-	file, header, err := c.Request.FormFile("file")
-	if err != nil {
-		sendError(err, c)
-		return
-	}
-	if header.Size > 1000000 {
-		sendServiceError(&errors.ServiceError{
-			Code: http.StatusBadRequest,
-		}, c)
-		return
-	}
-	binary, err := ioutil.ReadAll(file)
-	if err != nil {
-		sendError(err, c)
-		return
-	}
-
+func (h *Handler) uploadImage(periods []*period) (string, error) {
 	fileName := uuid.New().String()
-	fileNameWithExt := fileName + ".jpeg"
 
-	if err := h.uploadImageToCloudStorage(fileNameWithExt, binary); err != nil {
-		sendError(err, c)
-		return
-	}
+	go h.uploadImageThroughCloudFunctions(fileName, periods)
 
-	type response struct {
-		ShareURL string `json:"shareUrl"`
-	}
-	res := &response{
-		ShareURL: os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + fileName,
-	}
-	c.JSON(http.StatusOK, res)
-	return
+	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + fileName, nil
 }
 
-func (h *Handler) uploadImageToCloudStorage(fileName string, image []byte) error {
-	ctx := context.Background()
+func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*period) error {
+	type request struct {
+		UUID    string    `json:"uuid"`
+		Periods []*period `json:"periods"`
+	}
 
-	client, err := storage.NewClient(ctx)
+	req := &request{
+		UUID:    uuid,
+		Periods: periods,
+	}
+	encoded, _ := json.Marshal(req)
+
+	_, err := http.Post(os.Getenv("CLOUD_FUNCTIONS_URL"), "application/json", bytes.NewBuffer(encoded))
 	if err != nil {
-		return errors.Wrap(err, "new storage client")
-	}
-
-	bucketName := os.Getenv("BUCKET_NAME")
-	bucket := client.Bucket(bucketName)
-
-	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
-	defer cancel()
-	wc := bucket.Object(fileName).NewWriter(ctx)
-	if _, err = io.WriteString(wc, string(image)); err != nil {
-		return errors.Wrap(err, "upload image: %s", fileName)
-	}
-	if err := wc.Close(); err != nil {
-		return errors.Wrap(err, "close writer: %s", fileName)
+		logging.New().Error(err.Error())
+		return errors.Wrap(err, "post period data to cloud functions")
 	}
 
 	return nil

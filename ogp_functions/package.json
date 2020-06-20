@@ -1,0 +1,46 @@
+{
+    "name": "ogp_functions",
+    "version": "0.0.1",
+    "description": "OGP生成用Cloud Functions",
+    "main": "index.js",
+    "config": {
+        "function_name": "ogpFunctions",
+        "region": "asia-northeast1",
+        "gcp_project": "",
+        "runtime": "nodejs12"
+    },
+    "scripts": {
+        "clean": "rimraf \"functions/*\"",
+        "tsc": "tsc",
+        "cp-package": "copyfiles package.json functions",
+        "local": "yarn build && cd functions && npx @google-cloud/functions-framework --target=$npm_package_config_function_name --port=8081 ",
+        "build": "run-s clean tsc cp-package",
+        "deploy": "yarn build && cd functions && gcloud functions deploy $npm_package_config_function_name --runtime $npm_package_config_runtime --region=$npm_package_config_region --max-instances=10 --memory=1024MB --trigger-http --project ${GCP_PROJECT} --set-env-vars=OGP_URL=https://midare.p1ass.com/ogp"
+    },
+    "bin": {
+        "create-project": "./cli.js"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@google-cloud/functions-framework": "^1.6.0",
+        "@google-cloud/storage": "^5.1.1",
+        "puppeteer": "^4.0.0"
+    },
+    "devDependencies": {
+        "@types/chai": "4.2.11",
+        "@types/chai-http": "4.2.0",
+        "@types/express": "4.17.6",
+        "@types/mocha": "7.0.2",
+        "@types/moment": "2.13.0",
+        "@types/node": "13.13.12",
+        "@types/puppeteer": "^3.0.0",
+        "chai": "4.2.0",
+        "chai-http": "4.3.0",
+        "copyfiles": "2.3.0",
+        "express": "4.17.1",
+        "mocha": "8.0.1",
+        "npm-run-all": "4.1.5",
+        "rimraf": "3.0.2",
+        "typescript": "3.9.5"
+    }
+}

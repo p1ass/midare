@@ -43,6 +43,8 @@ export const CalendarContainer = () => {
 
   const ref = React.createRef<HTMLDivElement>()
 
+  const [shareUrl, setShareUrl] = useState('')
+
   useEffect(() => {
     const handleSaveAsync = async () => {
       await sleep(1000)
@@ -62,6 +64,7 @@ export const CalendarContainer = () => {
           return
         }
         setPeriods(res.periods)
+        setShareUrl(res.shareUrl)
       } catch (e) {
         setInfoMsg('ツイートの取得に失敗しました。時間を空けてもう一度お試しください。')
         return
@@ -76,6 +79,11 @@ export const CalendarContainer = () => {
         <>
           <Tips />
           <Calendar periods={periods} generatingImage={false}></Calendar>
+          <a
+            href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=あなたも生活習慣の乱れを可視化してみませんか？&hashtags=生活習慣の乱れを可視化するやつ`}
+          >
+            Twitterに画像つきでシェア
+          </a>
           <Button
             onClick={async () => {
               setGeneratingImage(true)

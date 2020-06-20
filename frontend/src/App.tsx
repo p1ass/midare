@@ -63,7 +63,7 @@ export function App() {
           <FlexContainer>
             <h1>生活習慣の乱れを可視化するやつ</h1>
             <NewRelease>
-              新機能 : Twitterに画像付きでシェア出来るようになりました！
+              新機能 : 画像付きでTwitterにシェア出来るようになりました！
               <span role="img" aria-label="クラッカー">
                 🎉
               </span>

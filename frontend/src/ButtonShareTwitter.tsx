@@ -14,7 +14,7 @@ export const ButtonShareTwitter = ({ href }: { href: string }) => {
   return (
     <Button href={href}>
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />
-      Twitterに画像付きでシェア
+      画像付きでTwitterにシェア
     </Button>
   )
 }

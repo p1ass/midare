@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import puppeteer from 'puppeteer';
 import {Storage} from '@google-cloud/storage'
+import { SSL_OP_TLS_BLOCK_PADDING_BUG } from 'constants';
 
 interface Body{
     uuid: string
@@ -46,20 +47,16 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     const bucket = storage.bucket(bucketName)
 
     const blob = bucket.file(filename);
-    const blobStream = blob.createWriteStream();
 
-    blobStream.on('error', (e) => {
-        res.status(500)
+    try{
+        await blob.save(binary)
+        res.status(200)
+        return
+    }catch(e){
         res.send(e)
         console.log(e)
         return
-    });
-  
-    blobStream.on('finish', () => {
-        return res.status(200)
-    });
-  
-    blobStream.end(binary);
+    }
 }
 
 

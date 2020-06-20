@@ -60,15 +60,15 @@ export function App() {
             <h1>生活習慣の乱れを可視化するやつ</h1>
             {!isFetchUser ? <SwitchWhetherLogin /> : null}
             <Description></Description>
-            <GoogleAds
-              client="ca-pub-4978327687969784"
-              slot="6211274963"
-              className="adsbygoogle"
-              format="auto"
-              style={{ display: 'block' }}
-            />
           </FlexContainer>
         </Container>
+        <GoogleAds
+          client="ca-pub-4978327687969784"
+          slot="6211274963"
+          className="adsbygoogle"
+          format="auto"
+          style={{ display: 'block' }}
+        />
         <Footer></Footer>
       </>
     )

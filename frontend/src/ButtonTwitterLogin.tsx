@@ -8,6 +8,7 @@ import { ButtonBase } from './ButtonBase'
 const TwitterButton = styled(ButtonBase)`
   background-color: rgb(27, 149, 224);
   color: white;
+  margin-bottom: 2rem;
 `
 
 export const ButtonTwitterLogin = () => {

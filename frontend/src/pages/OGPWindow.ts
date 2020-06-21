@@ -1,4 +1,4 @@
-import { Period } from '../api/client'
+import { Period } from '../entity/Period'
 
 declare global {
   interface Window {

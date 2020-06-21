@@ -7,8 +7,9 @@ import { ButtonTwitterLogin } from '../components/ButtonTwitterLogin'
 import { Description } from '../components/Description'
 import { Header } from '../atom/Header'
 import { Footer } from '../atom/Footer'
+import { User } from '../entity/User'
 
-import { getMe, User } from '../api/client'
+import { getMe } from '../api/client'
 
 const FlexContainer = styled.div`
   display: flex;

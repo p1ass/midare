@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import { Period } from '../api/client'
+import { Period } from '../entity/Period'
 
-type Tweet = {
+type TweetWithTime = {
   id: string
   text: string
   createdAt: dayjs.Dayjs
@@ -9,8 +9,8 @@ type Tweet = {
 }
 
 export type AwakePeriod = {
-  okiTime: Tweet
-  neTime: Tweet
+  okiTime: TweetWithTime
+  neTime: TweetWithTime
 }
 
 const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: dayjs.Dayjs) => {

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-import { rangeTimes } from '../lib/Time'
+import { rangeTimes } from '../lib/time'
 import {
   convertPeriodsToAwakePeriods,
   getDatesBetweenLatestAndOldest,
   AwakePeriod,
-} from '../lib/AwakePeriods'
+} from '../entity/AwakePeriod'
 
 import { Times } from '../components/Times'
 import { Borders } from './Borders'
 import { AwakeSchedules } from './AwakeSchedule'
 import { DateHeaders } from '../components/DateHeaders'
-import { Period } from '../api/client'
+import { Period } from '../entity/Period'
 
 const timesPerHalfHour = rangeTimes()
 const columnTemplate =

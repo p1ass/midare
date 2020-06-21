@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ButtonBase } from './ButtonBase'
+import { ButtonBase } from '../atom/ButtonBase'
 
 const Button = styled(ButtonBase)`
   background-color: #1b95e0;

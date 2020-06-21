@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import GoogleAds from 'react-google-ads'
 import styled from 'styled-components'
-
-import { CalendarContainer } from '../components/CalendarContainer'
 import { ButtonTwitterLogin } from '../components/ButtonTwitterLogin'
 import { Description } from '../components/Description'
 import { Header } from '../atom/Header'
@@ -10,6 +8,8 @@ import { Footer } from '../atom/Footer'
 import { User } from '../entity/User'
 
 import { getMe } from '../api/client'
+
+const CalendarContainer = React.lazy(() => import('../components/CalendarContainer'))
 
 const FlexContainer = styled.div`
   display: flex;
@@ -60,7 +60,7 @@ export const Main = () => {
               🎉
             </span>
           </NewRelease>
-          {!isFetchUser ? <SwitchWhetherLogin /> : null}
+          <Suspense fallback={null}>{!isFetchUser ? <SwitchWhetherLogin /> : null}</Suspense>
           <GoogleAds
             client="ca-pub-4978327687969784"
             slot="6211274963"

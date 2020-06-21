@@ -10,25 +10,18 @@ npm, tsc, gcloud コマンドがインストール済
 "config": {
   "function_name": "関数の名前を定義,　この関数名はindex.tsの export function の名前と一致する必要があります",
   "region": "europe-west1 or us-east1 or us-central1 or asia-northeast1",
-  "gcp_project": "デプロイ先のGCPプロジェクトのIDをいれます",
-  "runtime": "nodejs8"
+  "runtime": "nodejs12"
 }
 ```
 
 ## Build
 
 ```
-$npm run build
-```
-
-## Test
-
-```
-$npm run test
+$yarn build
 ```
 
 ## Deploy
 
 ```
-$npm run deploy --prefix functions/src/
+$yarn deploy
 ```

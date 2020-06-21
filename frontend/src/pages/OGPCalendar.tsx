@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Calendar } from '../components/Calendar'
-import { Period } from '../api/client'
+import { Period } from '../entity/Period'
 
 const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 

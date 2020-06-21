@@ -6,7 +6,6 @@
     "config": {
         "function_name": "ogpFunctions",
         "region": "asia-northeast1",
-        "gcp_project": "",
         "runtime": "nodejs12"
     },
     "scripts": {

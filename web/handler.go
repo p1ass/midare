@@ -6,16 +6,17 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
+
 	"github.com/p1ass/midare/lib/errors"
 	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
+	"github.com/patrickmn/go-cache"
 )
 
 const (
@@ -30,8 +31,8 @@ const (
 type Handler struct {
 	twiCli              twitter.Client
 	frontendCallbackURL string
-	mu                  sync.Mutex
 	redisCli            *redis.Client
+	responseCache       *cache.Cache
 }
 
 // NewHandler returns a new struct of Handler.
@@ -47,8 +48,8 @@ func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, er
 	return &Handler{
 		twiCli:              twiCli,
 		frontendCallbackURL: frontendCallbackURL,
-		mu:                  sync.Mutex{},
 		redisCli:            redisCli,
+		responseCache:       cache.New(5*time.Minute, 5*time.Minute),
 	}, nil
 }
 
@@ -70,8 +71,21 @@ func (h *Handler) GetMe(c *gin.Context) {
 
 // GetAwakePeriods gets awake periods from tweets.
 func (h *Handler) GetAwakePeriods(c *gin.Context) {
+	type getAwakePeriodsRes struct {
+		Periods  []*period `json:"periods"`
+		ShareURL string    `json:"shareUrl"`
+	}
+
 	accessToken := h.getAccessToken(c)
 	if accessToken == nil {
+		return
+	}
+
+	screenName := accessToken.AdditionalData["screen_name"]
+
+	cached, ok := h.responseCache.Get(screenName)
+	if ok {
+		c.JSON(http.StatusOK, cached.(*getAwakePeriodsRes))
 		return
 	}
 
@@ -81,27 +95,27 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 		return
 	}
 
-	type getAwakePeriodsRes struct {
-		Periods  []*period `json:"periods"`
-		ShareURL string    `json:"shareUrl"`
-	}
-
 	periods := h.calcAwakePeriods(tweets)
 
-	url, err := h.uploadImage(periods)
-	if err != nil {
-		c.Status(http.StatusInternalServerError)
-	}
+	shareID := uuid.New().String()
 
-	c.JSON(http.StatusOK, &getAwakePeriodsRes{Periods: periods, ShareURL: url})
+	url := h.uploadImage(periods, shareID)
+
+	res := &getAwakePeriodsRes{Periods: periods, ShareURL: url}
+
+	h.responseCache.SetDefault(screenName, res)
+
+	c.JSON(http.StatusOK, res)
 }
 
 // getTweets gets more than 1000 tweets.
 func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, error) {
+	screenName := accessToken.AdditionalData["screen_name"]
+
 	var allTweets []*twitter.Tweet
 	maxID := ""
 	for {
-		tweets, err := h.twiCli.GetUserTweets(accessToken, accessToken.AdditionalData["screen_name"], maxID)
+		tweets, err := h.twiCli.GetUserTweets(accessToken, screenName, maxID)
 		if err != nil {
 			return nil, err
 		}
@@ -115,6 +129,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 		}
 		maxID = allTweets[len(allTweets)-1].ID
 	}
+
 	return allTweets, nil
 }
 
@@ -186,12 +201,11 @@ func (h *Handler) containExcludeWord(text string) bool {
 	return false
 }
 
-func (h *Handler) uploadImage(periods []*period) (string, error) {
-	fileName := uuid.New().String()
+func (h *Handler) uploadImage(periods []*period, shareID string) string {
 
-	go h.uploadImageThroughCloudFunctions(fileName, periods)
+	go h.uploadImageThroughCloudFunctions(shareID, periods)
 
-	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + fileName, nil
+	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID
 }
 
 func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*period) error {

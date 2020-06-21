@@ -8,14 +8,12 @@ import (
 	"net/url"
 	"os"
 	"strconv"
-	"sync"
 	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/lib/errors"
 	"github.com/p1ass/midare/lib/logging"
-	"github.com/patrickmn/go-cache"
 	"go.uber.org/zap"
 )
 
@@ -33,8 +31,6 @@ var (
 type client struct {
 	consumer    *oauth.Consumer
 	callbackURL string
-	mu          sync.Mutex
-	tweetCache  *cache.Cache
 	redisCli    *redis.Client
 }
 
@@ -54,8 +50,6 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 	return &client{
 		consumer:    consumer,
 		callbackURL: callbackURL,
-		mu:          sync.Mutex{},
-		tweetCache:  cache.New(5*time.Minute, 5*time.Minute),
 		redisCli:    redisCli,
 	}
 }
@@ -66,9 +60,6 @@ func (cli *client) GetRequestTokenAndURL() (loginURL string, err error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to get access token")
 	}
-
-	cli.mu.Lock()
-	cli.mu.Unlock()
 
 	v, err := json.Marshal(rToken)
 	if err != nil {
@@ -84,8 +75,6 @@ func (cli *client) GetRequestTokenAndURL() (loginURL string, err error) {
 
 // AuthorizeToken gets oauth access token
 func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {
-	cli.mu.Lock()
-	defer cli.mu.Unlock()
 	var rToken *oauth.RequestToken
 	v, err := cli.redisCli.Get(token).Result()
 	if err != nil {
@@ -144,11 +133,6 @@ func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, er
 }
 
 func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error) {
-	cached, ok := cli.tweetCache.Get(screenName + maxID)
-	if ok {
-		return cached.([]*Tweet), nil
-	}
-
 	httpCli, err := cli.httpClient(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make http client")
@@ -195,7 +179,6 @@ func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID str
 	}
 
 	tweets := cli.toTweets(res)
-	cli.tweetCache.SetDefault(screenName+maxID, tweets)
 	return tweets, nil
 }
 

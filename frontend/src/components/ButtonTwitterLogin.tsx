@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { getLoginUrl } from './api/client'
+import { getLoginUrl } from '../api/client'
 
 import { ButtonBase } from './ButtonBase'
 

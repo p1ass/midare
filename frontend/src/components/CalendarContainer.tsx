@@ -3,11 +3,11 @@ import htmlToImage from 'html-to-image'
 import download from 'downloadjs'
 
 import { Calendar } from './Calendar'
-import { Period } from './api/client'
+import { Period } from '../api/client'
 import { ButtonSaveImage } from './ButtonSaveImage'
 import { ButtonShareTwitter } from './ButtonShareTwitter'
 
-import { getPeriods } from './api/client'
+import { getPeriods } from '../api/client'
 
 const handleSave = async (dom: HTMLDivElement | null) => {
   if (!dom) {

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { Period } from './api/client'
+import { Period } from '../api/client'
 
 type Tweet = {
   id: string

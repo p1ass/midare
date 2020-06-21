@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { rangeTimes } from './Time'
+import { rangeTimes } from '../lib/Time'
 import { Area } from './Area'
 
 const Hour = styled(Area)<{ generatingImage: boolean }>`

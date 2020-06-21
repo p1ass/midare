@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import dayjs from 'dayjs'
 import Modal from 'react-modal'
 
-import { Area } from './Area'
-import { AwakePeriod } from './AwakePeriods'
+import { Area } from '../atom/Area'
+import { AwakePeriod } from '../lib/AwakePeriods'
 
 const ScheduleBlock = styled(Area)`
   background: rgb(88, 149, 98);

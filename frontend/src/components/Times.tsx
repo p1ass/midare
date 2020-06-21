@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { rangeTimes } from './Time'
-import { Area } from './Area'
+import { rangeTimes } from '../lib/Time'
+import { Area } from '../atom/Area'
 
 const Hour = styled(Area)<{ generatingImage: boolean }>`
   margin: 4px 0;

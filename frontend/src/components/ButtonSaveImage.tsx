@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ButtonBase } from './ButtonBase'
+import { ButtonBase } from '../atom/ButtonBase'
 
 const Button = styled(ButtonBase)`
   background-color: #7f8c8d;

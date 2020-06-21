@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { getLoginUrl } from './api/client'
+import { getLoginUrl } from '../api/client'
 
-import { ButtonBase } from './ButtonBase'
+import { ButtonBase } from '../atom/ButtonBase'
 
 const TwitterButton = styled(ButtonBase)`
   background-color: rgb(27, 149, 224);

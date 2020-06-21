@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { ButtonBase } from './ButtonBase'
+import { ButtonBase } from '../atom/ButtonBase'
 
 const GitHubButton = styled(ButtonBase)`
   background-color: #171515;

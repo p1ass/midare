@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import dayjs from 'dayjs'
-import { Area } from './Area'
+import { Area } from '../atom/Area'
 
 const Border = styled(Area)<{ time: dayjs.Dayjs }>`
   border-top: solid 1px #ccc;

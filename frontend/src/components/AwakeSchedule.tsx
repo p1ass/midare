@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import dayjs from 'dayjs'
 import Modal from 'react-modal'
 
-import { Area } from '../components/Area'
+import { Area } from '../atom/Area'
 import { AwakePeriod } from '../lib/AwakePeriods'
 
 const ScheduleBlock = styled(Area)`

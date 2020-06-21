@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { CalendarContainer } from '../components/CalendarContainer'
 import { ButtonTwitterLogin } from '../components/ButtonTwitterLogin'
 import { Description } from '../components/Description'
-import { Header } from '../components/Header'
-import { Footer } from '../components/Footer'
+import { Header } from '../atom/Header'
+import { Footer } from '../atom/Footer'
 
 import { getMe, User } from '../api/client'
 

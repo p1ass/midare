@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Area } from './Area'
+import { Area } from '../atom/Area'
 
 const HeaderCell = styled(Area)`
   padding: 0 8px;

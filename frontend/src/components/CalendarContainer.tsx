@@ -30,7 +30,7 @@ const Tips = () => {
   )
 }
 
-export const CalendarContainer = () => {
+export default () => {
   const [periods, setPeriods] = useState(new Array<Period>())
 
   const [infoMsg, setInfoMsg] = useState('Now Loading...')

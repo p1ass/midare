@@ -60,8 +60,6 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 		return
 	}
 
-	h.mu.Lock()
-	defer h.mu.Unlock()
 	marshaled, err := json.Marshal(accessToken)
 	if err != nil {
 		logger.Error("failed to marshal access token", logging.Error(err))

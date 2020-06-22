@@ -49,7 +49,7 @@ const AwakeSchedule = ({ awakePeriod }: AwakeScheduleProps) => {
       <ScheduleBlock
         colStart={okiTimeTrunate.format('HHmm')}
         colEnd={
-          !okiTimeTrunate.isSame(neTime, 'date') && neTimeTruncate.hour() === 0
+          !okiTimeTrunate.isSame(neTimeTruncate, 'date') && neTimeTruncate.hour() === 0
             ? '2400'
             : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
         }

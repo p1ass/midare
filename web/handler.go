@@ -192,7 +192,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 }
 
 func (h *Handler) containExcludeWord(text string) bool {
-	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数"}
+	excludeWords := []string{"みんなへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数"}
 	for _, word := range excludeWords {
 		if strings.Contains(text, word) {
 			return true

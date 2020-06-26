@@ -13,8 +13,8 @@ func TestHandler_containExcludeWord(t *testing.T) {
 		want bool
 	}{
 		{
-			name: "ぼくへ 生活習慣乱れてませんか？",
-			text: "ぼくへ 生活習慣乱れてませんか？",
+			name: "みんなへ 生活習慣乱れてませんか？",
+			text: "みんなへ 生活習慣乱れてませんか？",
 			want: true,
 		},
 		{

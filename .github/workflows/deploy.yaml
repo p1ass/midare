@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - master
-
+    paths-ignore:
+    - 'frontend/**'
 
 env:
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}

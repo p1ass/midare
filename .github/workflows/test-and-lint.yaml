@@ -3,6 +3,8 @@ name: test_and_lint
 on:
   pull_request:
     types: [opened, synchronize]
+    paths-ignore:
+    - 'frontend/**'
 
 jobs:
   test:

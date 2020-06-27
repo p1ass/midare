@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -25,6 +24,8 @@ const (
 
 	// この時間以内にツイートされていたらその時間は起きていることにする
 	awakeThreshold = 3*time.Hour + 30*time.Minute
+
+	oldestTweetTime = 21 * 24 * time.Hour
 )
 
 // Handler ia HTTP handler.
@@ -137,68 +138,11 @@ func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
 	var filtered []*twitter.Tweet
 
 	for _, t := range tweets {
-		if time.Now().Sub(t.Created) <= 21*24*time.Hour {
+		if time.Now().Sub(t.Created) <= oldestTweetTime {
 			filtered = append(filtered, t)
 		}
 	}
-
 	return filtered
-}
-
-func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
-	periods := []*period{}
-	var neTweet *twitter.Tweet
-	var okiTweet *twitter.Tweet
-	var lastTweet *twitter.Tweet
-	startIdx := 1
-	for i, t := range ts {
-		if !h.containExcludeWord(t.Text) {
-			neTweet = t
-			okiTweet = t
-			lastTweet = t
-			startIdx = i + 1
-			break
-		}
-	}
-	if neTweet == nil {
-		return periods
-	}
-
-	for _, t := range ts[startIdx:] {
-		if h.containExcludeWord(t.Text) {
-			continue
-		}
-
-		durationBetweenTweets := lastTweet.Created.Sub(t.Created)
-		if durationBetweenTweets < awakeThreshold {
-			okiTweet = t
-			lastTweet = t
-			continue
-		}
-
-		if okiTweet != neTweet {
-			periods = append(periods, &period{
-				OkiTime: okiTweet,
-				NeTime:  neTweet,
-			})
-		}
-
-		okiTweet = t
-		neTweet = t
-		lastTweet = t
-	}
-
-	return periods
-}
-
-func (h *Handler) containExcludeWord(text string) bool {
-	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "みんなへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数"}
-	for _, word := range excludeWords {
-		if strings.Contains(text, word) {
-			return true
-		}
-	}
-	return false
 }
 
 func (h *Handler) uploadImage(periods []*period, shareID string) string {
@@ -227,9 +171,4 @@ func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*perio
 	}
 
 	return nil
-}
-
-type period struct {
-	OkiTime *twitter.Tweet `json:"okiTime"`
-	NeTime  *twitter.Tweet `json:"neTime"`
 }

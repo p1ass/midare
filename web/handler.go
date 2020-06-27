@@ -25,6 +25,8 @@ const (
 
 	// この時間以内にツイートされていたらその時間は起きていることにする
 	awakeThreshold = 3*time.Hour + 30*time.Minute
+
+	oldestTweetTime = 21 * 24 * time.Hour
 )
 
 // Handler ia HTTP handler.
@@ -137,11 +139,10 @@ func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
 	var filtered []*twitter.Tweet
 
 	for _, t := range tweets {
-		if time.Now().Sub(t.Created) <= 21*24*time.Hour {
+		if time.Now().Sub(t.Created) <= oldestTweetTime {
 			filtered = append(filtered, t)
 		}
 	}
-
 	return filtered
 }
 
@@ -160,7 +161,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 			break
 		}
 	}
-	if neTweet == nil {
+	if lastTweet == nil {
 		return periods
 	}
 
@@ -170,7 +171,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 		}
 
 		durationBetweenTweets := lastTweet.Created.Sub(t.Created)
-		if durationBetweenTweets < awakeThreshold {
+		if durationBetweenTweets <= awakeThreshold {
 			okiTweet = t
 			lastTweet = t
 			continue
@@ -186,6 +187,13 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 		okiTweet = t
 		neTweet = t
 		lastTweet = t
+	}
+
+	if okiTweet != neTweet {
+		periods = append(periods, &period{
+			OkiTime: okiTweet,
+			NeTime:  neTweet,
+		})
 	}
 
 	return periods

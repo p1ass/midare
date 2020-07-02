@@ -153,7 +153,7 @@ func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID str
 	}
 	defer resp.Body.Close()
 
-	remain, err := strconv.Atoi(resp.Header.Get("X-App-Rate-Limit-Remaining"))
+	remain, _ := strconv.Atoi(resp.Header.Get("X-App-Rate-Limit-Remaining"))
 	if remain%100 == 0 || remain <= 10000 {
 		logging.New().Info(resp.Status+resp.Header.Get("X-App-Rate-Limit-Limit")+":"+resp.Header.Get("X-App-Rate-Limit-Remaining")+":"+resp.Header.Get("X-App-Rate-Limit-Reset"), zap.Int("rate_limit", remain))
 	}

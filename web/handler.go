@@ -12,7 +12,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
 
-	"github.com/p1ass/midare/lib/errors"
 	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
 	"github.com/patrickmn/go-cache"
@@ -138,7 +137,7 @@ func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
 	var filtered []*twitter.Tweet
 
 	for _, t := range tweets {
-		if time.Now().Sub(t.Created) <= oldestTweetTime {
+		if time.Since(t.Created) <= oldestTweetTime {
 			filtered = append(filtered, t)
 		}
 	}
@@ -152,7 +151,7 @@ func (h *Handler) uploadImage(periods []*period, shareID string) string {
 	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID
 }
 
-func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*period) error {
+func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*period) {
 	type request struct {
 		UUID    string    `json:"uuid"`
 		Periods []*period `json:"periods"`
@@ -166,9 +165,6 @@ func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*perio
 
 	_, err := http.Post(os.Getenv("CLOUD_FUNCTIONS_URL"), "application/json", bytes.NewBuffer(encoded))
 	if err != nil {
-		logging.New().Error(err.Error())
-		return errors.Wrap(err, "post period data to cloud functions")
+		logging.New().Error("post period data to cloud functions" + err.Error())
 	}
-
-	return nil
 }

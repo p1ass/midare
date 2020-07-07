@@ -17,7 +17,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-modal": "^3.10.6",
     "@types/react-router-dom": "^5.1.5",
-    "@types/styled-components": "^5.1.0",
+    "@types/styled-components": "^5.1.1",
     "axios": "^0.19.2",
     "dayjs": "^1.8.29",
     "downloadjs": "^1.4.7",

@@ -23,7 +23,7 @@
     "dependencies": {
         "@google-cloud/functions-framework": "^1.6.0",
         "@google-cloud/storage": "^5.1.2",
-        "puppeteer": "^4.0.0"
+        "puppeteer": "^5.2.0"
     },
     "devDependencies": {
         "@types/chai": "4.2.11",

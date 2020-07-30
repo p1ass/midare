@@ -19,7 +19,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.1",
     "axios": "^0.19.2",
-    "dayjs": "^1.8.30",
+    "dayjs": "^1.8.31",
     "downloadjs": "^1.4.7",
     "html-to-image": "^0.1.1",
     "react": "^16.13.1",

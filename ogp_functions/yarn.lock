@@ -17,10 +17,10 @@
     retry-request "^4.1.1"
     teeny-request "^6.0.3"
 
-"@google-cloud/functions-framework@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-1.6.0.tgz#90db9d47f0cb34a018327c54cc3590834a30e0d2"
-  integrity sha512-b9dT2bAH5Y2e0Q89zFaBJoQmIxRiSeFYxHMBBTREXLWD6rs7in4M7I/hbwbXBXximDDlC1m9QGXrIwYw/7RouA==
+"@google-cloud/functions-framework@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-1.7.0.tgz#a3eecc950907d6bea1bc5e01886aa29d5dcc6c90"
+  integrity sha512-aIccMyME6x1PCdTc3op9xm3UVhf8mi7e3NDogh8VhaScqsCsYDzRrBn30CWyHn6lqF0IJ/bwrD24X8UmLin3uQ==
   dependencies:
     body-parser "^1.18.3"
     express "^4.16.4"

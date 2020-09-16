@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^12.1.5",
     "@types/downloadjs": "^1.4.2",
     "@types/jest": "^26.0.14",
-    "@types/node": "^14.10.1",
+    "@types/node": "^14.10.2",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.0",
     "@types/react-modal": "^3.10.6",

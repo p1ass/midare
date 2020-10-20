@@ -22,7 +22,7 @@
     "dayjs": "^1.9.3",
     "downloadjs": "^1.4.7",
     "html-to-image": "^0.1.1",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-dom": "^16.13.1",
     "react-google-ads": "^1.0.5",
     "react-modal": "^3.11.2",

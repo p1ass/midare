@@ -17,12 +17,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "noFallthroughCasesInSwitch": true
   },
   "include": [
     "src"
   ],
   "paths": {
-    "*.tsx": ["*"]
+    "*.tsx": [
+      "*"
+    ]
   }
 }

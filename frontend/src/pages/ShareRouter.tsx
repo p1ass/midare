@@ -1,4 +1,3 @@
-import React from 'react'
 import { RouteComponentProps, Redirect } from 'react-router-dom'
 
 const title = '生活習慣の乱れを可視化するやつ'

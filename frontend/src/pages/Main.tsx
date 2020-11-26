@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import GoogleAds from 'react-google-ads'
 import styled from 'styled-components'
 import { ButtonTwitterLogin } from '../components/ButtonTwitterLogin'
@@ -8,8 +8,7 @@ import { Footer } from '../atom/Footer'
 import { User } from '../entity/User'
 
 import { getMe } from '../api/client'
-
-const CalendarContainer = React.lazy(() => import('../components/CalendarContainer'))
+import { CalendarContainer } from '../components/CalendarContainer'
 
 const FlexContainer = styled.div`
   display: flex;

@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 import { ButtonGitHub } from './ButtonGitHub'
 import { Share } from '../atom/Share'

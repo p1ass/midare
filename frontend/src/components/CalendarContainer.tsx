@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { createRef, useState, useEffect } from 'react'
 import htmlToImage from 'html-to-image'
 import download from 'downloadjs'
 
@@ -30,14 +30,14 @@ const Tips = () => {
   )
 }
 
-export default () => {
+export const CalendarContainer = () => {
   const [periods, setPeriods] = useState(new Array<Period>())
 
   const [infoMsg, setInfoMsg] = useState('Now Loading...')
 
   const [generatingImage, setGeneratingImage] = useState(false)
 
-  const ref = React.createRef<HTMLDivElement>()
+  const ref = createRef<HTMLDivElement>()
 
   const [shareUrl, setShareUrl] = useState('')
 

@@ -22,12 +22,12 @@
     "dayjs": "^1.9.6",
     "downloadjs": "^1.4.7",
     "html-to-image": "^0.1.1",
-    "react": "^16.14.0",
+    "react": "^17.0.1",
     "react-dom": "^16.14.0",
     "react-google-ads": "^1.0.5",
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.4",
+    "react-scripts": "4.0.1",
     "styled-components": "^5.2.1",
     "typescript": "~4.1.2"
   },
@@ -51,8 +51,8 @@
     ]
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^3.10.1",
-    "@typescript-eslint/parser": "^3.10.1",
+    "@typescript-eslint/eslint-plugin": "^4.8.2",
+    "@typescript-eslint/parser": "^4.7.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.4",

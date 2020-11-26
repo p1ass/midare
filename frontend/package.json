@@ -25,7 +25,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-google-ads": "^1.0.5",
-    "react-modal": "^3.11.2",
+    "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.4",
     "styled-components": "^5.2.1",

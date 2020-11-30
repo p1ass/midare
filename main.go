@@ -8,12 +8,24 @@ import (
 	"os/signal"
 	"time"
 
+	"cloud.google.com/go/profiler"
 	"github.com/p1ass/midare/web"
 
 	"github.com/p1ass/midare/twitter"
 )
 
 func main() {
+	if os.Getenv("K_REVISION") != "" {
+		cfg := profiler.Config{
+			Service:        "midare",
+			ServiceVersion: os.Getenv("K_REVISION"),
+			MutexProfiling: true,
+		}
+		if err := profiler.Start(cfg); err != nil {
+			log.Fatalf("Profiler failed to start: %v", err)
+		}
+	}
+
 	cli := twitter.NewClient(os.Getenv("TWITTER_CONSUMER_KEY"), os.Getenv("TWITTER_CONSUMER_SECRET"), os.Getenv("TWITTER_OAUTH_CALLBACK_URL"))
 
 	handler, err := web.NewHandler(cli, os.Getenv("FRONTEND_CALLBACK_URL"))

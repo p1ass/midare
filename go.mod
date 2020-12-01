@@ -3,7 +3,7 @@ module github.com/p1ass/midare
 go 1.14
 
 require (
-	cloud.google.com/go v0.65.0
+	cloud.google.com/go v0.72.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-contrib/zap v0.0.1

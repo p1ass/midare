@@ -9,7 +9,7 @@
     "@fortawesome/react-fontawesome": "^0.1.13",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
-    "@testing-library/user-event": "^12.2.2",
+    "@testing-library/user-event": "^12.3.0",
     "@types/downloadjs": "^1.4.2",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",

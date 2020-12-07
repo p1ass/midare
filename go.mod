@@ -3,7 +3,7 @@ module github.com/p1ass/midare
 go 1.14
 
 require (
-	cloud.google.com/go v0.65.0
+	cloud.google.com/go v0.73.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-contrib/zap v0.0.1
@@ -20,7 +20,5 @@ require (
 	github.com/tommy351/zap-stackdriver v0.1.4
 	go.uber.org/zap v1.16.0
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
-	golang.org/x/mod v0.3.0 // indirect
-	google.golang.org/api v0.35.0 // indirect
 	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
 )

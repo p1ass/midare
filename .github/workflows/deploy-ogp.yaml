@@ -2,8 +2,8 @@ name: Deploy OGP Function
 
 on:
   push:
-    # branches:
-      # - master
+    branches:
+      - master
     paths-ignore:
     - 'frontend/**'
     - 'ogp_functions/**'

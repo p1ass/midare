@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize]
     paths-ignore:
     - 'frontend/**'
+    - 'ogp_functions/**'
 
 jobs:
   test:

@@ -1,0 +1,35 @@
+name: Deploy OGP Function
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+    - 'frontend/**'
+    - 'ogp_functions/**'
+
+env:
+  GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+  GCP_REGION: ${{ secrets.GCP_REGION }}
+  IMAGE: asia.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v1
+
+      - name: GCP Authenticate
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Deploy to Cloud Functions
+        run: |
+            cd ogp_functions
+            yarn install
+            yarn deploy

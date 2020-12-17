@@ -11,6 +11,7 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
+	"go.uber.org/zap"
 
 	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
@@ -145,7 +146,7 @@ func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
 }
 
 func (h *Handler) uploadImage(periods []*period, shareID string) string {
-
+	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go h.uploadImageThroughCloudFunctions(shareID, periods)
 
 	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID

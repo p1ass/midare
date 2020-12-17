@@ -13,10 +13,11 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
         height: 640,
     }
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+
+    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+    const page = (await browser.pages())[0];
     await page.emulateTimezone('Asia/Tokyo')
-    page.setViewport(viewport)
+    await page.setViewport(viewport)
 
     const filename = req.body.uuid + '.jpg'
 
@@ -49,7 +50,9 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     const blob = bucket.file(filename);
 
     try{
+        console.log('before save')
         await blob.save(binary)
+        console.log('after save')
         res.status(200).send({})
         return
     }catch(e){

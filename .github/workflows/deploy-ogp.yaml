@@ -28,13 +28,6 @@ jobs:
           version: '290.0.1'
           service_account_key: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Configure docker to use the gcloud cli
-        run: |
-          gcloud config set project ${GCP_PROJECT}
-          gcloud config set run/platform managed
-          gcloud config set run/region ${GCP_REGION}
-    
-
       - name: Deploy to Cloud Functions
         run: |
             cd ogp_functions

@@ -1,5 +1,5 @@
 import { createRef, useState, useEffect } from 'react'
-import htmlToImage from 'html-to-image'
+import { toJpeg } from 'html-to-image'
 import download from 'downloadjs'
 
 import { Calendar } from './Calendar'
@@ -13,7 +13,7 @@ const handleSave = async (dom: HTMLDivElement | null) => {
   if (!dom) {
     return
   }
-  const dataUrl = await htmlToImage.toJpeg(dom, { quality: 0.95 })
+  const dataUrl = await toJpeg(dom, { quality: 0.95 })
   download(dataUrl, 'calendar.jpeg', 'image/jpeg')
 }
 

@@ -14,7 +14,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     }
 
 
-    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
+    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox'],headless:true});
     const page = (await browser.pages())[0];
     await page.emulateTimezone('Asia/Tokyo')
     await page.setViewport(viewport)
@@ -26,7 +26,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     try{
         await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
         await page.exposeFunction('getPeriods', ()=> req.body.periods)
-        await page.waitForTimeout(1200)
+        await page.waitForTimeout(2200)
         binary = await page.screenshot({encoding: 'binary'});
         await browser.close();
     }catch(e){

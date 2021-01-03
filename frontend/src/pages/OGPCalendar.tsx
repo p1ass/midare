@@ -17,7 +17,7 @@ export const OGPCalendar = () => {
   const [periods, setPeriods] = useState<Period[]>([])
   useEffect(() => {
     const getPeriodsAsync = async () => {
-      await sleep(1000)
+      await sleep(2000)
       setPeriods(await window.getPeriods())
     }
     getPeriodsAsync()

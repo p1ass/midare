@@ -109,13 +109,14 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-// getTweets gets more than 1000 tweets.
+// getTweets gets more than 2000 tweets.
 func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, error) {
 	screenName := accessToken.AdditionalData["screen_name"]
 
 	var allTweets []*twitter.Tweet
 	maxID := ""
-	for {
+	// 一度のAPIで200件取得するので最大200件になる
+	for i := 0; i < 10; i++ {
 		tweets, err := h.twiCli.GetUserTweets(accessToken, screenName, maxID)
 		if err != nil {
 			return nil, err
@@ -125,13 +126,21 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 		}
 		filtered := h.filterByCreated(tweets)
 		allTweets = append(allTweets, filtered...)
-		if len(allTweets) > 2000 || len(filtered) < len(tweets) {
+		if h.doesReachFirstTweet(tweets) || h.overOldestTweetTime(filtered, tweets) {
 			break
 		}
 		maxID = allTweets[len(allTweets)-1].ID
 	}
 
 	return allTweets, nil
+}
+
+func (h *Handler) overOldestTweetTime(filtered, tweets []*twitter.Tweet) bool {
+	return len(filtered) < len(tweets)
+}
+
+func (h *Handler) doesReachFirstTweet(tweets []*twitter.Tweet) bool {
+	return len(tweets) <= 1
 }
 
 func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {

@@ -26,7 +26,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     try{
         await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
         await page.exposeFunction('getPeriods', ()=> req.body.periods)
-        await page.waitForTimeout(2200)
+        await page.waitForSelector('.ogp-calendar-flex')
         binary = await page.screenshot({encoding: 'binary'});
         await browser.close();
     }catch(e){

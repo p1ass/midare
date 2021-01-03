@@ -17,14 +17,16 @@ export const OGPCalendar = () => {
   const [periods, setPeriods] = useState<Period[]>([])
   useEffect(() => {
     const getPeriodsAsync = async () => {
-      await sleep(2000)
+      while (!window.getPeriods) {
+        await sleep(100)
+      }
       setPeriods(await window.getPeriods())
     }
     getPeriodsAsync()
   }, [])
 
   return periods.length !== 0 ? (
-    <Flex>
+    <Flex className="ogp-calendar-flex">
       <Calendar periods={periods} generatingImage={true}></Calendar>
     </Flex>
   ) : null

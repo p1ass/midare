@@ -169,7 +169,7 @@ func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID str
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to decode twitter api response")
 		}
-		return nil, errors.New(errors.Unauthorized, "twitter api response status code=%d message=%v", resp.StatusCode, errMsg.Errors)
+		return nil, errors.New(errors.Unknown, "twitter api response status code=%d message=%v", resp.StatusCode, errMsg.Errors)
 	}
 
 	var res []*tweetObject

@@ -10,7 +10,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/go-cmp v0.5.4
-	github.com/google/uuid v1.1.3
+	github.com/google/uuid v1.1.4
 	github.com/googleapis/gax-go v1.0.3 // indirect
 	github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
 	github.com/onsi/ginkgo v1.13.0 // indirect

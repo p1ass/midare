@@ -11,7 +11,12 @@ const Button = styled(ButtonBase)`
 
 export const ButtonShareTwitter = ({ href }: { href: string }) => {
   return (
-    <Button href={href}>
+    <Button
+      href={href}
+      onClick={() =>
+        window.gtag('event', 'share', { event_category: 'link', event_label: href, value = 1 })
+      }
+    >
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />
       画像付きでTwitterにシェア
     </Button>

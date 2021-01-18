@@ -14,7 +14,7 @@ export const ButtonShareTwitter = ({ href }: { href: string }) => {
     <Button
       href={href}
       onClick={() =>
-        window.gtag('event', 'share', { event_category: 'link', event_label: href, value = 1 })
+        window.gtag('event', 'share', { event_category: 'link', event_label: href, value: 1 })
       }
     >
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />

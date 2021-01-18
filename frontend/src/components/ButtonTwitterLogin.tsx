@@ -12,7 +12,12 @@ const TwitterButton = styled(ButtonBase)`
 
 export const ButtonTwitterLogin = () => {
   return (
-    <TwitterButton href={getLoginUrl()}>
+    <TwitterButton
+      href={getLoginUrl()}
+      onClick={() =>
+        window.gtag('event', 'login', { event_category: 'login', event_label: 'twitter', value: 1 })
+      }
+    >
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />
       ログインして結果を見る
     </TwitterButton>

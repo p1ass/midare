@@ -11,7 +11,16 @@ const Button = styled(ButtonBase)`
 
 export const ButtonSaveImage = ({ onClick }: { onClick: () => Promise<void> }) => {
   return (
-    <Button as="button" onClick={onClick}>
+    <Button
+      as="button"
+      onClick={() => {
+        window.gtag('event', 'click', {
+          event_category: 'image',
+          value: 1,
+        })
+        onClick()
+      }}
+    >
       画像ファイルとして保存
     </Button>
   )

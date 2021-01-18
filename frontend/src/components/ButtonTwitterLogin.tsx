@@ -14,7 +14,7 @@ export const ButtonTwitterLogin = () => {
   return (
     <TwitterButton href={getLoginUrl()}>
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />
-      Twitterでログイン
+      ログインして結果を見る
     </TwitterButton>
   )
 }

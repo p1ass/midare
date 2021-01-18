@@ -7,6 +7,8 @@ interface Body{
     periods: any[]
 }
 
+const MAX_RETRY_COUNT = 3
+
 export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
     const viewport = {
         width: 1280,
@@ -21,18 +23,25 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
 
     const filename = req.body.uuid + '.jpg'
 
-    let binary : Buffer
+    let binary = Buffer.from("")
 
-    try{
-        await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
-        await page.exposeFunction('getPeriods', ()=> req.body.periods)
-        await page.waitForSelector('.ogp-calendar-flex')
-        binary = await page.screenshot({encoding: 'binary'});
-        await browser.close();
-    }catch(e){
-        console.log(e)
-        res.status(500).send(e)
-        return
+
+    for(let retryCnt=0;retryCnt<MAX_RETRY_COUNT;retryCnt++){
+        try{
+            await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
+            await page.exposeFunction('getPeriods', ()=> req.body.periods)
+            await page.waitForSelector('.ogp-calendar-flex',{timeout:5000})
+            binary = await page.screenshot({encoding: 'binary'});
+            await browser.close();
+            break
+        }catch(e){
+            if (retryCnt<MAX_RETRY_COUNT){
+                continue
+            }
+            console.error(e)
+            res.status(500).send(e)
+            return
+        }
     }
 
     const storage = new Storage()

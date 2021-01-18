@@ -30,7 +30,7 @@ export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
         binary = await page.screenshot({encoding: 'binary'});
         await browser.close();
     }catch(e){
-        console.log(e)
+        console.error(e)
         res.status(500).send(e)
         return
     }

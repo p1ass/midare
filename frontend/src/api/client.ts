@@ -21,10 +21,17 @@ export const getLoginUrl = () => {
 
 export const getMe = async () => {
   const res = await instance.get<User>('/me')
+  window.gtag('event', 'login_succeed', {
+    value: res.data.screenName,
+  })
   return res.data
 }
 
 export const getPeriods = async () => {
   const res = await instance.get<GetPeriodsResponse>('/periods')
+  window.gtag('event', 'periods_got', {
+    share_url: res.data.shareUrl,
+    value: res.data.periods.length,
+  })
   return res.data
 }

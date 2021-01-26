@@ -14,7 +14,7 @@ export const ButtonSaveImage = ({ onClick }: { onClick: () => Promise<void> }) =
     <Button
       as="button"
       onClick={() => {
-        window.gtag('event', 'click', {
+        window.gtag('event', 'image_saved', {
           event_category: 'image',
           value: 1,
         })

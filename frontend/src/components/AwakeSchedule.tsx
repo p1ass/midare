@@ -42,18 +42,18 @@ const AwakeSchedule = ({ awakePeriod }: AwakeScheduleProps) => {
     ? awakePeriod.neTime.splitDate
     : awakePeriod.neTime.createdAt
 
-  const okiTimeTrunate = truncateDate(okiTime)
+  const okiTimeTruncate = truncateDate(okiTime)
   const neTimeTruncate = truncateDate(neTime)
   return (
     <>
       <ScheduleBlock
-        colStart={okiTimeTrunate.format('HHmm')}
+        colStart={okiTimeTruncate.format('HHmm')}
         colEnd={
-          !okiTimeTrunate.isSame(neTimeTruncate, 'date') && neTimeTruncate.hour() === 0
+          !okiTimeTruncate.isSame(neTimeTruncate, 'date') && neTimeTruncate.hour() === 0
             ? '2400'
             : neTimeTruncate.format('HH') + neTimeTruncate.format('mm')
         }
-        row={okiTimeTrunate.format('MMMMDD')}
+        row={okiTimeTruncate.format('MMMMDD')}
         onClick={() => {
           setIsOpen(true)
         }}

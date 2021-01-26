@@ -31,15 +31,14 @@ jobs:
             ${{ runner.os }}-go-
       - name: Get dependencies
         run: |
-          go mod download
+          cd backend && go mod download
       - name: Build
-        run: go build -v .
+        run: cd backend && go build -v .
       - name: Get tools
         run: |
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.25.0
       - name: Test
-        run: make test
-
+        run: cd backend && make test
       - name: lint
         run: |
-          $(go env GOPATH)/bin/golangci-lint run --disable-all --enable=goimports --enable=govet
+          cd backend && $(go env GOPATH)/bin/golangci-lint run --disable-all --enable=goimports --enable=govet

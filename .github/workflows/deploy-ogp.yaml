@@ -6,6 +6,7 @@ on:
       - master
     paths-ignore:
     - 'frontend/**'
+    - 'backend/**'
 
 env:
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}

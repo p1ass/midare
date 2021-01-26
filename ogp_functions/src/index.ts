@@ -1,74 +1,73 @@
 import { Request, Response } from 'express'
-import puppeteer from 'puppeteer';
-import {Storage} from '@google-cloud/storage'
+import puppeteer from 'puppeteer'
+import { Storage } from '@google-cloud/storage'
 
-interface Body{
-    uuid: string
-    periods: any[]
+interface Body {
+  uuid: string
+  periods: any[]
 }
 
 const MAX_RETRY_COUNT = 3
 
-export async function ogpFunctions(req: Request<any,any,Body>, res: Response) {
-    const viewport = {
-        width: 1280,
-        height: 640,
+export async function ogpFunctions(req: Request<any, any, Body>, res: Response) {
+  const viewport = {
+    width: 1280,
+    height: 640
+  }
+
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true
+  })
+  const page = (await browser.pages())[0]
+  await page.emulateTimezone('Asia/Tokyo')
+  await page.setViewport(viewport)
+
+  const filename = req.body.uuid + '.jpg'
+
+  let binary = Buffer.from('')
+
+  for (let retryCnt = 0; retryCnt < MAX_RETRY_COUNT; retryCnt++) {
+    try {
+      await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp')
+      await page.exposeFunction('getPeriods', () => req.body.periods)
+      await page.waitForSelector('.ogp-calendar-flex', { timeout: 5000 })
+      binary = await page.screenshot({ encoding: 'binary' })
+      await browser.close()
+      break
+    } catch (e) {
+      if (retryCnt < MAX_RETRY_COUNT) {
+        continue
+      }
+      console.error(e)
+      res.status(500).send(e)
+      return
     }
+  }
 
+  const storage = new Storage()
 
-    const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox'],headless:true});
-    const page = (await browser.pages())[0];
-    await page.emulateTimezone('Asia/Tokyo')
-    await page.setViewport(viewport)
+  const bucketName = process.env.BUCKET_NAME || 'midare-share'
 
-    const filename = req.body.uuid + '.jpg'
+  if (!bucketName) {
+    res.status(500)
+    res.send('bucket name not found')
+    return
+  }
 
-    let binary = Buffer.from("")
+  const bucket = storage.bucket(bucketName)
 
+  const blob = bucket.file(filename)
 
-    for(let retryCnt=0;retryCnt<MAX_RETRY_COUNT;retryCnt++){
-        try{
-            await page.goto(process.env.OGP_URL || 'http://localhost.local:3000/ogp');
-            await page.exposeFunction('getPeriods', ()=> req.body.periods)
-            await page.waitForSelector('.ogp-calendar-flex',{timeout:5000})
-            binary = await page.screenshot({encoding: 'binary'});
-            await browser.close();
-            break
-        }catch(e){
-            if (retryCnt<MAX_RETRY_COUNT){
-                continue
-            }
-            console.error(e)
-            res.status(500).send(e)
-            return
-        }
-    }
-
-    const storage = new Storage()
-
-    const bucketName = process.env.BUCKET_NAME || 'midare-share'
-
-    if (!bucketName){
-        res.status(500)
-        res.send('bucket name not found')
-        return
-    }
-
-    const bucket = storage.bucket(bucketName)
-
-    const blob = bucket.file(filename);
-
-    try{
-        console.log('before save')
-        await blob.save(binary)
-        console.log('after save')
-        res.status(200).send({})
-        return
-    }catch(e){
-        res.status(500).send(e)
-        console.log(e)
-        return
-    }
+  try {
+    console.log('before save')
+    await blob.save(binary)
+    console.log('after save')
+    res.status(200).send({})
+    return
+  } catch (e) {
+    res.status(500).send(e)
+    console.log(e)
+    return
+  }
 }
-
-

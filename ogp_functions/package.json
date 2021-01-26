@@ -14,6 +14,8 @@
         "cp-package": "copyfiles package.json functions",
         "local": "yarn build && cd functions && npx @google-cloud/functions-framework --target=$npm_package_config_function_name --port=8081 ",
         "build": "run-s clean tsc cp-package",
+        "format": "prettier \"src/**/*.{ts,tsx}\" -c",
+        "lint": "eslint --ext .ts ./src",
         "deploy": "yarn build && cd functions && gcloud functions deploy $npm_package_config_function_name --runtime $npm_package_config_runtime --region=$npm_package_config_region --max-instances=50 --memory=1024MB --trigger-http --project ${GCP_PROJECT} --set-env-vars=OGP_URL=https://midare.p1ass.com/ogp"
     },
     "bin": {

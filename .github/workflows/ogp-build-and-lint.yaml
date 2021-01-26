@@ -1,0 +1,29 @@
+name: Build and Lint
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths-ignore:
+    - 'frontend/**'
+    - 'backend/**'
+jobs:
+  run:
+    name: Build and Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            yarn-
+      - name: Install deps
+        run: cd ogp_functions && yarn
+      - name: Build
+        run: cd ogp_functions && yarn build
+      - name: Lint
+        run: cd ogp_functions && yarn lint && yarn format

@@ -1,4 +1,4 @@
-name: Build and Lint
+name: OGP Build and Lint
 on:
   pull_request:
     types: [opened, synchronize]

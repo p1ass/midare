@@ -14,6 +14,8 @@
         "cp-package": "copyfiles package.json functions",
         "local": "yarn build && cd functions && npx @google-cloud/functions-framework --target=$npm_package_config_function_name --port=8081 ",
         "build": "run-s clean tsc cp-package",
+        "format": "prettier \"src/**/*.{ts,tsx}\" -c",
+        "lint": "eslint --ext .ts ./src",
         "deploy": "yarn build && cd functions && gcloud functions deploy $npm_package_config_function_name --runtime $npm_package_config_runtime --region=$npm_package_config_region --max-instances=50 --memory=1024MB --trigger-http --project ${GCP_PROJECT} --set-env-vars=OGP_URL=https://midare.p1ass.com/ogp"
     },
     "bin": {
@@ -23,23 +25,23 @@
     "dependencies": {
         "@google-cloud/functions-framework": "^1.7.1",
         "@google-cloud/storage": "^5.7.3",
-        "puppeteer": "^5.5.0"
+        "puppeteer": "^5.5.0",
+        "express": "4.17.1"
     },
     "devDependencies": {
-        "@types/chai": "4.2.14",
-        "@types/chai-http": "4.2.0",
         "@types/express": "^4.17.11",
-        "@types/mocha": "8.2.0",
-        "@types/moment": "2.13.0",
         "@types/node": "14.14.22",
         "@types/puppeteer": "^5.4.2",
-        "chai": "4.2.0",
-        "chai-http": "4.3.0",
         "copyfiles": "2.4.1",
-        "express": "4.17.1",
-        "mocha": "8.2.1",
         "npm-run-all": "4.1.5",
         "rimraf": "3.0.2",
-        "typescript": "4.1.3"
+        "typescript": "4.1.3",
+        "eslint": "^7.17.0",
+        "prettier": "^2.2.1",
+        "eslint-config-prettier": "^7.1.0",
+        "eslint-import-resolver-typescript": "^2.3.0",
+        "eslint-plugin-import": "^2.22.1",
+        "@typescript-eslint/eslint-plugin": "^4.11.1",
+        "@typescript-eslint/parser": "^4.11.1"
     }
 }

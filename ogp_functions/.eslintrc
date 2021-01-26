@@ -1,0 +1,36 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "tsconfigRootDir": ".",
+      "sourceType": "module"
+    },
+    "plugins": ["@typescript-eslint"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings",
+      "plugin:import/typescript",
+      "prettier"
+    ],
+    "rules": {
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off",
+      "import/order": [
+        "error",
+        {
+          "pathGroups": [
+            {
+              "pattern": "@/**",
+              "group": "parent",
+              "position": "after"
+            }
+          ],
+          "newlines-between": "always"
+        }
+      ],
+      "import/no-default-export": "warn"
+    }
+}

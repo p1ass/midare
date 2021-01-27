@@ -9,12 +9,12 @@ const Button = styled(ButtonBase)`
   border: none;
 `
 
-export const ButtonShareTwitter = ({ href }: { href: string }) => {
+export const ButtonShareTwitter = ({ shareUrl }: { shareUrl: string }) => {
   return (
     <Button
-      href={href}
+      href={`https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=生活習慣の乱れを可視化するやつ`}
       onClick={() =>
-        window.gtag('event', 'share', { event_category: 'link', event_label: href, value: 1 })
+        window.gtag('event', 'share', { event_category: 'link', event_label: shareUrl, value: 1 })
       }
     >
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />

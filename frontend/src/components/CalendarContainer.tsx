@@ -74,9 +74,7 @@ export const CalendarContainer = () => {
         <>
           <Tips />
           <Calendar periods={periods} generatingImage={false}></Calendar>
-          <ButtonShareTwitter
-            href={`https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=生活習慣の乱れを可視化するやつ`}
-          />
+          <ButtonShareTwitter shareUrl={shareUrl} />
           <ButtonSaveImage
             onClick={async () => {
               setGeneratingImage(true)

@@ -19,17 +19,6 @@ const handleSave = async (dom: HTMLDivElement | null) => {
 
 const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 
-const Tips = () => {
-  return (
-    <p>
-      <span role="img" aria-label="Tips">
-        💡
-      </span>
-      クリックすることで起床後・就寝前のツイートを見ることができます。
-    </p>
-  )
-}
-
 export const CalendarContainer = () => {
   const [periods, setPeriods] = useState(new Array<Period>())
 
@@ -72,7 +61,6 @@ export const CalendarContainer = () => {
     <>
       {periods.length !== 0 ? (
         <>
-          <Tips />
           <Calendar periods={periods} generatingImage={false}></Calendar>
           <ButtonShareTwitter shareUrl={shareUrl} />
           <ButtonSaveImage

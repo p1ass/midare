@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Area } from '../atom/Area'
 
 const HeaderCell = styled(Area)`
-  padding: 0 8px;
+  padding: 0px;
   border-bottom: solid 1px #ccc;
   margin-top: -1px;
 `
@@ -15,6 +15,7 @@ const DateText = styled.p<{ generatingImage: boolean }>`
   }
   @media (max-width: 40rem) {
     font-size: ${({ generatingImage }) => (generatingImage ? '0.1rem' : '0.4rem')};
+    width: 3.4rem;
   }
 `
 

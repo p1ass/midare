@@ -12,8 +12,8 @@ const Hour = styled(Area)<{ generatingImage: boolean }>`
     min-width: 0.7rem;
   }
   @media (max-width: 40rem) {
-    font-size: ${({ generatingImage }) => (generatingImage ? '1rem' : '0.4rem')};
-    min-width: ${({ generatingImage }) => (generatingImage ? '1.5rem' : '0.4rem')};
+    font-size: ${({ generatingImage }) => (generatingImage ? '1rem' : '0.2rem')};
+    min-width: ${({ generatingImage }) => (generatingImage ? '1.5rem' : '0.2rem')};
   }
 `
 

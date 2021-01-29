@@ -19,7 +19,7 @@ export const ButtonTwitterLogin = () => {
       }
     >
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />
-      ログインして結果を見る
+      起きている時間の変化を見る
     </TwitterButton>
   )
 }

@@ -18,7 +18,7 @@ export const ButtonShareTwitter = ({ shareUrl }: { shareUrl: string }) => {
       }
     >
       <FontAwesomeIcon icon={['fab', 'twitter']} style={{ paddingRight: '0.5rem' }} />
-      画像付きでTwitterにシェア
+      Twitterにシェアする
     </Button>
   )
 }

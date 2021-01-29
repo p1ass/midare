@@ -14,6 +14,12 @@ const Li = styled.li`
   padding: 0.3rem 0;
 `
 
+const ExampleImage = styled.img`
+  width: 100%;
+  max-width: 50rem;
+  margin: 0 auto;
+`
+
 export const Description = () => {
   return (
     <>
@@ -25,6 +31,8 @@ export const Description = () => {
         <br />
         ツイート数が多ければ多いほど精度が高くなります。
       </WhatIsThis>
+      <ExampleImage src="/example.png" alt="例" loading="lazy" />
+      <figcaption>生成されるカレンダーの例</figcaption>
       <h2>仕組み</h2>
       <ol>
         <li>Twitter APIを使って直近のツイートを収集します。</li>

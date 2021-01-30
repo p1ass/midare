@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { IsProd } from '../common/env'
 
 import { ButtonBase } from '../atom/ButtonBase'
 
@@ -14,10 +15,12 @@ export const ButtonSaveImage = ({ onClick }: { onClick: () => Promise<void> }) =
     <Button
       as="button"
       onClick={() => {
-        window.gtag('event', 'image_saved', {
-          event_category: 'image',
-          value: 1,
-        })
+        if (IsProd()) {
+          window.gtag('event', 'image_saved', {
+            event_category: 'image',
+            value: 1,
+          })
+        }
         onClick()
       }}
     >

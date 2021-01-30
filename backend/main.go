@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	"log"
+	"github.com/p1ass/midare/lib/logging"
+	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
@@ -23,7 +24,8 @@ func main() {
 			MutexProfiling: true,
 		}
 		if err := profiler.Start(cfg); err != nil {
-			log.Fatalf("Profiler failed to start: %v", err)
+			logging.New().Fatal("Profiler failed to start", zap.Error(err))
+			return
 		}
 	}
 
@@ -31,11 +33,13 @@ func main() {
 
 	handler, err := web.NewHandler(cli, os.Getenv("FRONTEND_CALLBACK_URL"))
 	if err != nil {
-		log.Fatalln(err)
+		logging.New().Fatal("Failed to initialize web handler", zap.Error(err))
+		return
 	}
 	router, err := web.NewRouter(handler, os.Getenv("CORS_ALLOW_ORIGIN"))
 	if err != nil {
-		log.Fatalln(err)
+		logging.New().Fatal("Failed to initialize web router", zap.Error(err))
+		return
 	}
 
 	srv := &http.Server{
@@ -46,7 +50,8 @@ func main() {
 	go func() {
 		// service connections
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatalf("listen: %s\n", err)
+			logging.New().Fatal("Failed to listen and serve", zap.Error(err))
+			return
 		}
 	}()
 
@@ -55,13 +60,13 @@ func main() {
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, os.Interrupt)
 	<-quit
-	log.Println("Shutdown Server ...")
+	logging.New().Info("Graceful Shutdown signal received")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatal("Server Shutdown:", err)
+		logging.New().Fatal("Failed to shutdown server", zap.Error(err))
 	}
-	log.Println("Server exiting")
+	logging.New().Info("Server finished")
 
 }

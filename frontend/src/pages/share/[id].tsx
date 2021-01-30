@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 
 type Prop = {
-  id: string
+  id?: string
 }
 
 const Share = ({ id }: Prop) => {
@@ -13,17 +13,19 @@ const Share = ({ id }: Prop) => {
   }
   return (
     <Head>
-      <meta
-        property="og:image"
-        content={`https://storage.googleapis.com/midare-share/${id}.jpg`}
-        key="ogImage"
-      />
+      {id ? (
+        <meta
+          property="og:image"
+          content={`https://storage.googleapis.com/midare-share/${id}.jpg`}
+          key="ogImage"
+        />
+      ) : null}
     </Head>
   )
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  return { props: { id: ctx.params.id } }
+  return { props: { id: ctx.params?.id } }
 }
 
 export default Share

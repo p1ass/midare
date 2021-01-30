@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 
 const ShareWrapper = styled.section`
   display: inline-flex;
@@ -38,7 +39,7 @@ export const Share = () => {
         rel="noopener noreferrer"
         title="Tweet"
       >
-        <FontAwesomeIcon icon={['fab', 'twitter']} style={{ color: '#1B95E0' }} size="2x" />
+        <FontAwesomeIcon icon={faTwitter} style={{ color: '#1B95E0' }} s />
       </ShareButton>
 
       <ShareButton
@@ -47,7 +48,7 @@ export const Share = () => {
         rel="noopener noreferrer"
         title="Facebook"
       >
-        <FontAwesomeIcon icon={['fab', 'facebook']} style={{ color: '#3B5999' }} size="2x" />
+        <FontAwesomeIcon icon={faTwitter} style={{ color: '#3B5999' }} />
       </ShareButton>
       <ShareButton
         href="http://b.hatena.ne.jp/add?mode=confirm&url=https%3A%2F%2Fmidare.p1ass.com&title=生活習慣の乱れを可視化するやつ"

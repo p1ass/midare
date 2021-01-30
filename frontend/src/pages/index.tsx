@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 import GoogleAds from 'react-google-ads'
 import styled from 'styled-components'
 import { ButtonTwitterLogin } from '../components/ButtonTwitterLogin'

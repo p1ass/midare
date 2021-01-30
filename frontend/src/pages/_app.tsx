@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { AppContext, AppInitialProps } from 'next/app'
 import { IsProd } from '../common/env'
+import '../index.css'
 
 function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
   const description =

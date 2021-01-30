@@ -4,7 +4,7 @@ import { Period } from '../entity/Period'
 import { User } from '../entity/User'
 import { IsProd } from '../common/env'
 
-const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost.local:8080'
+const baseURL = process.env.NEXT_API_BASE_URL || 'http://localhost.local:8080'
 
 const instance = axios.create({
   baseURL: baseURL,

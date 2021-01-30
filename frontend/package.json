@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next",
-    "build": "next build && cp _redirects build/",
-    "test": "react-scripts test",
+    "build": "next build",
     "lint": "eslint src --ext .ts,.tsx",
-    "eject": "react-scripts eject"
+    "export": "next export",
+    "start": "next start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.34",

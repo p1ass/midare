@@ -3,6 +3,12 @@ import styled from 'styled-components'
 import { Calendar } from '../components/Calendar'
 import { Period } from '../entity/Period'
 
+declare global {
+  interface Window {
+    getPeriods: () => Period[]
+  }
+}
+
 const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 
 const Flex = styled.div`

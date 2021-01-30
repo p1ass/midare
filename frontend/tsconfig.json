@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "noFallthroughCasesInSwitch": true
   },
   "include": [
@@ -27,5 +27,8 @@
     "*.tsx": [
       "*"
     ]
-  }
+  },
+  "exclude": [
+    "node_modules"
+  ]
 }

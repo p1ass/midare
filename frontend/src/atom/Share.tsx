@@ -8,6 +8,7 @@ const ShareWrapper = styled.section`
   flex-direction: row;
   margin-bottom: 1rem;
   justify-content: flex-end;
+  align-items: center;
 `
 
 const ShareButton = styled.a`
@@ -21,7 +22,7 @@ font-style: normal;
 font-variant: normal;
 text-rendering: auto;
 display: block;
-margin-bottom:4px;
+margin:0;
  &:before {
      content: "B!";
      font-family: Verdana;
@@ -40,7 +41,7 @@ export const Share = () => {
         rel="noopener noreferrer"
         title="Tweet"
       >
-        <FontAwesomeIcon icon={faTwitter} style={{ color: '#1B95E0' }} />
+        <FontAwesomeIcon icon={faTwitter} style={{ color: '#1B95E0', fontSize: '26px' }} />
       </ShareButton>
 
       <ShareButton
@@ -49,7 +50,7 @@ export const Share = () => {
         rel="noopener noreferrer"
         title="Facebook"
       >
-        <FontAwesomeIcon icon={faFacebook} style={{ color: '#3B5999' }} />
+        <FontAwesomeIcon icon={faFacebook} style={{ color: '#3B5999', fontSize: '26px' }} />
       </ShareButton>
       <ShareButton
         href="http://b.hatena.ne.jp/add?mode=confirm&url=https%3A%2F%2Fmidare.p1ass.com&title=生活習慣の乱れを可視化するやつ"

@@ -2,13 +2,14 @@ package main
 
 import (
 	"context"
-	"github.com/p1ass/midare/lib/logging"
-	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/p1ass/midare/lib/logging"
+	"go.uber.org/zap"
 
 	"cloud.google.com/go/profiler"
 	"github.com/p1ass/midare/web"

@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
         <meta name="description" content={description} />
         <meta property="og:type" content="website" />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content="https://midare.p1ass.com/ogp.jpg" />
+        <meta property="og:image" content="https://midare.p1ass.com/ogp.jpg" key="ogImage" />
         <meta property="og:url" content="https://midare.p1ass.com/" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@p1ass" />

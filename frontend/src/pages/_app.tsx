@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
           ></script>
         ) : null}
         <meta charSet="utf-8" />
-        <link rel="icon" href={`${process.env.PUBLIC_URL}/favicon.ico`} />
+        <link rel="icon" href={`/favicon.ico`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <meta name="description" content={description} />
@@ -38,8 +38,8 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
         <meta name="twitter:site" content="@p1ass" />
         <meta name="twitter:creator" content="@p1ass" />
         <meta property="og:title" content="生活習慣の乱れを可視化するやつ" />
-        <link rel="apple-touch-icon" href={`${process.env.PUBLIC_URL}/icon.png`} />
-        <link rel="manifest" href={`${process.env.PUBLIC_URL}/manifest.json`} />
+        <link rel="apple-touch-icon" href={`/icon.png`} />
+        <link rel="manifest" href={`/manifest.json`} />
         <title>生活習慣の乱れを可視化するやつ</title>
         <script
           data-ad-client="ca-pub-4978327687969784"

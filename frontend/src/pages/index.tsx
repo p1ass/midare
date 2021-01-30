@@ -23,7 +23,7 @@ const Container = styled.div`
   margin: 0 auto;
 `
 
-export const Main = () => {
+const Main = () => {
   const [user, setUser] = useState<User | null>(null)
   const [isFetchUser, setIsFetchUser] = useState(true)
 
@@ -49,7 +49,7 @@ export const Main = () => {
       <Container>
         <FlexContainer>
           <h1>生活習慣の乱れを可視化するやつ</h1>
-          <Suspense fallback={null}>{!isFetchUser ? <SwitchWhetherLogin /> : null}</Suspense>
+          {!isFetchUser ? <SwitchWhetherLogin /> : null}
           <GoogleAds
             client="ca-pub-4978327687969784"
             slot="6211274963"
@@ -64,3 +64,5 @@ export const Main = () => {
     </>
   )
 }
+
+export default Main

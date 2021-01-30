@@ -16,7 +16,7 @@ const ScheduleBlock = styled(Area)`
   cursor: pointer;
 `
 
-Modal.setAppElement('#root')
+Modal.setAppElement('#__next')
 const customModalStyles = {
   content: {
     top: '50%',

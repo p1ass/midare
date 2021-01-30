@@ -3,6 +3,12 @@ import styled from 'styled-components'
 import { Calendar } from '../components/Calendar'
 import { Period } from '../entity/Period'
 
+declare global {
+  interface Window {
+    getPeriods: () => Period[]
+  }
+}
+
 const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 
 const Flex = styled.div`
@@ -13,7 +19,7 @@ const Flex = styled.div`
   justify-content: center;
 `
 
-export const OGPCalendar = () => {
+export const OGP = () => {
   const [periods, setPeriods] = useState<Period[]>([])
   useEffect(() => {
     const getPeriodsAsync = async () => {
@@ -31,3 +37,5 @@ export const OGPCalendar = () => {
     </Flex>
   ) : null
 }
+
+export default OGP

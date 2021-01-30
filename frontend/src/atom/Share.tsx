@@ -1,11 +1,14 @@
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTwitter } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 
 const ShareWrapper = styled.section`
   display: inline-flex;
   flex-direction: row;
   margin-bottom: 1rem;
   justify-content: flex-end;
+  align-items: center;
 `
 
 const ShareButton = styled.a`
@@ -19,7 +22,7 @@ font-style: normal;
 font-variant: normal;
 text-rendering: auto;
 display: block;
-margin-bottom:4px;
+margin:0;
  &:before {
      content: "B!";
      font-family: Verdana;
@@ -38,7 +41,7 @@ export const Share = () => {
         rel="noopener noreferrer"
         title="Tweet"
       >
-        <FontAwesomeIcon icon={['fab', 'twitter']} style={{ color: '#1B95E0' }} size="2x" />
+        <FontAwesomeIcon icon={faTwitter} style={{ color: '#1B95E0', fontSize: '26px' }} />
       </ShareButton>
 
       <ShareButton
@@ -47,7 +50,7 @@ export const Share = () => {
         rel="noopener noreferrer"
         title="Facebook"
       >
-        <FontAwesomeIcon icon={['fab', 'facebook']} style={{ color: '#3B5999' }} size="2x" />
+        <FontAwesomeIcon icon={faFacebook} style={{ color: '#3B5999', fontSize: '26px' }} />
       </ShareButton>
       <ShareButton
         href="http://b.hatena.ne.jp/add?mode=confirm&url=https%3A%2F%2Fmidare.p1ass.com&title=生活習慣の乱れを可視化するやつ"

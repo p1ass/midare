@@ -1,8 +1,31 @@
 import { useState, useEffect } from 'react'
 
 import { Period } from '../entity/Period'
+import { User } from '../entity/User'
 
-import { getPeriods } from './client'
+import { getMe, getPeriods } from './client'
+
+export const useMe = (): [User | undefined, unknown | undefined, boolean] => {
+  const [user, setUser] = useState<User | undefined>(undefined)
+  const [error, setError] = useState<unknown | undefined>(undefined)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const getUserAsync = async () => {
+      try {
+        setIsLoading(true)
+        const user = await getMe()
+        setUser(user)
+      } catch (e) {
+        setError(e)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    getUserAsync()
+  }, [])
+  return [user, error, isLoading]
+}
 
 export const usePeriods = (): [Period[] | undefined, string, unknown] => {
   const [periods, setPeriods] = useState<Period[] | undefined>(undefined)

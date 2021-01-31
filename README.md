@@ -24,4 +24,4 @@ https://midare.p1ass.com
 
 ## ブログ
 
-TBD
+[Twitter トレンド１位になった個人開発 Web サービスの負荷対応記録 - ぷらすのブログ](https://blog.p1ass.com/posts/midare/)

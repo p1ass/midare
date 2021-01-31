@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 
 import { getLoginUrl } from '../api/client'
-import { IsProd } from '../lib/env'
+import { isProd } from '../lib/env'
 import { ButtonBase } from '../atom/ButtonBase'
 
 const TwitterButton = styled(ButtonBase)`
@@ -17,7 +17,7 @@ export const ButtonTwitterLogin = () => {
     <TwitterButton
       href={getLoginUrl()}
       onClick={() => {
-        if (IsProd()) {
+        if (isProd()) {
           window.gtag('event', 'login', {
             event_category: 'login',
             event_label: 'twitter',

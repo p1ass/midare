@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 
 import { ButtonBase } from '../atom/ButtonBase'
-import { IsProd } from '../lib/env'
+import { isProd } from '../lib/env'
 
 const Button = styled(ButtonBase)`
   background-color: #1b95e0;
@@ -25,7 +25,7 @@ export const ButtonShareTwitter = ({ shareUrl }: { shareUrl: string }) => {
     <FullWidthButton
       href={`https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=生活習慣の乱れを可視化するやつ`}
       onClick={() => {
-        if (IsProd()) {
+        if (isProd()) {
           window.gtag('event', 'share', { event_category: 'link', event_label: shareUrl, value: 1 })
         }
       }}

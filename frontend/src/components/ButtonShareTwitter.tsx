@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { ButtonBase } from '../atom/ButtonBase'
-import { IsProd } from '../common/env'
+import { IsProd } from '../lib/env'
 
 const Button = styled(ButtonBase)`
   background-color: #1b95e0;

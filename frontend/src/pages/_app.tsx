@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { AppContext, AppInitialProps } from 'next/app'
-import { IsProd } from '../common/env'
+import { IsProd } from '../lib/env'
 import '../index.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 

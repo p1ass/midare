@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { IsProd } from '../common/env'
+import { IsProd } from '../lib/env'
 
 import { ButtonBase } from '../atom/ButtonBase'
 

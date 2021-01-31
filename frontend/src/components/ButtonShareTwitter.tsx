@@ -10,9 +10,6 @@ const Button = styled(ButtonBase)`
   color: white;
   margin: 1rem;
   border: none;
-`
-
-const FullWidthButton = styled(Button)`
   width: 20rem;
   @media (max-width: 40rem) {
     width: 90%;
@@ -22,7 +19,7 @@ const FullWidthButton = styled(Button)`
 
 export const ButtonShareTwitter = ({ shareUrl }: { shareUrl: string }) => {
   return (
-    <FullWidthButton
+    <Button
       href={`https://twitter.com/intent/tweet?url=${shareUrl}&hashtags=生活習慣の乱れを可視化するやつ`}
       onClick={() => {
         if (isProd()) {
@@ -32,6 +29,6 @@ export const ButtonShareTwitter = ({ shareUrl }: { shareUrl: string }) => {
     >
       <FontAwesomeIcon icon={faTwitter} style={{ paddingRight: '0.5rem' }} />
       画像をシェアする
-    </FullWidthButton>
+    </Button>
   )
 }

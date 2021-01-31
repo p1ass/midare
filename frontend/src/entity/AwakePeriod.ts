@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-import { Period } from '../entity/Period'
+import { Period } from './Period'
 
 type TweetWithTime = {
   id: string

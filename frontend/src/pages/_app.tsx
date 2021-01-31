@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import { AppContext, AppInitialProps } from 'next/app'
 
-import { IsProd } from '../lib/env'
+import { isProd } from '../lib/env'
 
 import '../index.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
   return (
     <>
       <Head>
-        {IsProd() ? (
+        {isProd() ? (
           <>
             <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9" />
             <script

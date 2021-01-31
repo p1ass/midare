@@ -41,9 +41,9 @@ export const Description = () => {
         <li>ツイートの間隔が3.5時間以内であれば、その時間帯は起きているとみなします。</li>
       </ol>
       <h2>シェア</h2>
-      <Share></Share>
+      <Share />
       <h2>ソースコードはこちら↓</h2>
-      <ButtonGitHub></ButtonGitHub>
+      <ButtonGitHub />
       <h2>作成者</h2>
       <Ul>
         <Li>

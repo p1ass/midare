@@ -2,8 +2,7 @@ import { createRef, useState, useEffect } from 'react'
 import { toJpeg } from 'html-to-image'
 import download from 'downloadjs'
 
-import { Period } from '../entity/Period'
-import { getPeriods } from '../api/client'
+import { usePeriods } from '../api/hooks'
 
 import { Calendar } from './Calendar'
 import { ButtonSaveImage } from './ButtonSaveImage'
@@ -20,15 +19,11 @@ const handleSave = async (dom: HTMLDivElement | null) => {
 const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 
 export const CalendarContainer = () => {
-  const [periods, setPeriods] = useState(new Array<Period>())
-
   const [infoMsg, setInfoMsg] = useState('Now Loading...')
 
   const [generatingImage, setGeneratingImage] = useState(false)
 
   const ref = createRef<HTMLDivElement>()
-
-  const [shareUrl, setShareUrl] = useState('')
 
   useEffect(() => {
     const handleSaveAsync = async () => {
@@ -39,39 +34,32 @@ export const CalendarContainer = () => {
     handleSaveAsync()
   }, [ref])
 
+  const [periods, shareUrl, error] = usePeriods()
   useEffect(() => {
-    const getPeriodsAsync = async () => {
-      try {
-        const res = await getPeriods()
-        if (res.periods.length === 0) {
-          setInfoMsg('直近のツイートが存在しません')
-          return
-        }
-        setPeriods(res.periods)
-        setShareUrl(res.shareUrl)
-      } catch (e) {
-        setInfoMsg('ツイートの取得に失敗しました。時間を空けてもう一度お試しください。')
-        return
-      }
+    if (periods && periods.length === 0) {
+      setInfoMsg('直近のツイートが存在しません')
     }
-    getPeriodsAsync()
-  }, [])
+    if (error) {
+      console.error(error)
+      setInfoMsg('ツイートの取得に失敗しました。時間を空けてもう一度お試しください。')
+    }
+  }, [periods, error])
 
   return (
     <>
-      {periods.length !== 0 ? (
+      {periods && periods.length !== 0 ? (
         <>
-          <Calendar periods={periods} generatingImage={false}></Calendar>
+          <Calendar periods={periods} generatingImage={false} />
           <ButtonShareTwitter shareUrl={shareUrl} />
           <ButtonSaveImage
             onClick={async () => {
               setGeneratingImage(true)
             }}
-          ></ButtonSaveImage>
+          />
           {generatingImage ? (
             <>
               <p>画像生成中...</p>
-              <Calendar periods={periods} generatingImage={generatingImage} ref={ref}></Calendar>
+              <Calendar periods={periods} generatingImage={generatingImage} ref={ref} />
             </>
           ) : null}
         </>

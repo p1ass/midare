@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { IsProd } from '../lib/env'
 
+import { IsProd } from '../lib/env'
 import { ButtonBase } from '../atom/ButtonBase'
 
 const Button = styled(ButtonBase)`

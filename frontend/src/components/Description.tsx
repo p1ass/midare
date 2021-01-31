@@ -1,6 +1,8 @@
 import styled from 'styled-components'
-import { ButtonGitHub } from './ButtonGitHub'
+
 import { Share } from '../atom/Share'
+
+import { ButtonGitHub } from './ButtonGitHub'
 
 const WhatIsThis = styled.p`
   text-align: center;

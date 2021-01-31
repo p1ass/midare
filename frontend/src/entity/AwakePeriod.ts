@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+
 import { Period } from '../entity/Period'
 
 type TweetWithTime = {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
+
 import { Calendar } from '../components/Calendar'
 import { Period } from '../entity/Period'
 
@@ -33,7 +34,7 @@ export const OGP = () => {
 
   return periods.length !== 0 ? (
     <Flex className="ogp-calendar-flex">
-      <Calendar periods={periods} generatingImage={true}></Calendar>
+      <Calendar periods={periods} generatingImage={true} />
     </Flex>
   ) : null
 }

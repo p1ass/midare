@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import dayjs from 'dayjs'
+
 import { Area } from '../atom/Area'
 
 const Border = styled(Area)<{ time: dayjs.Dayjs }>`

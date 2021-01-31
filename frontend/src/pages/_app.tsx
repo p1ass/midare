@@ -1,6 +1,9 @@
+import React from 'react'
 import Head from 'next/head'
 import { AppContext, AppInitialProps } from 'next/app'
-import { IsProd } from '../common/env'
+
+import { IsProd } from '../lib/env'
+
 import '../index.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 
@@ -10,11 +13,12 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
   return (
     <>
       <Head>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9"></script>
         {IsProd() ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
+          <>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9" />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
         window.dataLayer = window.dataLayer || [];
         function gtag() {
             dataLayer.push(arguments);
@@ -22,8 +26,9 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
         gtag("js", new Date());
         gtag("config", "UA-127036212-9");
         `,
-            }}
-          ></script>
+              }}
+            />
+          </>
         ) : null}
         <meta charSet="utf-8" />
         <link rel="icon" href={`/favicon.ico`} />
@@ -45,7 +50,7 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
           data-ad-client="ca-pub-4978327687969784"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-        ></script>
+        />
       </Head>
       <Component {...pageProps} />
     </>

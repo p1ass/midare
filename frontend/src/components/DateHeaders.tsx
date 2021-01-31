@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import { Area } from '../atom/Area'
 
 const HeaderCell = styled(Area)`

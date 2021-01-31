@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import GoogleAds from 'react-google-ads'
 import styled from 'styled-components'
+
 import { ButtonTwitterLogin } from '../components/ButtonTwitterLogin'
 import { Description } from '../components/Description'
 import { Header } from '../atom/Header'
 import { Footer } from '../atom/Footer'
 import { User } from '../entity/User'
-
 import { getMe } from '../api/client'
 import { CalendarContainer } from '../components/CalendarContainer'
 
@@ -45,7 +45,7 @@ const Main = () => {
 
   return (
     <>
-      <Header></Header>
+      <Header />
       <Container>
         <FlexContainer>
           <h1>生活習慣の乱れを可視化するやつ</h1>
@@ -57,10 +57,10 @@ const Main = () => {
             format="auto"
             style={{ display: 'block' }}
           />
-          <Description></Description>
+          <Description />
         </FlexContainer>
       </Container>
-      <Footer></Footer>
+      <Footer />
     </>
   )
 }

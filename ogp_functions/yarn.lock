@@ -82,10 +82,10 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-2.0.1.tgz#79f722463a5779197267c6870362b1d7927081f7"
   integrity sha512-82EQzwrNauw1fkbUSr3f+50Bcq7g4h0XvLOk8C5e9ABkXYHei7ZPi9tiMMD7Vh3SfcdH97d1ibJ3KBWp2o1J+w==
 
-"@google-cloud/storage@^5.7.3":
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.7.3.tgz#bf62be3daa2d5a253a907f514edee7e69c9f75bd"
-  integrity sha512-1or09kfx8bmSMG5MvTCiuooCfS0btDtchvwQpIx/iF2IogzmFhLFFtmCeEpstTsfql6bHAnvN8Up7W5+9kMgdA==
+"@google-cloud/storage@^5.7.4":
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.7.4.tgz#de79c569a2b296e7c85d9141812fbe107a66c1ef"
+  integrity sha512-fynB3kDT+lhx71laML+LtUs/w9Ezcf+SVAsaP0fhAyPQzOc0kp43uYTymYCvF9GffYR7jcy6yqYifeMSU9VEVA==
   dependencies:
     "@google-cloud/common" "^3.5.0"
     "@google-cloud/paginator" "^3.0.0"

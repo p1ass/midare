@@ -27,7 +27,7 @@ export const ButtonTwitterLogin = () => {
       }}
     >
       <FontAwesomeIcon icon={faTwitter} style={{ paddingRight: '0.5rem' }} />
-      起きている時間の変化を見る
+      乱れを可視化する
     </TwitterButton>
   )
 }

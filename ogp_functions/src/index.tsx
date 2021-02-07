@@ -52,7 +52,18 @@ export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Re
   }
 
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      // puppeteer高速化のためのオプション
+      // https://github.com/puppeteer/puppeteer/issues/3120#issuecomment-415553869
+      '--disable-gpu',
+      '--disable-dev-shm-usage',
+      '--no-first-run',
+      '--no-sandbox',
+      '--no-zygote',
+      '--single-process' // <- this one doesn't works in Windows
+    ],
     headless: process.env.NODE_ENV === 'production'
   })
   const page = (await browser.pages())[0]

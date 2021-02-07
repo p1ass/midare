@@ -49,7 +49,7 @@ jobs:
             --cpu 1 \
             --max-instances 10 \
             --memory 512Mi \
-            --set-env-vars `cat .env.prod | tr '\n' ','`REDIS_ADDR=${{ secrets.REDIS_ADDR }},REDIS_PASS=${{ secrets.REDIS_PASS }},TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }},TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }},CLOUD_FUNCTIONS_URL=${{ secrets.CLOUD_FUNCTIONS_URL }} \
+            --set-env-vars `cat .env.prod | tr '\n' ','`REDIS_ADDR=${{ secrets.REDIS_ADDR }},REDIS_PASS=${{ secrets.REDIS_PASS }},TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }},TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }},CLOUD_FUNCTIONS_URL=${{ secrets.CLOUD_FUNCTIONS_URL }},SESSION_KEY=${{ secrets.SESSION_KEY}} \
             --allow-unauthenticated \
             --no-traffic
             yes | gcloud beta run services update-traffic ${{ secrets.SERVICE_NAME }} --to-latest --quiet

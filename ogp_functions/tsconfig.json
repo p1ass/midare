@@ -2,6 +2,7 @@
     "buildOnSave": false,
     "compileOnSave": false,
     "compilerOptions": {
+        "jsx": "react-jsx",
         "charset": "utf8",
         "module": "commonjs",
         "target": "es2018",
@@ -18,7 +19,8 @@
         "sourceMap": false,
         "esModuleInterop": true,
         "outDir": "functions",
-        "noImplicitReturns": true
+        "noImplicitReturns": true,
+        "skipLibCheck": true,
     },
     "typeRoots": [
         "node_modules/@types"

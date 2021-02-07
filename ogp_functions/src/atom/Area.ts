@@ -8,6 +8,6 @@ interface AreaProps {
 export const Area = styled.div.attrs<AreaProps>(({ row, colStart, colEnd }) => ({
   style: {
     gridRow: row,
-    gridColumn: colEnd ? `t-${colStart} / t-${colEnd}` : `t-${colStart}`,
-  },
+    gridColumn: colEnd ? `t-${colStart} / t-${colEnd}` : `t-${colStart}`
+  }
 }))<AreaProps>``

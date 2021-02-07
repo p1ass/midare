@@ -24,14 +24,14 @@ const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: d
         id: period.okiTime.id,
         text: period.okiTime.text,
         createdAt: okiDate,
-        splitDate: slideOkiDate,
+        splitDate: slideOkiDate
       },
       neTime: {
         id: period.neTime.id,
         text: period.neTime.text,
         createdAt: netaDate,
-        splitDate: slideNetaDate,
-      },
+        splitDate: slideNetaDate
+      }
     })
     slideOkiDate = slideNetaDate
     slideNetaDate = slideOkiDate.add(1, 'day')
@@ -42,29 +42,30 @@ const splitPeriodAtMidnight = (period: Period, okiDate: dayjs.Dayjs, netaDate: d
         id: period.okiTime.id,
         text: period.okiTime.text,
         createdAt: okiDate,
-        splitDate: slideOkiDate,
+        splitDate: slideOkiDate
       },
       neTime: {
         id: period.neTime.id,
         text: period.neTime.text,
         createdAt: netaDate,
-        splitDate: slideNetaDate,
-      },
+        splitDate: slideNetaDate
+      }
     })
   }
+
   awakePeriods.push({
     okiTime: {
       id: period.okiTime.id,
       text: period.okiTime.text,
       createdAt: okiDate,
-      splitDate: slideNetaDate,
+      splitDate: slideNetaDate
     },
     neTime: {
       id: period.neTime.id,
       text: period.neTime.text,
       createdAt: netaDate,
-      splitDate: null,
-    },
+      splitDate: null
+    }
   })
   return awakePeriods
 }
@@ -80,14 +81,14 @@ export const convertPeriodsToAwakePeriods = (periods: Period[]) => {
           id: period.okiTime.id,
           text: period.okiTime.text,
           createdAt: okiDate,
-          splitDate: null,
+          splitDate: null
         },
         neTime: {
           id: period.neTime.id,
           text: period.neTime.text,
           createdAt: netaDate,
-          splitDate: null,
-        },
+          splitDate: null
+        }
       })
     } else {
       const divided = splitPeriodAtMidnight(period, okiDate, netaDate)

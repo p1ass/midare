@@ -9,7 +9,7 @@ import { ButtonBase } from '../atom/ButtonBase'
 const TwitterButton = styled(ButtonBase)`
   background-color: rgb(27, 149, 224);
   color: white;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `
 
 export const ButtonTwitterLogin = () => {

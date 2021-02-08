@@ -29,13 +29,14 @@ body {
 
 export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Response) {
   const sheet = new ServerStyleSheet()
-  const calendar = (
-    <StyleSheetManager sheet={sheet.instance}>
-      <Flex className="ogp-calendar-flex">
-        <Calendar periods={req.body.periods}></Calendar>
-      </Flex>
-    </StyleSheetManager>
-  )
+  const calendar =
+    req.body.periods && req.body.periods.length > 0 ? (
+      <StyleSheetManager sheet={sheet.instance}>
+        <Flex className="ogp-calendar-flex">
+          <Calendar periods={req.body.periods}></Calendar>
+        </Flex>
+      </StyleSheetManager>
+    ) : null
   if (!calendar) {
     console.error('calender is null')
     res.status(500).send({})

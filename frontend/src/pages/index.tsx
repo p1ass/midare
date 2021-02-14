@@ -34,7 +34,7 @@ const DescriptionAboutTwitterLogin = styled.p`
 const Main = () => {
   const [user, , isLoading] = useMe()
   const SwitchWhetherLogin = user ? (
-    <CalendarContainer></CalendarContainer>
+    <CalendarContainer user={user}></CalendarContainer>
   ) : (
     <>
       <ButtonTwitterLogin></ButtonTwitterLogin>

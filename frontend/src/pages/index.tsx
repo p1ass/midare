@@ -31,10 +31,14 @@ const DescriptionAboutTwitterLogin = styled.p`
   margin: 0;
 `
 
+const Title = styled.h1`
+  text-align: center;
+`
+
 const Main = () => {
   const [user, , isLoading] = useMe()
   const SwitchWhetherLogin = user ? (
-    <CalendarContainer></CalendarContainer>
+    <CalendarContainer user={user}></CalendarContainer>
   ) : (
     <>
       <ButtonTwitterLogin></ButtonTwitterLogin>
@@ -52,7 +56,15 @@ const Main = () => {
       <Header />
       <Container>
         <FlexContainer>
-          <h1>生活習慣の乱れを可視化するやつ</h1>
+          <Title>
+            <span className="ww">生活習慣</span>
+            <span className="ww">の</span>
+            <span className="ww">乱れを</span>
+            <span className="ww">可視化</span>
+            <span className="ww">する</span>
+            <span className="ww">やつ</span>
+          </Title>
+
           {!isLoading ? SwitchWhetherLogin : null}
           <GoogleAds
             client="ca-pub-4978327687969784"

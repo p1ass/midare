@@ -1,12 +1,14 @@
-import { createRef, useState, useEffect } from 'react'
+import React, { createRef, useState, useEffect } from 'react'
 import { toJpeg } from 'html-to-image'
 import download from 'downloadjs'
 
 import { usePeriods } from '../api/hooks'
+import { User } from '../entity/User'
 
 import { Calendar } from './Calendar'
 import { ButtonSaveImage } from './ButtonSaveImage'
 import { ButtonShareTwitter } from './ButtonShareTwitter'
+import { CalendarUser } from './CalendarUser'
 
 const handleSave = async (dom: HTMLDivElement | null) => {
   if (!dom) {
@@ -18,7 +20,11 @@ const handleSave = async (dom: HTMLDivElement | null) => {
 
 const sleep = (msec: number) => new Promise((resolve) => setTimeout(resolve, msec))
 
-export const CalendarContainer = () => {
+type Props = {
+  user: User
+}
+
+export const CalendarContainer = ({ user }: Props) => {
   const [infoMsg, setInfoMsg] = useState('Now Loading...')
 
   const [generatingImage, setGeneratingImage] = useState(false)
@@ -49,6 +55,7 @@ export const CalendarContainer = () => {
     <>
       {periods && periods.length !== 0 ? (
         <>
+          <CalendarUser user={user}></CalendarUser>
           <Calendar periods={periods} generatingImage={false} />
           <ButtonShareTwitter shareUrl={shareUrl} />
           <ButtonSaveImage

@@ -18,7 +18,7 @@ export const CalendarUser = ({ user }: Props) => {
   return (
     <UserInfoWrapper>
       <img src={user.imageUrl} width="48px" height="48px" />
-      <p>{user.screenName}さんの生活習慣はこちら！</p>
+      <p>👇 {user.screenName}さんの生活習慣はこちら👇</p>
     </UserInfoWrapper>
   )
 }

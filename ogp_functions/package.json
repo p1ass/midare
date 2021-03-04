@@ -24,7 +24,7 @@
     "license": "MIT",
     "dependencies": {
         "@google-cloud/functions-framework": "^1.7.1",
-        "@google-cloud/storage": "^5.7.4",
+        "@google-cloud/storage": "^5.8.1",
         "dayjs": "^1.10.4",
         "express": "4.17.1",
         "puppeteer": "^5.5.0",

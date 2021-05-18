@@ -40,7 +40,7 @@
         "@types/react-dom": "^17.0.5",
         "@types/styled-components": "^5.1.9",
         "@typescript-eslint/eslint-plugin": "^4.23.0",
-        "@typescript-eslint/parser": "^4.23.0",
+        "@typescript-eslint/parser": "^4.24.0",
         "copyfiles": "2.4.1",
         "eslint": "^7.26.0",
         "eslint-config-prettier": "^8.3.0",

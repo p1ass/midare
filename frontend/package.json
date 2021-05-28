@@ -16,7 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.0.16",
+    "@testing-library/user-event": "^13.1.9",
     "axios": "^0.21.1",
     "dayjs": "^1.10.4",
     "downloadjs": "^1.4.7",

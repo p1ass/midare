@@ -72,9 +72,8 @@ export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Re
   await page.setViewport(viewport)
   await page.setContent(html + styleTags + globalStyle)
   const binary = await page.screenshot({ encoding: 'binary' })
-
-  // デバッグしやすいようにローカルではブラウザを閉じない
   if (process.env.NODE_ENV === 'production') {
+    // デバッグしやすいようにローカルではブラウザを閉じない
     await browser.close()
   }
 
@@ -96,10 +95,15 @@ export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Re
 
   try {
     console.log('before save')
-    await blob.save(binary)
-    console.log('after save')
-    res.status(200).send({})
-    return
+    if (binary instanceof Buffer) {
+      await blob.save(binary)
+
+      console.log('after save')
+      res.status(200).send({})
+      return
+    } else {
+      res.status(500).send({ message: 'binary is not Buffer' })
+    }
   } catch (e) {
     res.status(500).send(e)
     console.log(e)

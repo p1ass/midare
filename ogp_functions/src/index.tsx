@@ -8,6 +8,8 @@ import { Calendar } from './components/Calendar'
 import { Period } from './entity/Period'
 
 interface Body {
+  name: string
+  iconUrl: string
   uuid: string
   periods: Period[]
 }
@@ -17,14 +19,42 @@ const Flex = styled.div`
   height: 100vh;
   width: 100vw;
   align-items: center;
+  justify-content: flex-start;
+`
+
+const LeftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  padding: 0 32px;
+  width: 250px;
+  height: 100vh;
+  background-color: rgb(88, 149, 98);
+`
+
+const IconImage = styled.img`
+  width: 200px;
+  border-radius: 200px;
+`
+
+const LeftHeadline = styled.p`
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+`
+
+const WhiteText = styled.p`
+  color: white;
 `
 
 const globalStyle = `
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
 body {
   margin:0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Noto Sans JP', sans-serif;
 </style>`
 
 export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Response) {
@@ -33,6 +63,11 @@ export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Re
     req.body.periods && req.body.periods.length > 0 ? (
       <StyleSheetManager sheet={sheet.instance}>
         <Flex className="ogp-calendar-flex">
+          <LeftContainer>
+            <IconImage src={req.body.iconUrl.replace('normal', '400x400')}></IconImage>
+            <LeftHeadline>{req.body.name}さんの生活習慣</LeftHeadline>
+            <WhiteText>#生活習慣の乱れを可視化するやつ</WhiteText>
+          </LeftContainer>
           <Calendar periods={req.body.periods}></Calendar>
         </Flex>
       </StyleSheetManager>

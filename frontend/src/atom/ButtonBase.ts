@@ -5,6 +5,7 @@ export const ButtonBase = styled.a`
   border-radius: 0.5rem;
   text-decoration: none;
   font-weight: bold;
+  cursor: pointer;
   &:visited {
     color: white;
   }

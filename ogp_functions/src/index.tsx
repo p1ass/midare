@@ -83,7 +83,7 @@ export async function ogpFunctions(req: Request<unknown, unknown, Body>, res: Re
   sheet.seal()
 
   const viewport = {
-    width: 1280,
+    width: 1200,
     height: 640
   }
 

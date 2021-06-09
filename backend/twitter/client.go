@@ -6,12 +6,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/lib/errors"
 	"github.com/p1ass/midare/lib/logging"
@@ -44,9 +44,10 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 			AuthorizeTokenUrl: authorizationURL,
 			AccessTokenUrl:    accessTokenURL,
 		})
+	redisCfg := config.ReadRedisConfig()
 	redisCli := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_ADDR") + ":6379",
-		Password: os.Getenv("REDIS_PASS"),
+		Addr:     redisCfg.Addr(),
+		Password: redisCfg.Password,
 	})
 	return &client{
 		consumer:    consumer,

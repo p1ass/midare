@@ -13,6 +13,7 @@ import (
 	"github.com/mrjones/oauth"
 	"go.uber.org/zap"
 
+	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
@@ -38,9 +39,10 @@ type Handler struct {
 
 // NewHandler returns a new struct of Handler.
 func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, error) {
+	redisCfg := config.ReadRedisConfig()
 	redisCli := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_ADDR") + ":6379",
-		Password: os.Getenv("REDIS_PASS"),
+		Addr:     redisCfg.Addr(),
+		Password: redisCfg.Password,
 	})
 	if err := redisCli.Ping().Err(); err != nil {
 		logging.New().Error("failed to ping to redis", logging.Error(err))

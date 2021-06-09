@@ -2,6 +2,7 @@ package twitter
 
 import (
 	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
 )
 
@@ -14,6 +15,7 @@ type Client interface {
 }
 
 // NewClient returns Client
-func NewClient(consumerKey, consumerSecret, callbackURL string) Client {
-	return newClient(consumerKey, consumerSecret, callbackURL)
+func NewClient() Client {
+	twCfg := config.NewTwitter()
+	return newClient(twCfg.ConsumerKey, twCfg.ConsumerSecret, twCfg.OAuthCallBackURL)
 }

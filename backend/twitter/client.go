@@ -6,12 +6,13 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/config"
+	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/lib/errors"
 	"github.com/p1ass/midare/lib/logging"
 	"go.uber.org/zap"
@@ -43,9 +44,10 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 			AuthorizeTokenUrl: authorizationURL,
 			AccessTokenUrl:    accessTokenURL,
 		})
+	redisCfg := config.ReadRedisConfig()
 	redisCli := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_ADDR") + ":6379",
-		Password: os.Getenv("REDIS_PASS"),
+		Addr:     redisCfg.Addr(),
+		Password: redisCfg.Password,
 	})
 	return &client{
 		consumer:    consumer,
@@ -95,7 +97,7 @@ func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.Access
 }
 
 // AccountVerifyCredentials fetch twitter profile from twitter api
-func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, error) {
+func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*entity.TwitterUser, error) {
 	httpCli, err := cli.httpClient(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make http client")
@@ -122,7 +124,7 @@ func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, er
 		return nil, errors.Wrap(err, "failed to decode twitter api response")
 	}
 
-	twiUser := &User{
+	twiUser := &entity.TwitterUser{
 		ID:         res.IDStr,
 		Name:       res.Name,
 		ScreenName: res.ScreenName,
@@ -132,7 +134,7 @@ func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*User, er
 	return twiUser, nil
 }
 
-func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID string) ([]*Tweet, error) {
+func (cli *client) GetUserTweets(token *oauth.AccessToken, screenName, maxID string) ([]*entity.Tweet, error) {
 	httpCli, err := cli.httpClient(token)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to make http client")
@@ -214,12 +216,12 @@ type tweetObject struct {
 	CreatedStr string `json:"created_at"`
 }
 
-func (cli *client) toTweets(tweetObjects []*tweetObject) []*Tweet {
-	var ts []*Tweet
+func (cli *client) toTweets(tweetObjects []*tweetObject) []*entity.Tweet {
+	var ts []*entity.Tweet
 
 	for _, t := range tweetObjects {
 		created, _ := time.Parse(time.RubyDate, t.CreatedStr)
-		ts = append(ts, &Tweet{
+		ts = append(ts, &entity.Tweet{
 			ID:      fmt.Sprintf("%d", t.ID),
 			Text:    t.Text,
 			Created: created.In(jst),

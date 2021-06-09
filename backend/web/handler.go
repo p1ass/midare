@@ -13,17 +13,17 @@ import (
 	"github.com/mrjones/oauth"
 	"go.uber.org/zap"
 
+	"github.com/p1ass/midare/config"
+	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
+	"github.com/p1ass/midare/usecase"
 	"github.com/patrickmn/go-cache"
 )
 
 const (
 	sessionIDKey = "sessionID"
 	sevenDays    = 60 * 60 * 24 * 7
-
-	// この時間以内にツイートされていたらその時間は起きていることにする
-	awakeThreshold = 3*time.Hour + 30*time.Minute
 
 	oldestTweetTime = 21 * 24 * time.Hour
 )
@@ -34,13 +34,15 @@ type Handler struct {
 	frontendCallbackURL string
 	redisCli            *redis.Client
 	responseCache       *cache.Cache
+	usecase             *usecase.Usecase
 }
 
 // NewHandler returns a new struct of Handler.
 func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, error) {
+	redisCfg := config.ReadRedisConfig()
 	redisCli := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS_ADDR") + ":6379",
-		Password: os.Getenv("REDIS_PASS"),
+		Addr:     redisCfg.Addr(),
+		Password: redisCfg.Password,
 	})
 	if err := redisCli.Ping().Err(); err != nil {
 		logging.New().Error("failed to ping to redis", logging.Error(err))
@@ -51,6 +53,7 @@ func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, er
 		frontendCallbackURL: frontendCallbackURL,
 		redisCli:            redisCli,
 		responseCache:       cache.New(5*time.Minute, 5*time.Minute),
+		usecase:             &usecase.Usecase{},
 	}, nil
 }
 
@@ -73,8 +76,8 @@ func (h *Handler) GetMe(c *gin.Context) {
 // GetAwakePeriods gets awake periods from tweets.
 func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	type getAwakePeriodsRes struct {
-		Periods  []*period `json:"periods"`
-		ShareURL string    `json:"shareUrl"`
+		Periods  []*entity.Period `json:"periods"`
+		ShareURL string           `json:"shareUrl"`
 	}
 
 	accessToken := h.getAccessToken(c)
@@ -96,7 +99,7 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 		return
 	}
 
-	periods := h.calcAwakePeriods(tweets)
+	periods := h.usecase.CalcAwakePeriods(tweets)
 
 	shareID := uuid.New().String()
 
@@ -110,10 +113,10 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 }
 
 // getTweets gets more than 2000 tweets.
-func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, error) {
+func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*entity.Tweet, error) {
 	screenName := accessToken.AdditionalData["screen_name"]
 
-	var allTweets []*twitter.Tweet
+	var allTweets []*entity.Tweet
 	maxID := ""
 	// 一度のAPIで200件取得するので最大200件になる
 	for i := 0; i < 10; i++ {
@@ -122,7 +125,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 			return nil, err
 		}
 		if len(tweets) == 0 {
-			return []*twitter.Tweet{}, nil
+			return []*entity.Tweet{}, nil
 		}
 		filtered := h.filterByCreated(tweets)
 		allTweets = append(allTweets, filtered...)
@@ -135,16 +138,16 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 	return allTweets, nil
 }
 
-func (h *Handler) overOldestTweetTime(filtered, tweets []*twitter.Tweet) bool {
+func (h *Handler) overOldestTweetTime(filtered, tweets []*entity.Tweet) bool {
 	return len(filtered) < len(tweets)
 }
 
-func (h *Handler) doesReachFirstTweet(tweets []*twitter.Tweet) bool {
+func (h *Handler) doesReachFirstTweet(tweets []*entity.Tweet) bool {
 	return len(tweets) <= 1
 }
 
-func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
-	var filtered []*twitter.Tweet
+func (h *Handler) filterByCreated(tweets []*entity.Tweet) []*entity.Tweet {
+	var filtered []*entity.Tweet
 
 	for _, t := range tweets {
 		if time.Since(t.Created) <= oldestTweetTime {
@@ -154,19 +157,19 @@ func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
 	return filtered
 }
 
-func (h *Handler) uploadImage(periods []*period, shareID string, accessToken *oauth.AccessToken) string {
+func (h *Handler) uploadImage(periods []*entity.Period, shareID string, accessToken *oauth.AccessToken) string {
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go h.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
 
 	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID
 }
 
-func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*period, accessToken *oauth.AccessToken) {
+func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*entity.Period, accessToken *oauth.AccessToken) {
 	type request struct {
-		Name    string    `json:"name"`
-		IconURL string    `json:"iconUrl"`
-		UUID    string    `json:"uuid"`
-		Periods []*period `json:"periods"`
+		Name    string           `json:"name"`
+		IconURL string           `json:"iconUrl"`
+		UUID    string           `json:"uuid"`
+		Periods []*entity.Period `json:"periods"`
 	}
 
 	user, err := h.twiCli.AccountVerifyCredentials(accessToken)

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/lib/logging"
 
 	"github.com/gin-contrib/cors"
@@ -21,8 +22,9 @@ func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 
 	logger := logging.New()
 	r.Use(ginzap.RecoveryWithZap(logger, true))
+	redisCfg := config.ReadRedisConfig()
 
-	store, err := redis.NewStore(256, "tcp", os.Getenv("REDIS_ADDR")+":6379", os.Getenv("REDIS_PASS"), []byte(os.Getenv("SESSION_KEY")))
+	store, err := redis.NewStore(256, "tcp", redisCfg.Addr(), redisCfg.Password, []byte(os.Getenv("SESSION_KEY")))
 	if err != nil {
 		logging.New().Error("failed to prepare redis", logging.Error(err))
 		return nil, err

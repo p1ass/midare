@@ -30,7 +30,7 @@ func main() {
 		}
 	}
 
-	cli := twitter.NewClient(os.Getenv("TWITTER_CONSUMER_KEY"), os.Getenv("TWITTER_CONSUMER_SECRET"), os.Getenv("TWITTER_OAUTH_CALLBACK_URL"))
+	cli := twitter.NewClient()
 
 	handler, err := web.NewHandler(cli, os.Getenv("FRONTEND_CALLBACK_URL"))
 	if err != nil {

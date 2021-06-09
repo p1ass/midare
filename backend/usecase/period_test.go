@@ -56,7 +56,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 
 	tests := []struct {
 		name string
-		ts   []*twitter.Tweet
+		ts   []*entity.Tweet
 		want []*entity.Period
 	}{
 		{
@@ -66,14 +66,14 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "1ツイートしか存在しない場合は起きている時間がないのでperiodは空",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
 			},
 			want: []*entity.Period{},
 		},
 		{
 			name: "ツイートが2つ存在し、3.5時間以内のツイートであればperiodが1つ",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 3, 30, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
 			},
@@ -90,7 +90,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "ツイートが2つ存在し、間隔が3.5時間より大きいツイートであればperiodが空",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 3, 31, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
 			},
@@ -98,7 +98,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "ツイートが3つ存在し、全ての間隔が3.5時間以内のツイートであればperiodが1つ",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 7, 0, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 3, 30, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
@@ -116,7 +116,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "ツイートが3つ存在し、全ての間隔が3.5時間より大きいのツイートであればperiodが0つ",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 7, 32, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 3, 31, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
@@ -125,7 +125,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "ツイートが3つ存在し、最初の2つの間隔が3.5時間以内のツイートであればperiodが1つ",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 7, 1, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 3, 30, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
@@ -143,7 +143,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "ツイートが3つ存在し、最後の2つの間隔が3.5時間以内のツイートであればperiodが1つ",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 7, 1, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 3, 31, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 0, 0, 0, 0, jst)},
@@ -161,7 +161,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 		},
 		{
 			name: "ツイートが4つ存在し、最初の2つと最後の2つがそれぞれ間隔が3.5時間以内のツイートであればperiodが2つ",
-			ts: []*twitter.Tweet{
+			ts: []*entity.Tweet{
 				{Created: time.Date(2020, 1, 1, 10, 0, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 7, 1, 0, 0, jst)},
 				{Created: time.Date(2020, 1, 1, 3, 30, 0, 0, jst)},

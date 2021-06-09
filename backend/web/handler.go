@@ -111,10 +111,10 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 }
 
 // getTweets gets more than 2000 tweets.
-func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, error) {
+func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*entity.Tweet, error) {
 	screenName := accessToken.AdditionalData["screen_name"]
 
-	var allTweets []*twitter.Tweet
+	var allTweets []*entity.Tweet
 	maxID := ""
 	// 一度のAPIで200件取得するので最大200件になる
 	for i := 0; i < 10; i++ {
@@ -123,7 +123,7 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 			return nil, err
 		}
 		if len(tweets) == 0 {
-			return []*twitter.Tweet{}, nil
+			return []*entity.Tweet{}, nil
 		}
 		filtered := h.filterByCreated(tweets)
 		allTweets = append(allTweets, filtered...)
@@ -136,16 +136,16 @@ func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*twitter.Tweet, e
 	return allTweets, nil
 }
 
-func (h *Handler) overOldestTweetTime(filtered, tweets []*twitter.Tweet) bool {
+func (h *Handler) overOldestTweetTime(filtered, tweets []*entity.Tweet) bool {
 	return len(filtered) < len(tweets)
 }
 
-func (h *Handler) doesReachFirstTweet(tweets []*twitter.Tweet) bool {
+func (h *Handler) doesReachFirstTweet(tweets []*entity.Tweet) bool {
 	return len(tweets) <= 1
 }
 
-func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
-	var filtered []*twitter.Tweet
+func (h *Handler) filterByCreated(tweets []*entity.Tweet) []*entity.Tweet {
+	var filtered []*entity.Tweet
 
 	for _, t := range tweets {
 		if time.Since(t.Created) <= oldestTweetTime {

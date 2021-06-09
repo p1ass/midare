@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/p1ass/midare/entity"
-	"github.com/p1ass/midare/twitter"
 )
 
 const (
@@ -13,11 +12,11 @@ const (
 	awakeThreshold = 3*time.Hour + 30*time.Minute
 )
 
-func (u *Usecase) CalcAwakePeriods(ts []*twitter.Tweet) []*entity.Period {
+func (u *Usecase) CalcAwakePeriods(ts []*entity.Tweet) []*entity.Period {
 	periods := []*entity.Period{}
-	var neTweet *twitter.Tweet
-	var okiTweet *twitter.Tweet
-	var lastTweet *twitter.Tweet
+	var neTweet *entity.Tweet
+	var okiTweet *entity.Tweet
+	var lastTweet *entity.Tweet
 	startIdx := 1
 	for i, t := range ts {
 		if !u.containExcludeWord(t.Text) {

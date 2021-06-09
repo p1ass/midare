@@ -1,9 +1,9 @@
-package twitter
+package entity
 
 import "time"
 
-// User represents a user info about twitter
-type User struct {
+// TwitterUser represents a user info about twitter
+type TwitterUser struct {
 	ID         string `json:"id"`
 	Name       string `json:"name"`
 	ScreenName string `json:"screenName"`

@@ -11,6 +11,7 @@ const (
 	awakeThreshold = 3*time.Hour + 30*time.Minute
 )
 
+// FIX ME テストで挙動を担保してはいるが、ロジックがブラックボックスなのでうまく整理したい
 func (u *Usecase) CalcAwakePeriods(ts []*entity.Tweet) []*entity.Period {
 	periods := []*entity.Period{}
 	var neTweet *entity.Tweet

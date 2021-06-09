@@ -13,17 +13,16 @@ import (
 	"github.com/mrjones/oauth"
 	"go.uber.org/zap"
 
+	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
+	"github.com/p1ass/midare/usecase"
 	"github.com/patrickmn/go-cache"
 )
 
 const (
 	sessionIDKey = "sessionID"
 	sevenDays    = 60 * 60 * 24 * 7
-
-	// この時間以内にツイートされていたらその時間は起きていることにする
-	awakeThreshold = 3*time.Hour + 30*time.Minute
 
 	oldestTweetTime = 21 * 24 * time.Hour
 )
@@ -34,6 +33,7 @@ type Handler struct {
 	frontendCallbackURL string
 	redisCli            *redis.Client
 	responseCache       *cache.Cache
+	usecase             *usecase.Usecase
 }
 
 // NewHandler returns a new struct of Handler.
@@ -51,6 +51,7 @@ func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, er
 		frontendCallbackURL: frontendCallbackURL,
 		redisCli:            redisCli,
 		responseCache:       cache.New(5*time.Minute, 5*time.Minute),
+		usecase:             &usecase.Usecase{},
 	}, nil
 }
 
@@ -73,8 +74,8 @@ func (h *Handler) GetMe(c *gin.Context) {
 // GetAwakePeriods gets awake periods from tweets.
 func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	type getAwakePeriodsRes struct {
-		Periods  []*period `json:"periods"`
-		ShareURL string    `json:"shareUrl"`
+		Periods  []*entity.Period `json:"periods"`
+		ShareURL string           `json:"shareUrl"`
 	}
 
 	accessToken := h.getAccessToken(c)
@@ -96,7 +97,7 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 		return
 	}
 
-	periods := h.calcAwakePeriods(tweets)
+	periods := h.usecase.CalcAwakePeriods(tweets)
 
 	shareID := uuid.New().String()
 
@@ -154,19 +155,19 @@ func (h *Handler) filterByCreated(tweets []*twitter.Tweet) []*twitter.Tweet {
 	return filtered
 }
 
-func (h *Handler) uploadImage(periods []*period, shareID string, accessToken *oauth.AccessToken) string {
+func (h *Handler) uploadImage(periods []*entity.Period, shareID string, accessToken *oauth.AccessToken) string {
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go h.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
 
 	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID
 }
 
-func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*period, accessToken *oauth.AccessToken) {
+func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*entity.Period, accessToken *oauth.AccessToken) {
 	type request struct {
-		Name    string    `json:"name"`
-		IconURL string    `json:"iconUrl"`
-		UUID    string    `json:"uuid"`
-		Periods []*period `json:"periods"`
+		Name    string           `json:"name"`
+		IconURL string           `json:"iconUrl"`
+		UUID    string           `json:"uuid"`
+		Periods []*entity.Period `json:"periods"`
 	}
 
 	user, err := h.twiCli.AccountVerifyCredentials(accessToken)

@@ -1,19 +1,26 @@
-package web
+package usecase
 
 import (
 	"strings"
+	"time"
 
+	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/twitter"
 )
 
-func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
-	periods := []*period{}
+const (
+	// この時間以内にツイートされていたらその時間は起きていることにする
+	awakeThreshold = 3*time.Hour + 30*time.Minute
+)
+
+func (u *Usecase) CalcAwakePeriods(ts []*twitter.Tweet) []*entity.Period {
+	periods := []*entity.Period{}
 	var neTweet *twitter.Tweet
 	var okiTweet *twitter.Tweet
 	var lastTweet *twitter.Tweet
 	startIdx := 1
 	for i, t := range ts {
-		if !h.containExcludeWord(t.Text) {
+		if !u.containExcludeWord(t.Text) {
 			neTweet = t
 			okiTweet = t
 			lastTweet = t
@@ -26,7 +33,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 	}
 
 	for _, t := range ts[startIdx:] {
-		if h.containExcludeWord(t.Text) {
+		if u.containExcludeWord(t.Text) {
 			continue
 		}
 
@@ -38,7 +45,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 		}
 
 		if okiTweet != neTweet {
-			periods = append(periods, &period{
+			periods = append(periods, &entity.Period{
 				OkiTime: okiTweet,
 				NeTime:  neTweet,
 			})
@@ -50,7 +57,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 	}
 
 	if okiTweet != neTweet {
-		periods = append(periods, &period{
+		periods = append(periods, &entity.Period{
 			OkiTime: okiTweet,
 			NeTime:  neTweet,
 		})
@@ -59,7 +66,7 @@ func (h *Handler) calcAwakePeriods(ts []*twitter.Tweet) []*period {
 	return periods
 }
 
-func (h *Handler) containExcludeWord(text string) bool {
+func (u *Usecase) containExcludeWord(text string) bool {
 	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "みんなへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数"}
 	for _, word := range excludeWords {
 		if strings.Contains(text, word) {
@@ -67,9 +74,4 @@ func (h *Handler) containExcludeWord(text string) bool {
 		}
 	}
 	return false
-}
-
-type period struct {
-	OkiTime *twitter.Tweet `json:"okiTime"`
-	NeTime  *twitter.Tweet `json:"neTime"`
 }

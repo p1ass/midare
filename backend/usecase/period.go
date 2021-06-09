@@ -1,7 +1,6 @@
 package usecase
 
 import (
-	"strings"
 	"time"
 
 	"github.com/p1ass/midare/entity"
@@ -19,7 +18,7 @@ func (u *Usecase) CalcAwakePeriods(ts []*entity.Tweet) []*entity.Period {
 	var lastTweet *entity.Tweet
 	startIdx := 1
 	for i, t := range ts {
-		if !u.containExcludeWord(t.Text) {
+		if !t.ContainExcludedWord() {
 			neTweet = t
 			okiTweet = t
 			lastTweet = t
@@ -32,7 +31,7 @@ func (u *Usecase) CalcAwakePeriods(ts []*entity.Tweet) []*entity.Period {
 	}
 
 	for _, t := range ts[startIdx:] {
-		if u.containExcludeWord(t.Text) {
+		if t.ContainExcludedWord() {
 			continue
 		}
 
@@ -63,14 +62,4 @@ func (u *Usecase) CalcAwakePeriods(ts []*entity.Tweet) []*entity.Period {
 	}
 
 	return periods
-}
-
-func (u *Usecase) containExcludeWord(text string) bool {
-	excludeWords := []string{"ぼくへ 生活習慣乱れてませんか？", "みんなへ 生活習慣乱れてませんか？", "#contributter_report", "のポスト数"}
-	for _, word := range excludeWords {
-		if strings.Contains(text, word) {
-			return true
-		}
-	}
-	return false
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	"github.com/google/uuid"
-	"github.com/mrjones/oauth"
 
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
@@ -89,7 +88,7 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 		return
 	}
 
-	tweets, err := h.getTweets(accessToken)
+	tweets, err := h.usecase.GetTweets(accessToken)
 	if err != nil {
 		sendError(err, c)
 		return
@@ -106,49 +105,4 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	h.responseCache.SetDefault(screenName, res)
 
 	c.JSON(http.StatusOK, res)
-}
-
-// getTweets gets more than 2000 tweets.
-func (h *Handler) getTweets(accessToken *oauth.AccessToken) ([]*entity.Tweet, error) {
-	screenName := accessToken.AdditionalData["screen_name"]
-
-	var allTweets []*entity.Tweet
-	maxID := ""
-	// 一度のAPIで200件取得するので最大200件になる
-	for i := 0; i < 10; i++ {
-		tweets, err := h.twiCli.GetUserTweets(accessToken, screenName, maxID)
-		if err != nil {
-			return nil, err
-		}
-		if len(tweets) == 0 {
-			return []*entity.Tweet{}, nil
-		}
-		filtered := h.filterByCreated(tweets)
-		allTweets = append(allTweets, filtered...)
-		if h.doesReachFirstTweet(tweets) || h.overOldestTweetTime(filtered, tweets) {
-			break
-		}
-		maxID = allTweets[len(allTweets)-1].ID
-	}
-
-	return allTweets, nil
-}
-
-func (h *Handler) overOldestTweetTime(filtered, tweets []*entity.Tweet) bool {
-	return len(filtered) < len(tweets)
-}
-
-func (h *Handler) doesReachFirstTweet(tweets []*entity.Tweet) bool {
-	return len(tweets) <= 1
-}
-
-func (h *Handler) filterByCreated(tweets []*entity.Tweet) []*entity.Tweet {
-	var filtered []*entity.Tweet
-
-	for _, t := range tweets {
-		if time.Since(t.Created) <= oldestTweetTime {
-			filtered = append(filtered, t)
-		}
-	}
-	return filtered
 }

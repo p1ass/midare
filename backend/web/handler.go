@@ -1,17 +1,13 @@
 package web
 
 import (
-	"bytes"
-	"encoding/json"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
-	"go.uber.org/zap"
 
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
@@ -53,7 +49,7 @@ func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, er
 		frontendCallbackURL: frontendCallbackURL,
 		redisCli:            redisCli,
 		responseCache:       cache.New(5*time.Minute, 5*time.Minute),
-		usecase:             &usecase.Usecase{},
+		usecase:             usecase.NewUsecase(twiCli),
 	}, nil
 }
 
@@ -103,7 +99,7 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 
 	shareID := uuid.New().String()
 
-	url := h.uploadImage(periods, shareID, accessToken)
+	url := h.usecase.UploadImage(periods, shareID, accessToken)
 
 	res := &getAwakePeriodsRes{Periods: periods, ShareURL: url}
 
@@ -155,39 +151,4 @@ func (h *Handler) filterByCreated(tweets []*entity.Tweet) []*entity.Tweet {
 		}
 	}
 	return filtered
-}
-
-func (h *Handler) uploadImage(periods []*entity.Period, shareID string, accessToken *oauth.AccessToken) string {
-	logging.New().Info("uploadImage", zap.String("uuid", shareID))
-	go h.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
-
-	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID
-}
-
-func (h *Handler) uploadImageThroughCloudFunctions(uuid string, periods []*entity.Period, accessToken *oauth.AccessToken) {
-	type request struct {
-		Name    string           `json:"name"`
-		IconURL string           `json:"iconUrl"`
-		UUID    string           `json:"uuid"`
-		Periods []*entity.Period `json:"periods"`
-	}
-
-	user, err := h.twiCli.AccountVerifyCredentials(accessToken)
-	if err != nil {
-		logging.New().Error("uploadImageThroughCloudFunctions: get account info" + err.Error())
-		return
-	}
-
-	req := &request{
-		Name:    user.Name,
-		IconURL: user.ImageURL,
-		UUID:    uuid,
-		Periods: periods,
-	}
-	encoded, _ := json.Marshal(req)
-
-	_, err = http.Post(os.Getenv("CLOUD_FUNCTIONS_URL"), "application/json", bytes.NewBuffer(encoded))
-	if err != nil {
-		logging.New().Error("post period data to cloud functions" + err.Error())
-	}
 }

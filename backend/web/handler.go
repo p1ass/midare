@@ -19,8 +19,6 @@ import (
 const (
 	sessionIDKey = "sessionID"
 	sevenDays    = 60 * 60 * 24 * 7
-
-	oldestTweetTime = 21 * 24 * time.Hour
 )
 
 // Handler ia HTTP handler.

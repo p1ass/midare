@@ -8,6 +8,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/lib/logging"
 	"go.uber.org/zap"
 
@@ -37,7 +38,7 @@ func main() {
 		logging.New().Fatal("Failed to initialize web handler", zap.Error(err))
 		return
 	}
-	router, err := web.NewRouter(handler, os.Getenv("CORS_ALLOW_ORIGIN"))
+	router, err := web.NewRouter(handler, config.ReadAllowCORSOriginURL())
 	if err != nil {
 		logging.New().Fatal("Failed to initialize web router", zap.Error(err))
 		return

@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"os"
 
 	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/lib/logging"
 	"go.uber.org/zap"
@@ -16,7 +16,7 @@ func (u *Usecase) UploadImage(periods []*entity.Period, shareID string, accessTo
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go u.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
 
-	return os.Getenv("CORS_ALLOW_ORIGIN") + "/share/" + shareID
+	return config.ReadAllowCORSOriginURL() + "/share/" + shareID
 }
 
 func (u *Usecase) uploadImageThroughCloudFunctions(uuid string, periods []*entity.Period, accessToken *oauth.AccessToken) {
@@ -41,7 +41,7 @@ func (u *Usecase) uploadImageThroughCloudFunctions(uuid string, periods []*entit
 	}
 	encoded, _ := json.Marshal(req)
 
-	_, err = http.Post(os.Getenv("CLOUD_FUNCTIONS_URL"), "application/json", bytes.NewBuffer(encoded))
+	_, err = http.Post(config.ReadCloudFunctionsURL(), "application/json", bytes.NewBuffer(encoded))
 	if err != nil {
 		logging.New().Error("post period data to cloud functions" + err.Error())
 	}

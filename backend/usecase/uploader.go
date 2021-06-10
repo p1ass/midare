@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func (u *Usecase) UploadImage(periods []*entity.Period, shareID string, accessToken *oauth.AccessToken) string {
+func (u *Usecase) uploadImage(periods []*entity.Period, shareID string, accessToken *oauth.AccessToken) string {
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go u.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
 

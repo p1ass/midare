@@ -150,7 +150,7 @@ func TestUsecase_calcAwakePeriods(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			u := &Usecase{}
-			if got := u.CalcAwakePeriods(tt.ts); !cmp.Equal(got, tt.want) {
+			if got := u.calcAwakePeriods(tt.ts); !cmp.Equal(got, tt.want) {
 				t.Errorf("calcAwakePeriods() = diff=%v", cmp.Diff(tt.want, got))
 			}
 		})

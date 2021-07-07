@@ -33,7 +33,7 @@
         "styled-components": "^5.3.0"
     },
     "devDependencies": {
-        "@types/express": "^4.17.12",
+        "@types/express": "^4.17.13",
         "@types/node": "15.14.0",
         "@types/puppeteer": "^5.4.3",
         "@types/react": "^17.0.13",

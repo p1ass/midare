@@ -18,7 +18,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.1.9",
     "axios": "^0.21.1",
-    "dayjs": "^1.10.5",
+    "dayjs": "^1.10.6",
     "downloadjs": "^1.4.7",
     "html-to-image": "^1.6.2",
     "next": "^10.2.3",

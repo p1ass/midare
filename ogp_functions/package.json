@@ -37,7 +37,7 @@
         "@types/node": "15.14.0",
         "@types/puppeteer": "^5.4.4",
         "@types/react": "^17.0.13",
-        "@types/react-dom": "^17.0.8",
+        "@types/react-dom": "^17.0.9",
         "@types/styled-components": "^5.1.11",
         "@typescript-eslint/eslint-plugin": "^4.28.2",
         "@typescript-eslint/parser": "^4.28.2",

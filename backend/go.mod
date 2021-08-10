@@ -16,5 +16,5 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/tommy351/zap-stackdriver v0.1.4
-	go.uber.org/zap v1.16.0
+	go.uber.org/zap v1.19.0
 )

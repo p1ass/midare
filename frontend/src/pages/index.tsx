@@ -76,8 +76,8 @@ const Main = () => {
             <span className="ww">する</span>
             <span className="ww">やつ</span>
           </Title>
-          <OneYearMessage>祝1周年🎉</OneYearMessage>
-          <OneYearDescription>いつもお使いいただきありがとうございます！</OneYearDescription>
+          {/* <OneYearMessage>祝1周年🎉</OneYearMessage>
+          <OneYearDescription>いつもお使いいただきありがとうございます！</OneYearDescription> */}
 
           {!isLoading ? SwitchWhetherLogin : null}
           <GoogleAds

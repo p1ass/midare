@@ -165,10 +165,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@google-cloud/common@^3.7.0":
-  version "3.7.2"
-  resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-3.7.2.tgz#2f1feef9aaeb4f392d627ceab06e7eaa03329f58"
-  integrity sha512-5Q9f74IbZaY6xAwJSNFy5SrGwbm1j7mpv+6A/r+K2dymjsXBH5UauB0tziaMwWoVVaMq1IQnZF9lgtfqqvxcUg==
+"@google-cloud/common@^3.7.4":
+  version "3.7.4"
+  resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-3.7.4.tgz#71acac3dfe19bbed42e4763c5d85b35acea7e368"
+  integrity sha512-JO4a8l/N6fkHZ+vWgNYgcNoZh1/m6kqv8F7+NpBkGqs7NzUtkmE9WdvHaNUwAOm1mIqbuX2wXKNfAZfqZr+vMg==
   dependencies:
     "@google-cloud/projectify" "^2.0.0"
     "@google-cloud/promisify" "^2.0.0"
@@ -176,7 +176,7 @@
     duplexify "^4.1.1"
     ent "^2.2.0"
     extend "^3.0.2"
-    google-auth-library "^7.0.2"
+    google-auth-library "^7.9.2"
     retry-request "^4.2.2"
     teeny-request "^7.0.0"
 
@@ -210,12 +210,12 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-2.0.3.tgz#f934b5cdc939e3c7039ff62b9caaf59a9d89e3a8"
   integrity sha512-d4VSA86eL/AFTe5xtyZX+ePUjE8dIFu2T8zmdeNBSa5/kNgXPCx/o/wbFNHAGLJdGnk1vddRuMESD9HbOC8irw==
 
-"@google-cloud/storage@^5.14.5":
-  version "5.14.5"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.14.5.tgz#d1ac1dbdc553c1534eac64820e3c71ab3830805b"
-  integrity sha512-infuxv0zhclSX+IF3nkeIt2vVOm55RQOYBX7NdTBA4jsj0Q8ezquQ78ZK0o5MR8AdC//OQwPfRJt0IIR6gEADw==
+"@google-cloud/storage@^5.14.8":
+  version "5.14.8"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.14.8.tgz#bbc5c9c47d8839033945c0cd46a3992db9b625c4"
+  integrity sha512-NL2HGIk/nRWR056IJq8DohDJV3z87QjkBU1NssHuSCHEuzci++rUUSeM8j+QLOuoulM4g1MgfHxl9QZOCyKtzg==
   dependencies:
-    "@google-cloud/common" "^3.7.0"
+    "@google-cloud/common" "^3.7.4"
     "@google-cloud/paginator" "^3.0.0"
     "@google-cloud/promisify" "^2.0.0"
     arrify "^2.0.0"
@@ -1588,10 +1588,25 @@ globby@^11.0.3:
     merge2 "^1.3.0"
     slash "^3.0.0"
 
-google-auth-library@^7.0.0, google-auth-library@^7.0.2:
+google-auth-library@^7.0.0:
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-7.0.2.tgz#cab6fc7f94ebecc97be6133d6519d9946ccf3e9d"
   integrity sha512-vjyNZR3pDLC0u7GHLfj+Hw9tGprrJwoMwkYGqURCXYITjCrP9HprOyxVV+KekdLgATtWGuDkQG2MTh0qpUPUgg==
+  dependencies:
+    arrify "^2.0.0"
+    base64-js "^1.3.0"
+    ecdsa-sig-formatter "^1.0.11"
+    fast-text-encoding "^1.0.0"
+    gaxios "^4.0.0"
+    gcp-metadata "^4.2.0"
+    gtoken "^5.0.4"
+    jws "^4.0.0"
+    lru-cache "^6.0.0"
+
+google-auth-library@^7.9.2:
+  version "7.10.0"
+  resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-7.10.0.tgz#6ab852f8e1abbe425aec695ac6501f80bd5eba56"
+  integrity sha512-ICsqaU+lxMHVlDUzMrfVIEqnARw2AwBiZ/2KnNM6BcTf9Nott+Af87DTIzmlnW865p3REUP2MVL0xkPC3a61aQ==
   dependencies:
     arrify "^2.0.0"
     base64-js "^1.3.0"

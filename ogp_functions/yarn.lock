@@ -210,10 +210,10 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-2.0.3.tgz#f934b5cdc939e3c7039ff62b9caaf59a9d89e3a8"
   integrity sha512-d4VSA86eL/AFTe5xtyZX+ePUjE8dIFu2T8zmdeNBSa5/kNgXPCx/o/wbFNHAGLJdGnk1vddRuMESD9HbOC8irw==
 
-"@google-cloud/storage@^5.15.4":
-  version "5.15.4"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.15.4.tgz#fb184896fd4a6ca296e0c1c045c5c879c6052e7c"
-  integrity sha512-bpA60qjO1OCXwIe06h9jMT3srNPmzazH1P0HV9tI/kItbXGW4vlgkzqoRJJBgP5zV1xJCyYv2MLwK0TN8wLJ7A==
+"@google-cloud/storage@^5.15.5":
+  version "5.15.5"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.15.5.tgz#b2c564ba41b23d9c64d0bf7a815f20a0adf69b00"
+  integrity sha512-UmTM32Cmoyk9c9u8fvKl8tA954GnM4eZpH9Ji0fyjMGBSwuOLR4SgU/E71hCFRcD6+12l5YTmbowIvb0k6uXEA==
   dependencies:
     "@google-cloud/common" "^3.7.4"
     "@google-cloud/paginator" "^3.0.0"
@@ -227,7 +227,7 @@
     gcs-resumable-upload "^3.3.0"
     get-stream "^6.0.0"
     hash-stream-validation "^0.2.2"
-    mime "^2.2.0"
+    mime "^3.0.0"
     mime-types "^2.0.8"
     p-limit "^3.0.1"
     pumpify "^2.0.0"
@@ -2148,10 +2148,10 @@ mime@1.6.0:
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
   integrity sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==
 
-mime@^2.2.0:
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-2.5.0.tgz#2b4af934401779806ee98026bb42e8c1ae1876b1"
-  integrity sha512-ft3WayFSFUVBuJj7BMLKAQcSlItKtfjsKDDsii3rqFDAZ7t11zRe8ASw/GlmivGwVUYtwkQrxiGGpL6gFvB0ag==
+mime@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-3.0.0.tgz#b374550dca3a0c18443b0c950a6a58f1931cf7a7"
+  integrity sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==
 
 minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"

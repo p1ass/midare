@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go v0.79.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.4
-	github.com/gin-contrib/zap v0.0.1
+	github.com/gin-contrib/zap v0.0.2
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/google/go-cmp v0.5.6

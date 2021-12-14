@@ -17,7 +17,7 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^0.23.0",
+    "axios": "^0.24.0",
     "dayjs": "^1.10.7",
     "downloadjs": "^1.4.7",
     "html-to-image": "^1.8.5",

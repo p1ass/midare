@@ -180,12 +180,13 @@
     retry-request "^4.2.2"
     teeny-request "^7.0.0"
 
-"@google-cloud/functions-framework@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-1.9.0.tgz#97c7fa8a59dc941a3efb796ba8a0ebfbc4d6f59f"
-  integrity sha512-5MsxLiBdRU6EaUzhTClm97XqNIiQWXrz93w5KzgBjPyvQya6Nuz98IZbd/A8AKZZBOv9AelzAZ+Atqu076adkg==
+"@google-cloud/functions-framework@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-2.1.0.tgz#ef50738dca41dbd926c6b6a17e437a098ac3e3cc"
+  integrity sha512-ajW6gIhsSZeHArSTvWmELoUkz27aLHEP/bD9GIapgMcb6q9TlR8CkIYti9Pyss5D6YrvTcs4k2ah/zz2hEUgEg==
   dependencies:
     body-parser "^1.18.3"
+    cloudevents "^5.1.0"
     express "^4.16.4"
     minimist "^1.2.5"
     on-finished "^2.3.0"
@@ -511,7 +512,7 @@ agent-base@6:
   dependencies:
     debug "4"
 
-ajv@^6.10.0, ajv@^6.12.4:
+ajv@^6.10.0, ajv@^6.12.4, ajv@~6.12.3:
   version "6.12.6"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
   integrity sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==
@@ -750,6 +751,14 @@ cliui@^7.0.2:
     string-width "^4.2.0"
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
+
+cloudevents@^5.1.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/cloudevents/-/cloudevents-5.2.0.tgz#2e4b72db04d409d814841c8fb9b4032bd90e3b5d"
+  integrity sha512-khYLL5qYImCuVBy9ki8c+twY37lWGu4e3Zr018VyZN+1Zj2McURCLGBx5SalAdeGV1RJE5hT8lxgcEwv9JbdxA==
+  dependencies:
+    ajv "~6.12.3"
+    uuid "~8.3.0"
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -3230,7 +3239,7 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^8.0.0:
+uuid@^8.0.0, uuid@~8.3.0:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

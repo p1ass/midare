@@ -6064,10 +6064,10 @@ html-minifier-terser@^5.0.1:
     relateurl "^0.2.7"
     terser "^4.6.3"
 
-html-to-image@^1.8.5:
-  version "1.8.5"
-  resolved "https://registry.yarnpkg.com/html-to-image/-/html-to-image-1.8.5.tgz#cbdca590911c817248af68715199367d44ed7cc5"
-  integrity sha512-W+QV4LFLkK5pEZhmAOXrLWwuNGqa/eVLTVVFAghhZmAfBNjxw53wDX/sw+tGMT2n6Z7lRQxzh0dzrtM7nsUC0g==
+html-to-image@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/html-to-image/-/html-to-image-1.9.0.tgz#cb49bf9f4b37376771c85cfdd65863ae9420b268"
+  integrity sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA==
 
 html-webpack-plugin@4.5.0:
   version "4.5.0"

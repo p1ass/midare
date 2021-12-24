@@ -27,7 +27,7 @@
     "typescript": "~4.4.4"
   },
   "devDependencies": {
-    "@types/downloadjs": "^1.4.2",
+    "@types/downloadjs": "^1.4.3",
     "@types/gtag.js": "^0.0.8",
     "@types/jest": "^27.0.3",
     "@types/node": "^16.11.13",

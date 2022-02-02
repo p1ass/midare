@@ -23,7 +23,7 @@
     },
     "license": "MIT",
     "dependencies": {
-        "@google-cloud/functions-framework": "^2.1.0",
+        "@google-cloud/functions-framework": "^2.1.1",
         "@google-cloud/storage": "^5.16.1",
         "dayjs": "^1.10.7",
         "express": "4.17.2",

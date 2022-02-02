@@ -180,10 +180,10 @@
     retry-request "^4.2.2"
     teeny-request "^7.0.0"
 
-"@google-cloud/functions-framework@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-2.1.0.tgz#ef50738dca41dbd926c6b6a17e437a098ac3e3cc"
-  integrity sha512-ajW6gIhsSZeHArSTvWmELoUkz27aLHEP/bD9GIapgMcb6q9TlR8CkIYti9Pyss5D6YrvTcs4k2ah/zz2hEUgEg==
+"@google-cloud/functions-framework@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-2.1.1.tgz#6919647b21568158776454d2d51f938c82c31b07"
+  integrity sha512-TsiijmJJwW8nqaDS/wYK52ypf9ZDzyrg0kmDz2DgwA172j+vjtB+muieBNKqquO++51GULBFfLzhK1SPh9Z7rg==
   dependencies:
     body-parser "^1.18.3"
     cloudevents "^5.1.0"

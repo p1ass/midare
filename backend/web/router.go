@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/p1ass/midare/config"
-	"github.com/p1ass/midare/lib/logging"
+	"github.com/p1ass/midare/logging"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
@@ -15,7 +15,7 @@ import (
 )
 
 // NewRouter returns a gin router
-func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
+func NewRouter(handler *Handler, allowOrigin string) (*gin.Engine, error) {
 	r := gin.New()
 
 	r.Use(gin.Recovery())
@@ -41,13 +41,13 @@ func NewRouter(twiHandler *Handler, allowOrigin string) (*gin.Engine, error) {
 		c.Status(http.StatusOK)
 	})
 
-	r.GET("/login", twiHandler.StartSignInWithTwitter)
-	r.GET("/callback", twiHandler.TwitterCallback)
+	r.GET("/login", handler.StartSignInWithTwitter)
+	r.GET("/callback", handler.TwitterCallback)
 
 	withAuthGrp := r.Group("/")
 	withAuthGrp.Use(AuthMiddleware())
-	withAuthGrp.GET("/me", twiHandler.GetMe)
-	withAuthGrp.GET("/periods", twiHandler.GetAwakePeriods)
+	withAuthGrp.GET("/me", handler.GetMe)
+	withAuthGrp.GET("/periods", handler.GetAwakePeriods)
 
 	return r, nil
 }

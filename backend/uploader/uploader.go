@@ -1,4 +1,4 @@
-package usecase
+package uploader
 
 import (
 	"bytes"
@@ -7,24 +7,34 @@ import (
 
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/config"
-	"github.com/p1ass/midare/entity"
-	"github.com/p1ass/midare/lib/logging"
+	"github.com/p1ass/midare/logging"
+	"github.com/p1ass/midare/period"
+	"github.com/p1ass/midare/twitter"
 	"go.uber.org/zap"
 )
 
-func (u *Usecase) uploadImage(periods []*entity.Period, shareID string, accessToken *oauth.AccessToken) string {
+type ImageUploader struct {
+	twiCli twitter.Client
+}
+
+func NewImageUploader(twiCli twitter.Client) *ImageUploader {
+	return &ImageUploader{twiCli: twiCli}
+}
+
+// Upload uploads image to cloud storage via Cloud Functions and returns share URL.
+func (u *ImageUploader) Upload(periods []*period.Period, shareID string, accessToken *oauth.AccessToken) string {
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go u.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
 
 	return config.ReadAllowCORSOriginURL() + "/share/" + shareID
 }
 
-func (u *Usecase) uploadImageThroughCloudFunctions(uuid string, periods []*entity.Period, accessToken *oauth.AccessToken) {
+func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []*period.Period, accessToken *oauth.AccessToken) {
 	type request struct {
 		Name    string           `json:"name"`
 		IconURL string           `json:"iconUrl"`
 		UUID    string           `json:"uuid"`
-		Periods []*entity.Period `json:"periods"`
+		Periods []*period.Period `json:"periods"`
 	}
 
 	user, err := u.twiCli.AccountVerifyCredentials(accessToken)

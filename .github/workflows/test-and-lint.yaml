@@ -11,7 +11,18 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-
+    timeout-minutes: 10
+    services:
+      datastore:
+        image: singularities/datastore-emulator
+        env:
+          DATASTORE_LISTEN_ADDRESS: 0.0.0.0:5000
+          DATASTORE_PROJECT_ID: midare-ci
+        ports:
+          - 5000:5000
+    env:
+      DATASTORE_EMULATOR_HOST: 127.0.0.1:5000
+      DATASTORE_PROJECT_ID: midare-ci
     steps:
       - name: Set up Go 1.17
         uses: actions/setup-go@v1

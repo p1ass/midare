@@ -17,3 +17,11 @@ func ReadCloudRunRevision() string {
 func ReadFrontEndCallbackURL() string {
 	return os.Getenv("FRONTEND_CALLBACK_URL")
 }
+
+func ReadSessionKey() string {
+	return os.Getenv("SESSION_KEY")
+}
+
+func IsLocal() bool {
+	return os.Getenv("ENV") == "LOCAL"
+}

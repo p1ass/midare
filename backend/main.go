@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/p1ass/midare/config"
+	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/logging"
 	"go.uber.org/zap"
 
@@ -19,6 +20,8 @@ import (
 )
 
 func main() {
+	datastore.TestDatastore()
+
 	revision := config.ReadCloudRunRevision()
 	if revision != "" {
 		cfg := profiler.Config{

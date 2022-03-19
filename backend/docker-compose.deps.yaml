@@ -6,4 +6,14 @@ services:
     restart: always
     command: redis-server --requirepass hoge
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
+  datastore:
+    build:
+      context: ./docker/datastore
+      dockerfile: Dockerfile
+    tty: true
+    environment:
+      DATASTORE_PROJECT_ID: midare-local
+      DATASTORE_LISTEN_ADDRESS: 0.0.0.0:5000
+    ports:
+      - "127.0.0.1:5000:5000"

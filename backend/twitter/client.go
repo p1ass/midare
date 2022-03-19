@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/go-redis/redis"
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/config"
+	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/errors"
 )
 
@@ -30,18 +30,18 @@ type Client interface {
 }
 
 // NewClient returns Client
-func NewClient() Client {
+func NewClient(dsCli datastore.Client) Client {
 	twCfg := config.NewTwitter()
-	return newClient(twCfg.ConsumerKey, twCfg.ConsumerSecret, twCfg.OAuthCallBackURL)
+	return newClient(twCfg.ConsumerKey, twCfg.ConsumerSecret, twCfg.OAuthCallBackURL, dsCli)
 }
 
 type client struct {
 	consumer    *oauth.Consumer
 	callbackURL string
-	redisCli    *redis.Client
+	dsCli       datastore.Client
 }
 
-func newClient(consumerKey, consumerSecret, callbackURL string) *client {
+func newClient(consumerKey, consumerSecret, callbackURL string, dsCli datastore.Client) *client {
 	consumer := oauth.NewConsumer(
 		consumerKey,
 		consumerSecret,
@@ -50,15 +50,11 @@ func newClient(consumerKey, consumerSecret, callbackURL string) *client {
 			AuthorizeTokenUrl: authorizationURL,
 			AccessTokenUrl:    accessTokenURL,
 		})
-	redisCfg := config.ReadRedisConfig()
-	redisCli := redis.NewClient(&redis.Options{
-		Addr:     redisCfg.Addr(),
-		Password: redisCfg.Password,
-	})
+
 	return &client{
 		consumer:    consumer,
 		callbackURL: callbackURL,
-		redisCli:    redisCli,
+		dsCli:       dsCli,
 	}
 }
 

@@ -20,8 +20,6 @@ import (
 )
 
 func main() {
-	datastore.TestDatastore()
-
 	revision := config.ReadCloudRunRevision()
 	if revision != "" {
 		cfg := profiler.Config{
@@ -35,7 +33,13 @@ func main() {
 		}
 	}
 
-	cli := twitter.NewClient()
+	dsCli, err := datastore.NewClient()
+	if err != nil {
+		logging.New().Fatal("Failed to create datastore client", zap.Error(err))
+		return
+	}
+
+	cli := twitter.NewClient(dsCli)
 
 	handler, err := web.NewHandler(cli, config.ReadFrontEndCallbackURL())
 	if err != nil {

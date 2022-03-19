@@ -19,10 +19,11 @@ import (
 )
 
 func main() {
-	if os.Getenv("K_REVISION") != "" {
+	revision := config.ReadCloudRunRevision()
+	if revision != "" {
 		cfg := profiler.Config{
 			Service:        "midare",
-			ServiceVersion: os.Getenv("K_REVISION"),
+			ServiceVersion: revision,
 			MutexProfiling: true,
 		}
 		if err := profiler.Start(cfg); err != nil {
@@ -33,7 +34,7 @@ func main() {
 
 	cli := twitter.NewClient()
 
-	handler, err := web.NewHandler(cli, os.Getenv("FRONTEND_CALLBACK_URL"))
+	handler, err := web.NewHandler(cli, config.ReadFrontEndCallbackURL())
 	if err != nil {
 		logging.New().Fatal("Failed to initialize web handler", zap.Error(err))
 		return

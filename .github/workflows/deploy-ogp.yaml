@@ -14,6 +14,9 @@ env:
 
 jobs:
   deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     runs-on: ubuntu-latest
 
@@ -21,10 +24,15 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v1
 
-      - name: GCP Authenticate
-        uses: google-github-actions/setup-gcloud@master
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
         with:
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
+          access_token_lifetime: '900s'
+
+      - name: Set up Cloud SDK 
+        uses: google-github-actions/setup-gcloud@v0
 
       - name: Deploy to Cloud Functions
         run: |

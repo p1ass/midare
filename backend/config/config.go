@@ -1,6 +1,9 @@
 package config
 
-import "os"
+import (
+	"encoding/base64"
+	"os"
+)
 
 func ReadCloudFunctionsURL() string {
 	return os.Getenv("CLOUD_FUNCTIONS_URL")
@@ -20,6 +23,14 @@ func ReadFrontEndCallbackURL() string {
 
 func ReadSessionKey() string {
 	return os.Getenv("SESSION_KEY")
+}
+func ReadSessionEncryptionKey() ([]byte, error) {
+	encoded := os.Getenv("SESSION_ENCRYPTION_KEY_BASE64_ENCODED")
+	encryptionKey, err := base64.URLEncoding.DecodeString(encoded)
+	if err != nil {
+		return nil, err
+	}
+	return encryptionKey, nil
 }
 
 func IsLocal() bool {

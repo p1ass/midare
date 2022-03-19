@@ -22,7 +22,12 @@ func NewRouter(handler *Handler, allowOrigin string) (*gin.Engine, error) {
 	logger := logging.New()
 	r.Use(ginzap.RecoveryWithZap(logger, true))
 
-	store := cookie.NewStore([]byte(config.ReadSessionKey()))
+	encryptionKey, err := config.ReadSessionEncryptionKey()
+	if err != nil {
+		return nil, err
+	}
+
+	store := cookie.NewStore([]byte(config.ReadSessionKey()), encryptionKey)
 	store.Options(sessions.Options{
 		MaxAge:   86400 * 7,
 		Secure:   !config.IsLocal(),

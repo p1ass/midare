@@ -41,7 +41,7 @@ func main() {
 
 	cli := twitter.NewClient(dsCli)
 
-	handler, err := web.NewHandler(cli, config.ReadFrontEndCallbackURL())
+	handler, err := web.NewHandler(cli, dsCli, config.ReadFrontEndCallbackURL())
 	if err != nil {
 		logging.New().Fatal("Failed to initialize web handler", zap.Error(err))
 		return

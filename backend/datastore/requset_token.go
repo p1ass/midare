@@ -9,8 +9,6 @@ import (
 	"github.com/p1ass/midare/errors"
 )
 
-var now = time.Now
-
 func (c client) StoreRequestToken(ctx context.Context, rToken *oauth.RequestToken) error {
 	dto := &requestToken{
 		Token:   rToken.Token,

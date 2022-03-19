@@ -51,7 +51,7 @@ func Test_client_RequestToken(t *testing.T) {
 					Secret: "requestSecret",
 				},
 			},
-			nowAfterStored: fixed.Add(time.Minute * 10),
+			nowAfterStored: fixed.Add(10 * time.Minute),
 			want:           nil,
 			wantStoreErr:   false,
 			wantFetchErr:   true,

@@ -6,11 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	"github.com/p1ass/midare/logging"
+	"github.com/p1ass/midare/period"
+	"github.com/p1ass/midare/usecase"
 
 	"github.com/p1ass/midare/config"
-	"github.com/p1ass/midare/entity"
 	"github.com/p1ass/midare/twitter"
-	"github.com/p1ass/midare/usecase"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 	sevenDays    = 60 * 60 * 24 * 7
 )
 
-// Handler ia HTTP handler.
+// Handler is HTTP handler.
 type Handler struct {
 	twiCli              twitter.Client
 	frontendCallbackURL string
@@ -64,7 +64,7 @@ func (h *Handler) GetMe(c *gin.Context) {
 // GetAwakePeriods gets awake periods from tweets.
 func (h *Handler) GetAwakePeriods(c *gin.Context) {
 	type getAwakePeriodsRes struct {
-		Periods  []*entity.Period `json:"periods"`
+		Periods  []*period.Period `json:"periods"`
 		ShareURL string           `json:"shareUrl"`
 	}
 

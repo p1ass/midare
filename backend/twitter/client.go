@@ -23,7 +23,7 @@ var (
 
 // Client is an interface for calling Twitter api
 type Client interface {
-	GetRequestTokenAndURL() (loginURL string, err error)
+	GetLoginURL() (loginURL string, err error)
 	AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error)
 	AccountVerifyCredentials(token *oauth.AccessToken) (*TwitterUser, error)
 	GetTweets(accessToken *oauth.AccessToken) ([]*Tweet, error)

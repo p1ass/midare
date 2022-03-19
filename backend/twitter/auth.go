@@ -9,8 +9,8 @@ import (
 	"github.com/p1ass/midare/logging"
 )
 
-// GetRequestTokenAndURL gets a request token associated with the user and login URL
-func (cli *client) GetRequestTokenAndURL() (loginURL string, err error) {
+// GetLoginURL gets login URL
+func (cli *client) GetLoginURL() (loginURL string, err error) {
 	rToken, loginURL, err := cli.consumer.GetRequestTokenAndUrl(cli.callbackURL)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to get access token")

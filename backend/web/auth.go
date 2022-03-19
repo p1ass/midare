@@ -16,7 +16,7 @@ import (
 
 // StartSignInWithTwitter start twitter oauth sign in
 func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
-	url, err := h.twiCli.GetRequestTokenAndURL()
+	url, err := h.usecase.GetLoginUrl()
 	if err != nil {
 		sendError(errors.Wrap(err, "failed to get redirect url"), c)
 		return
@@ -46,14 +46,14 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := h.twiCli.AuthorizeToken(token, ov)
+	accessToken, err := h.usecase.AuthorizeToken(token, ov)
 	if err != nil {
 		logger.Error("failed to authorize", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
-	twiUser, err := h.twiCli.AccountVerifyCredentials(accessToken)
+	twiUser, err := h.usecase.GetUser(accessToken)
 	if err != nil {
 		logger.Error("failed to get twitter user", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)

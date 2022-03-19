@@ -20,7 +20,6 @@ const (
 
 // Handler is HTTP handler.
 type Handler struct {
-	twiCli              twitter.Client
 	frontendCallbackURL string
 	redisCli            *redis.Client
 	usecase             *usecase.Usecase
@@ -38,7 +37,6 @@ func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, er
 		return nil, err
 	}
 	return &Handler{
-		twiCli:              twiCli,
 		frontendCallbackURL: frontendCallbackURL,
 		redisCli:            redisCli,
 		usecase:             usecase.NewUsecase(twiCli),
@@ -52,7 +50,7 @@ func (h *Handler) GetMe(c *gin.Context) {
 		return
 	}
 
-	user, err := h.twiCli.AccountVerifyCredentials(accessToken)
+	user, err := h.usecase.GetUser(accessToken)
 	if err != nil {
 		sendError(err, c)
 		return

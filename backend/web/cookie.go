@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/p1ass/midare/lib/crypto"
-	"github.com/p1ass/midare/lib/errors"
+	"github.com/p1ass/midare/crypto"
+	"github.com/p1ass/midare/errors"
 )
 
 func setSessionAndCookie(c *gin.Context, userID string) error {

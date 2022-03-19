@@ -5,10 +5,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
+	"github.com/p1ass/midare/logging"
 
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
-	"github.com/p1ass/midare/lib/logging"
 	"github.com/p1ass/midare/twitter"
 	"github.com/p1ass/midare/usecase"
 )

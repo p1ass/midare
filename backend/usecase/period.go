@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/entity"
+	"github.com/p1ass/midare/twitter"
 )
 
 const (
@@ -22,7 +23,7 @@ func (u *Usecase) GetAwakePeriods(accessToken *oauth.AccessToken) ([]*entity.Per
 		return c.Periods, c.ShareURL, nil
 	}
 
-	tweets, err := u.GetTweets(accessToken)
+	tweets, err := u.twiCli.GetTweets(accessToken)
 	if err != nil {
 		return nil, "", err
 	}
@@ -46,11 +47,11 @@ type getAwakePeriodsCache struct {
 }
 
 // FIX ME テストで挙動を担保してはいるが、ロジックがブラックボックスなのでうまく整理したい
-func (u *Usecase) calcAwakePeriods(ts []*entity.Tweet) []*entity.Period {
+func (u *Usecase) calcAwakePeriods(ts []*twitter.Tweet) []*entity.Period {
 	periods := []*entity.Period{}
-	var neTweet *entity.Tweet
-	var okiTweet *entity.Tweet
-	var lastTweet *entity.Tweet
+	var neTweet *twitter.Tweet
+	var okiTweet *twitter.Tweet
+	var lastTweet *twitter.Tweet
 	startIdx := 1
 	for i, t := range ts {
 		if !t.ContainExcludedWord() {

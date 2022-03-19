@@ -8,7 +8,7 @@ import (
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/entity"
-	"github.com/p1ass/midare/lib/logging"
+	"github.com/p1ass/midare/logging"
 	"go.uber.org/zap"
 )
 

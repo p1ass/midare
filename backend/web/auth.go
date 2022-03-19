@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/go-redis/redis"
+	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
 
 	"github.com/mrjones/oauth"
 
 	"github.com/gin-gonic/gin"
-	"github.com/p1ass/midare/lib/errors"
-	"github.com/p1ass/midare/lib/logging"
 )
 
 // StartSignInWithTwitter start twitter oauth sign in

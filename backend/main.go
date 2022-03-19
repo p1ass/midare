@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/p1ass/midare/config"
-	"github.com/p1ass/midare/lib/logging"
+	"github.com/p1ass/midare/logging"
 	"go.uber.org/zap"
 
 	"cloud.google.com/go/profiler"

@@ -1,4 +1,4 @@
-package entity
+package twitter
 
 import "testing"
 

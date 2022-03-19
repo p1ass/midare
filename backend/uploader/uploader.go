@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"net/url"
+	"path"
 
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/config"
@@ -22,11 +24,17 @@ func NewImageUploader(twiCli twitter.Client) *ImageUploader {
 }
 
 // Upload uploads image to cloud storage via Cloud Functions and returns share URL.
-func (u *ImageUploader) Upload(periods []*period.Period, shareID string, accessToken *oauth.AccessToken) string {
+func (u *ImageUploader) Upload(periods []*period.Period, shareID string, accessToken *oauth.AccessToken) *url.URL {
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
 	go u.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
 
-	return config.ReadAllowCORSOriginURL() + "/share/" + shareID
+	parsed, err := url.Parse(config.ReadAllowCORSOriginURL())
+	if err != nil {
+		panic(err)
+	}
+	parsed.Path = path.Join(parsed.Path, "share", shareID)
+
+	return parsed
 }
 
 func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []*period.Period, accessToken *oauth.AccessToken) {

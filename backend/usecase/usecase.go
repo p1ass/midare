@@ -50,11 +50,11 @@ func (u *Usecase) GetAwakePeriods(accessToken *oauth.AccessToken) ([]*period.Per
 
 	url := u.imageUploader.Upload(periods, shareID, accessToken)
 
-	res := &getAwakePeriodsCache{Periods: periods, ShareURL: url}
+	res := &getAwakePeriodsCache{Periods: periods, ShareURL: url.String()}
 
 	u.responseCache.SetDefault(screenName, res)
 
-	return periods, url, nil
+	return periods, url.String(), nil
 }
 
 func (u *Usecase) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {

@@ -37,6 +37,7 @@ func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []
 		Periods []*period.Period `json:"periods"`
 	}
 
+	// 本当はここでAPIを叩きたくないが、レイテンシの削減のために非同期でAPIを叩きたいため、ここで叩いている
 	user, err := u.twiCli.AccountVerifyCredentials(accessToken)
 	if err != nil {
 		logging.New().Error("uploadImageThroughCloudFunctions: get account info" + err.Error())

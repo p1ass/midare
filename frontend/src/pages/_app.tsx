@@ -1,6 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import { AppContext, AppInitialProps } from 'next/app'
+import Script from 'next/script'
 
 import { isProd } from '../lib/env'
 
@@ -15,19 +16,20 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
       <Head>
         {isProd() ? (
           <>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9" />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
+            <Script
+              src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9"
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
         window.dataLayer = window.dataLayer || [];
         function gtag() {
             dataLayer.push(arguments);
         }
         gtag("js", new Date());
         gtag("config", "UA-127036212-9");
-        `,
-              }}
-            />
+        `}
+            </Script>
           </>
         ) : null}
         <meta charSet="utf-8" />

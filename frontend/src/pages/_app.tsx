@@ -13,15 +13,14 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
     'ツイートを使って生活習慣の乱れを可視化するWebアプリです。カレンダーUIで直感的に起床・就寝時間の変化を見ることが出来ます。'
   return (
     <>
-      <Head>
-        {isProd() ? (
-          <>
-            <Script
-              src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9"
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`
+      {isProd() ? (
+        <>
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=UA-127036212-9"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
         window.dataLayer = window.dataLayer || [];
         function gtag() {
             dataLayer.push(arguments);
@@ -29,9 +28,10 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
         gtag("js", new Date());
         gtag("config", "UA-127036212-9");
         `}
-            </Script>
-          </>
-        ) : null}
+          </Script>
+        </>
+      ) : null}
+      <Head>
         <meta charSet="utf-8" />
         <link rel="icon" href={`/favicon.ico`} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

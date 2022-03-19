@@ -1,12 +1,5 @@
 version: "3"
 services:
-  redis-redis:
-    container_name: "redis"
-    image: "redis:latest"
-    restart: always
-    command: redis-server --requirepass hoge
-    ports:
-      - "127.0.0.1:6379:6379"
   datastore:
     build:
       context: ./docker/datastore

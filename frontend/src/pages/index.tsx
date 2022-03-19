@@ -35,6 +35,18 @@ const Title = styled.h1`
   text-align: center;
 `
 
+const OneYearMessage = styled.p`
+  margin: 0 0 0 0;
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #ff0000;
+`
+
+const OneYearDescription = styled.p`
+  margin: 0 0 1.5rem 0;
+  font-weight: bold;
+`
+
 const Main = () => {
   const [user, , isLoading] = useMe()
   const SwitchWhetherLogin = user ? (

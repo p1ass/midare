@@ -1,0 +1,16 @@
+{
+    "presets": ["next/babel"],
+    "env": {
+      "development": {
+        "plugins": [
+          [
+            "styled-components",
+            {
+              "displayName": true
+            }
+          ]
+        ]
+      }
+    },
+    "plugins": [["styled-components", { "ssr": true, "displayName": false  }]]
+  }

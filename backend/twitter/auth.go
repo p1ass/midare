@@ -1,8 +1,8 @@
 package twitter
 
 import (
+	"context"
 	"encoding/json"
-	"time"
 
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/errors"
@@ -16,12 +16,9 @@ func (cli *client) GetLoginURL() (loginURL string, err error) {
 		return "", errors.Wrap(err, "failed to get access token")
 	}
 
-	v, err := json.Marshal(rToken)
+	err = cli.dsCli.StoreRequestToken(context.Background(), rToken)
 	if err != nil {
-		panic(err)
-	}
-	if err := cli.redisCli.Set(rToken.Token, string(v), 10*time.Minute).Err(); err != nil {
-		logging.New().Error("failed to set request token to redis", logging.Error(err))
+		logging.New().Error("failed to set request token to datastore", logging.Error(err))
 		return "", err
 	}
 
@@ -30,15 +27,11 @@ func (cli *client) GetLoginURL() (loginURL string, err error) {
 
 // AuthorizeToken gets oauth access token
 func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {
-	var rToken *oauth.RequestToken
-	v, err := cli.redisCli.Get(token).Result()
+
+	rToken, err := cli.dsCli.FetchRequestToken(context.Background(), token)
 	if err != nil {
-		logging.New().Error("failed to get request token from redis", logging.Error(err))
+		logging.New().Error("failed to get request token from datastore", logging.Error(err))
 		return nil, err
-	}
-	if err := json.Unmarshal([]byte(v), &rToken); err != nil {
-		logging.New().Error("failed to unmarshal request token", logging.Error(err))
-		return nil, errors.New(errors.Unauthorized, "token secret not found")
 	}
 
 	aToken, err := cli.consumer.AuthorizeToken(rToken, verificationCode)

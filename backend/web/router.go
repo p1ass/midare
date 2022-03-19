@@ -2,14 +2,13 @@ package web
 
 import (
 	"net/http"
-	"os"
 
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/logging"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/redis"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 )
@@ -22,13 +21,18 @@ func NewRouter(handler *Handler, allowOrigin string) (*gin.Engine, error) {
 
 	logger := logging.New()
 	r.Use(ginzap.RecoveryWithZap(logger, true))
-	redisCfg := config.ReadRedisConfig()
 
-	store, err := redis.NewStore(256, "tcp", redisCfg.Addr(), redisCfg.Password, []byte(os.Getenv("SESSION_KEY")))
+	encryptionKey, err := config.ReadSessionEncryptionKey()
 	if err != nil {
-		logging.New().Error("failed to prepare redis", logging.Error(err))
 		return nil, err
 	}
+
+	store := cookie.NewStore([]byte(config.ReadSessionKey()), encryptionKey)
+	store.Options(sessions.Options{
+		MaxAge:   86400 * 7,
+		Secure:   !config.IsLocal(),
+		HttpOnly: true,
+	})
 	r.Use(sessions.Sessions("session-store", store))
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{allowOrigin},

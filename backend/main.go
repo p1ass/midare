@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/p1ass/midare/config"
+	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/logging"
 	"go.uber.org/zap"
 
@@ -32,9 +33,15 @@ func main() {
 		}
 	}
 
-	cli := twitter.NewClient()
+	dsCli, err := datastore.NewClient()
+	if err != nil {
+		logging.New().Fatal("Failed to create datastore client", zap.Error(err))
+		return
+	}
 
-	handler, err := web.NewHandler(cli, config.ReadFrontEndCallbackURL())
+	cli := twitter.NewClient(dsCli)
+
+	handler, err := web.NewHandler(cli, dsCli, config.ReadFrontEndCallbackURL())
 	if err != nil {
 		logging.New().Fatal("Failed to initialize web handler", zap.Error(err))
 		return

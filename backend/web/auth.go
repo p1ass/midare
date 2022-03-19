@@ -1,11 +1,8 @@
 package web
 
 import (
-	"encoding/json"
 	"net/http"
-	"time"
 
-	"github.com/go-redis/redis"
 	"github.com/p1ass/midare/errors"
 	"github.com/p1ass/midare/logging"
 
@@ -60,14 +57,11 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 		return
 	}
 
-	marshaled, err := json.Marshal(accessToken)
-	if err != nil {
-		logger.Error("failed to marshal access token", logging.Error(err))
+	if err := h.dsCli.StoreAccessToken(c.Request.Context(), twiUser.ID, accessToken); err != nil {
+		logger.Error("failed to save access token", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
-
 	}
 
-	h.redisCli.Set(twiUser.ID, string(marshaled), 30*time.Minute)
 	if err := setSessionAndCookie(c, twiUser.ID); err != nil {
 		sendError(errors.Wrap(err, "failed to set session"), c)
 		return
@@ -85,27 +79,12 @@ func (h *Handler) getAccessToken(c *gin.Context) *oauth.AccessToken {
 
 	logger := logging.New()
 
-	val, err := h.redisCli.Get(userID).Result()
-	if err == redis.Nil {
-		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
-		return nil
-	}
+	accessToken, err := h.dsCli.FetchAccessToken(c.Request.Context(), userID)
 	if err != nil {
-		logger.Error("failed to get access token", logging.Error(err))
+		logger.Info("failed to get access token", logging.Error(errors.Cause(err)))
 		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
 		return nil
-	}
-	var accessToken *oauth.AccessToken
-	if err := json.Unmarshal([]byte(val), &accessToken); err != nil {
-		logger.Error("failed to unmarshal access token", logging.Error(err))
-		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
-		return nil
-
 	}
 
-	if !ok {
-		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
-		return nil
-	}
 	return accessToken
 }

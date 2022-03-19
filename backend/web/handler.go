@@ -4,12 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
-	"github.com/p1ass/midare/logging"
+	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/period"
 	"github.com/p1ass/midare/usecase"
 
-	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/twitter"
 )
 
@@ -21,24 +19,15 @@ const (
 // Handler is HTTP handler.
 type Handler struct {
 	frontendCallbackURL string
-	redisCli            *redis.Client
+	dsCli               datastore.Client
 	usecase             *usecase.Usecase
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiCli twitter.Client, frontendCallbackURL string) (*Handler, error) {
-	redisCfg := config.ReadRedisConfig()
-	redisCli := redis.NewClient(&redis.Options{
-		Addr:     redisCfg.Addr(),
-		Password: redisCfg.Password,
-	})
-	if err := redisCli.Ping().Err(); err != nil {
-		logging.New().Error("failed to ping to redis", logging.Error(err))
-		return nil, err
-	}
+func NewHandler(twiCli twitter.Client, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
 	return &Handler{
 		frontendCallbackURL: frontendCallbackURL,
-		redisCli:            redisCli,
+		dsCli:               dsCli,
 		usecase:             usecase.NewUsecase(twiCli),
 	}, nil
 }

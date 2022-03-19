@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import styled from 'styled-components'
 
 import { User } from '../entity/User'
@@ -17,7 +18,7 @@ type Props = {
 export const CalendarUser = ({ user }: Props) => {
   return (
     <UserInfoWrapper>
-      <img src={user.imageUrl} width="48px" height="48px" />
+      <Image src={user.imageUrl} width="48px" height="48px" />
       <p>{user.name}さんの生活習慣はこちら！</p>
     </UserInfoWrapper>
   )

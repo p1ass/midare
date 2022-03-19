@@ -34,6 +34,7 @@ func (c client) FetchAccessToken(ctx context.Context, userID string) (*oauth.Acc
 
 	// Redis時代と同様にセキュリティ上の理由から30分でタイムアウトするようにする
 	if now().Sub(dto.Created) >= 30*time.Minute {
+		// TODO: ここでdatastoreから削除したいかも
 		return nil, errors.New(errors.Unauthorized, "request token expired")
 	}
 

@@ -28,6 +28,7 @@ func (c client) FetchRequestToken(ctx context.Context, token string) (*oauth.Req
 	dto := &requestToken{}
 	err := c.cli.Get(ctx, key, dto)
 	if err != nil {
+		// TODO: ここでdatastoreから削除したいかも
 		return nil, errors.Wrap(err, "failed to fetch request token")
 	}
 

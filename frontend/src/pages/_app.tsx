@@ -31,6 +31,12 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
           </Script>
         </>
       ) : null}
+      <Script
+        data-ad-client="ca-pub-4978327687969784"
+        async
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      />
       <Head>
         <meta charSet="utf-8" />
         <link rel="icon" href={`/favicon.ico`} />
@@ -48,11 +54,6 @@ function MyApp({ Component, pageProps }: AppContext & AppInitialProps) {
         <link rel="apple-touch-icon" href={`/icon.png`} />
         <link rel="manifest" href={`/manifest.json`} />
         <title>生活習慣の乱れを可視化するやつ</title>
-        <script
-          data-ad-client="ca-pub-4978327687969784"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-        />
       </Head>
       <Component {...pageProps} />
     </>

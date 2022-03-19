@@ -26,6 +26,11 @@ func NewUsecase(twiCli twitter.Client) *Usecase {
 }
 
 func (u *Usecase) GetAwakePeriods(accessToken *oauth.AccessToken) ([]*period.Period, string, error) {
+	type getAwakePeriodsCache struct {
+		Periods  []*period.Period `json:"periods"`
+		ShareURL string           `json:"shareUrl"`
+	}
+
 	screenName := accessToken.AdditionalData["screen_name"]
 
 	cached, ok := u.responseCache.Get(screenName)
@@ -45,14 +50,33 @@ func (u *Usecase) GetAwakePeriods(accessToken *oauth.AccessToken) ([]*period.Per
 
 	url := u.imageUploader.Upload(periods, shareID, accessToken)
 
-	res := &getAwakePeriodsCache{Periods: periods, ShareURL: url}
+	res := &getAwakePeriodsCache{Periods: periods, ShareURL: url.String()}
 
 	u.responseCache.SetDefault(screenName, res)
 
-	return periods, url, nil
+	return periods, url.String(), nil
 }
 
-type getAwakePeriodsCache struct {
-	Periods  []*period.Period `json:"periods"`
-	ShareURL string           `json:"shareUrl"`
+func (u *Usecase) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {
+	accessToken, err := u.twiCli.AuthorizeToken(token, verificationCode)
+	if err != nil {
+		return nil, err
+	}
+	return accessToken, nil
+}
+
+func (u *Usecase) GetLoginUrl() (string, error) {
+	url, err := u.twiCli.GetLoginURL()
+	if err != nil {
+		return "", err
+	}
+	return url, nil
+}
+
+func (u *Usecase) GetUser(accessToken *oauth.AccessToken) (*twitter.TwitterUser, error) {
+	user, err := u.twiCli.AccountVerifyCredentials(accessToken)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }

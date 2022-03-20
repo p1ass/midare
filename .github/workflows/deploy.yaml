@@ -56,7 +56,8 @@ jobs:
             --cpu 1 \
             --max-instances 10 \
             --memory 512Mi \
-            --set-env-vars `cat .env.prod | tr '\n' ','`REDIS_ADDR=${{ secrets.REDIS_ADDR }},REDIS_PASS=${{ secrets.REDIS_PASS }},TWITTER_CONSUMER_KEY=${{ secrets.TWITTER_CONSUMER_KEY }},TWITTER_CONSUMER_SECRET=${{ secrets.TWITTER_CONSUMER_SECRET }},CLOUD_FUNCTIONS_URL=${{ secrets.CLOUD_FUNCTIONS_URL }},SESSION_KEY=${{ secrets.SESSION_KEY }},SESSION_ENCRYPTION_KEY_BASE64_ENCODED=${{ secrets.SESSION_ENCRYPTION_KEY_BASE64_ENCODED }},DATASTORE_PROJECT_ID=${{ secrets.DATASTORE_PROJECT_ID }} \
+            --set-env-vars `cat .env.prod | tr -s '\n' ','` \
+            --set-secrets="TWITTER_CONSUMER_KEY=TWITTER_CONSUMER_KEY:latest,TWITTER_CONSUMER_SECRET=TWITTER_CONSUMER_SECRET:latest,CLOUD_FUNCTIONS_URL=CLOUD_FUNCTIONS_URL:latest,SESSION_KEY=SESSION_KEY:latest,SESSION_ENCRYPTION_KEY_BASE64_ENCODED=SESSION_ENCRYPTION_KEY_BASE64_ENCODED:latest,DATASTORE_PROJECT_ID=DATASTORE_PROJECT_ID:latest" \
             --allow-unauthenticated \
             --no-traffic
             yes | gcloud beta run services update-traffic ${{ secrets.SERVICE_NAME }} --to-latest --quiet

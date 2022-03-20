@@ -2,11 +2,11 @@ name: Deploy
 
 on:
   push:
-    # branches:
-    #   - master
-    # paths-ignore:
-    # - 'frontend/**'
-    # - 'ogp_functions/**'
+    branches:
+      - master
+    paths-ignore:
+    - 'frontend/**'
+    - 'ogp_functions/**'
 
 env:
   GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
@@ -60,4 +60,4 @@ jobs:
             --set-secrets="TWITTER_CONSUMER_KEY=TWITTER_CONSUMER_KEY:latest,TWITTER_CONSUMER_SECRET=TWITTER_CONSUMER_SECRET:latest,CLOUD_FUNCTIONS_URL=CLOUD_FUNCTIONS_URL:latest,SESSION_KEY=SESSION_KEY:latest,SESSION_ENCRYPTION_KEY_BASE64_ENCODED=SESSION_ENCRYPTION_KEY_BASE64_ENCODED:latest,DATASTORE_PROJECT_ID=DATASTORE_PROJECT_ID:latest" \
             --allow-unauthenticated \
             --no-traffic
-
+            yes | gcloud beta run services update-traffic ${{ secrets.SERVICE_NAME }} --to-latest --quiet

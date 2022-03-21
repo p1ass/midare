@@ -11,6 +11,14 @@ const UserInfoWrapper = styled.div`
   font-weight: 600;
 `
 
+const UserDescription = styled.p`
+  margin-left: 8px;
+`
+
+const UserIcon = styled(Image)`
+  border-radius: 48px;
+`
+
 type Props = {
   user: User
 }
@@ -18,8 +26,8 @@ type Props = {
 export const CalendarUser = ({ user }: Props) => {
   return (
     <UserInfoWrapper>
-      <Image src={user.imageUrl} width="48px" height="48px" />
-      <p>{user.name}さんの生活習慣はこちら！</p>
+      <UserIcon src={user.imageUrl} width="48px" height="48px" />
+      <UserDescription>{user.name}さんの生活習慣はこちら！</UserDescription>
     </UserInfoWrapper>
   )
 }

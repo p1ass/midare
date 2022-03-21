@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// StartSignInWithTwitter start twitter oauth sign in
+// StartSignInWithTwitter start twitter OAuth2 authorization code flow
 func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 	stateID, err := getOAuthStateID(c)
 	if err != nil {
@@ -28,7 +28,7 @@ func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 	c.Redirect(http.StatusTemporaryRedirect, url)
 }
 
-// TwitterCallback handles callback function after login succeeded
+// TwitterCallback handles callback function after OAuth2 use authorization
 // Redirect to frontend even if callback function fails
 func (h *Handler) TwitterCallback(c *gin.Context) {
 	logger := logging.New()
@@ -66,6 +66,8 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 	c.Redirect(http.StatusFound, h.frontendCallbackURL)
 }
 
+// getAccessToken gets OAuth2 access token from datastore.
+// TODO: usecaseに移しても良いかも
 func (h *Handler) getAccessToken(c *gin.Context) (string, *oauth2.Token) {
 	v, ok := c.Get(userIDContextKey)
 	if !ok {

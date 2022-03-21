@@ -15,6 +15,7 @@ const (
 	oauthStateKey = "oauthStateID"
 )
 
+// setSessionAndCookie creates login session and saves it to cookie.
 func setSessionAndCookie(c *gin.Context, userID string) error {
 	session := sessions.Default(c)
 	sessID := crypto.LongSecureRandomBase64()
@@ -28,6 +29,7 @@ func setSessionAndCookie(c *gin.Context, userID string) error {
 	return nil
 }
 
+// getUserIDFromCookie gets logged in userID from login session.
 func getUserIDFromCookie(c *gin.Context) (string, error) {
 	sessID, err := c.Cookie(sessionIDKey)
 	if err != nil {
@@ -42,6 +44,9 @@ func getUserIDFromCookie(c *gin.Context) (string, error) {
 	return userID, nil
 }
 
+// getOAuthStateID returns id associated with User Agent.
+// It is used for identifying OAuth2 state.
+// State is used before completing OAuth2 flow, so It is independent to login session.
 func getOAuthStateID(c *gin.Context) (string, error) {
 	session := sessions.Default(c)
 	stateID, ok := session.Get(oauthStateKey).(string)

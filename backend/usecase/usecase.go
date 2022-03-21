@@ -30,6 +30,7 @@ func NewUsecase(twiAuth *twitter.Auth, dsCli datastore.Client) *Usecase {
 	}
 }
 
+// GetAwakePeriods gets awake periods using Twitter API.
 func (u *Usecase) GetAwakePeriods(ctx context.Context, userID string, token *oauth2.Token) ([]*period.Period, string, error) {
 	type getAwakePeriodsCache struct {
 		Periods  []*period.Period `json:"periods"`
@@ -62,6 +63,8 @@ func (u *Usecase) GetAwakePeriods(ctx context.Context, userID string, token *oau
 	return periods, url.String(), nil
 }
 
+// AuthorizeToken exchanges code with access token.
+// It is defined by OAuth2.
 func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state string) (*twitter.User, error) {
 
 	authState, err := u.dsCli.FetchAuthorizationState(ctx, stateID)
@@ -89,6 +92,8 @@ func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state strin
 	return user, nil
 }
 
+// GetLoginUrl gets login url which starts OAuth2 flow.
+// It is defined by OAuth2.
 func (u *Usecase) GetLoginUrl(stateID string) (string, error) {
 	url, authState := u.twiAuth.BuildAuthorizationURL()
 	err := u.dsCli.StoreAuthorizationState(context.Background(), stateID, authState)
@@ -98,6 +103,7 @@ func (u *Usecase) GetLoginUrl(stateID string) (string, error) {
 	return url, nil
 }
 
+// GetUser gets user information using Twitter API.
 func (u *Usecase) GetUser(ctx context.Context, token *oauth2.Token) (*twitter.User, error) {
 	twiCli := twitter.NewClient(token)
 

@@ -3,7 +3,7 @@ package period
 import (
 	"time"
 
-	"github.com/p1ass/midare/twitterv1"
+	"github.com/p1ass/midare/twitter"
 )
 
 const (
@@ -12,16 +12,16 @@ const (
 )
 
 type Period struct {
-	OkiTime *twitterv1.Tweet `json:"okiTime"`
-	NeTime  *twitterv1.Tweet `json:"neTime"`
+	OkiTime *twitter.Tweet `json:"okiTime"`
+	NeTime  *twitter.Tweet `json:"neTime"`
 }
 
 // CalcAwakePeriods FIX ME テストで挙動を担保してはいるが、ロジックがブラックボックスなのでうまく整理したい
-func CalcAwakePeriods(tweets []*twitterv1.Tweet) []*Period {
+func CalcAwakePeriods(tweets []*twitter.Tweet) []*Period {
 	periods := []*Period{}
-	var neTweet *twitterv1.Tweet
-	var okiTweet *twitterv1.Tweet
-	var lastTweet *twitterv1.Tweet
+	var neTweet *twitter.Tweet
+	var okiTweet *twitter.Tweet
+	var lastTweet *twitter.Tweet
 	startIdx := 1
 	for i, t := range tweets {
 		if !t.ContainExcludedWord() {

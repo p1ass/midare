@@ -5,15 +5,19 @@ import (
 
 	"github.com/p1ass/midare/errors"
 	"github.com/p1ass/midare/logging"
-
-	"github.com/mrjones/oauth"
+	"golang.org/x/oauth2"
 
 	"github.com/gin-gonic/gin"
 )
 
 // StartSignInWithTwitter start twitter oauth sign in
 func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
-	url, err := h.usecase.GetLoginUrl()
+	stateID, err := getOAuthStateID(c)
+	if err != nil {
+		sendError(errors.Wrap(err, "failed to get oauth state id"), c)
+		return
+	}
+	url, err := h.usecase.GetLoginUrl(stateID)
 	if err != nil {
 		sendError(errors.Wrap(err, "failed to get redirect url"), c)
 		return
@@ -29,51 +33,44 @@ func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 func (h *Handler) TwitterCallback(c *gin.Context) {
 	logger := logging.New()
 
-	token := c.DefaultQuery("oauth_token", "")
-	if token == "" {
-		logger.Error("oauth token should be not empty")
+	code := c.DefaultQuery("code", "")
+	if code == "" {
+		logger.Error("code should be not empty")
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
-	ov := c.DefaultQuery("oauth_verifier", "")
-	if ov == "" {
-		logger.Error("oauth verifier should be not empty")
+	state := c.DefaultQuery("state", "")
+	if state == "" {
+		logger.Error("state should be not empty")
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
-	accessToken, err := h.usecase.AuthorizeToken(token, ov)
+	stateID, err := getOAuthStateID(c)
+	if err != nil {
+		sendError(errors.Wrap(err, "failed to get oauth state id"), c)
+		return
+	}
+	user, err := h.usecase.AuthorizeToken(c.Request.Context(), stateID, code, state)
 	if err != nil {
 		logger.Error("failed to authorize", logging.Error(err))
 		c.Redirect(http.StatusFound, h.frontendCallbackURL)
 		return
 	}
 
-	twiUser, err := h.usecase.GetUser(accessToken)
-	if err != nil {
-		logger.Error("failed to get twitter user", logging.Error(err))
-		c.Redirect(http.StatusFound, h.frontendCallbackURL)
-		return
-	}
-
-	if err := h.dsCli.StoreAccessToken(c.Request.Context(), twiUser.ID, accessToken); err != nil {
-		logger.Error("failed to save access token", logging.Error(err))
-		c.Redirect(http.StatusFound, h.frontendCallbackURL)
-	}
-
-	if err := setSessionAndCookie(c, twiUser.ID); err != nil {
+	if err := setSessionAndCookie(c, user.ID); err != nil {
 		sendError(errors.Wrap(err, "failed to set session"), c)
 		return
 	}
 	c.Redirect(http.StatusFound, h.frontendCallbackURL)
 }
 
-func (h *Handler) getAccessToken(c *gin.Context) *oauth.AccessToken {
+func (h *Handler) getAccessToken(c *gin.Context) (string, *oauth2.Token) {
 	v, ok := c.Get(userIDContextKey)
 	if !ok {
 		sendServiceError(errors.NewUnknown("user id must be set with context"), c)
-		return nil
+		return "", nil
 	}
 	userID := v.(string)
 
@@ -83,8 +80,8 @@ func (h *Handler) getAccessToken(c *gin.Context) *oauth.AccessToken {
 	if err != nil {
 		logger.Info("failed to get access token", logging.Error(errors.Cause(err)))
 		sendServiceError(&errors.ServiceError{Code: errors.Unauthorized}, c)
-		return nil
+		return "", nil
 	}
 
-	return accessToken
+	return userID, accessToken
 }

@@ -1,45 +1,50 @@
 package usecase
 
 import (
+	"context"
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/datastore"
+	"github.com/p1ass/midare/errors"
 	"github.com/p1ass/midare/period"
-	"github.com/p1ass/midare/twitterv1"
+	"github.com/p1ass/midare/twitter"
 	"github.com/p1ass/midare/uploader"
 	"github.com/patrickmn/go-cache"
+	"golang.org/x/oauth2"
 )
 
 type Usecase struct {
-	twiCli        twitterv1.Client
+	twiAuth       *twitter.Auth
+	dsCli         datastore.Client
 	responseCache *cache.Cache
 	imageUploader *uploader.ImageUploader
 }
 
-func NewUsecase(twiCli twitterv1.Client) *Usecase {
+func NewUsecase(twiAuth *twitter.Auth, dsCli datastore.Client) *Usecase {
 	return &Usecase{
-		twiCli:        twiCli,
+		twiAuth:       twiAuth,
+		dsCli:         dsCli,
 		responseCache: cache.New(5*time.Minute, 5*time.Minute),
-		imageUploader: uploader.NewImageUploader(twiCli),
+		imageUploader: uploader.NewImageUploader(),
 	}
 }
 
-func (u *Usecase) GetAwakePeriods(accessToken *oauth.AccessToken) ([]*period.Period, string, error) {
+func (u *Usecase) GetAwakePeriods(ctx context.Context, userID string, token *oauth2.Token) ([]*period.Period, string, error) {
 	type getAwakePeriodsCache struct {
 		Periods  []*period.Period `json:"periods"`
 		ShareURL string           `json:"shareUrl"`
 	}
 
-	screenName := accessToken.AdditionalData["screen_name"]
+	twiCli := twitter.NewClient(token)
 
-	cached, ok := u.responseCache.Get(screenName)
+	cached, ok := u.responseCache.Get(userID)
 	if ok {
 		c := cached.(*getAwakePeriodsCache)
 		return c.Periods, c.ShareURL, nil
 	}
 
-	tweets, err := u.twiCli.GetTweets(accessToken)
+	tweets, err := twiCli.GetTweets(ctx, userID)
 	if err != nil {
 		return nil, "", err
 	}
@@ -48,35 +53,57 @@ func (u *Usecase) GetAwakePeriods(accessToken *oauth.AccessToken) ([]*period.Per
 
 	shareID := uuid.New().String()
 
-	url := u.imageUploader.Upload(periods, shareID, accessToken)
+	url := u.imageUploader.Upload(periods, shareID, twiCli)
 
 	res := &getAwakePeriodsCache{Periods: periods, ShareURL: url.String()}
 
-	u.responseCache.SetDefault(screenName, res)
+	u.responseCache.SetDefault(userID, res)
 
 	return periods, url.String(), nil
 }
 
-func (u *Usecase) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {
-	accessToken, err := u.twiCli.AuthorizeToken(token, verificationCode)
+func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state string) (*twitter.User, error) {
+
+	authState, err := u.dsCli.FetchAuthorizationState(ctx, stateID)
 	if err != nil {
 		return nil, err
 	}
-	return accessToken, nil
+
+	if state != authState.State {
+		return nil, errors.NewForbidden("state not matched")
+	}
+
+	token, err := u.twiAuth.ExchangeCode(ctx, code, authState.CodeVerifier)
+	if err != nil {
+		return nil, errors.Wrap(err, "exchange code")
+	}
+
+	user, err := u.GetUser(ctx, token)
+	if err != nil {
+		return nil, errors.Wrap(err, "get user")
+	}
+
+	if err := u.dsCli.StoreAccessToken(ctx, user.ID, token); err != nil {
+		return nil, errors.Wrap(err, "store access token")
+	}
+	return user, nil
 }
 
-func (u *Usecase) GetLoginUrl() (string, error) {
-	url, err := u.twiCli.GetLoginURL()
+func (u *Usecase) GetLoginUrl(stateID string) (string, error) {
+	url, authState := u.twiAuth.BuildAuthorizationURL()
+	err := u.dsCli.StoreAuthorizationState(context.Background(), stateID, authState)
 	if err != nil {
 		return "", err
 	}
 	return url, nil
 }
 
-func (u *Usecase) GetUser(accessToken *oauth.AccessToken) (*twitterv1.TwitterUser, error) {
-	user, err := u.twiCli.AccountVerifyCredentials(accessToken)
+func (u *Usecase) GetUser(ctx context.Context, token *oauth2.Token) (*twitter.User, error) {
+	twiCli := twitter.NewClient(token)
+
+	user, err := twiCli.GetMe(ctx)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "account verify credentials")
 	}
 	return user, nil
 }

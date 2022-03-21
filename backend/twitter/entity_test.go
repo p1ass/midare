@@ -1,4 +1,4 @@
-package twitterv1
+package twitter
 
 import "testing"
 

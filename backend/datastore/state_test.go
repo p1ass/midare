@@ -6,12 +6,11 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
-	"golang.org/x/oauth2"
+	"github.com/p1ass/midare/twitter"
 )
 
-func Test_client_AccessToken(t *testing.T) {
+func Test_client_AuthorizationState(t *testing.T) {
 	fixed := time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC)
 
 	now = func() time.Time {
@@ -19,39 +18,33 @@ func Test_client_AccessToken(t *testing.T) {
 	}
 
 	type args struct {
-		userID string
-		token  *oauth2.Token
+		stateID string
+		state   *twitter.AuthorizationState
 	}
 	tests := []struct {
 		name           string
 		args           args
 		nowAfterStored time.Time
-		want           *oauth2.Token
+		want           *twitter.AuthorizationState
 		wantStoreErr   bool
 		wantFetchErr   bool
 	}{
 		{
 			name: "保存したトークンを正しく取得できる",
 			args: args{
-				userID: uuid.NewString(),
-				token: &oauth2.Token{
-					AccessToken: "accessToken",
-				},
+				stateID: uuid.NewString(),
+				state:   &twitter.AuthorizationState{State: "state", CodeVerifier: "codeVerifier"},
 			},
 			nowAfterStored: fixed,
-			want: &oauth2.Token{
-				AccessToken: "accessToken",
-			},
-			wantStoreErr: false,
-			wantFetchErr: false,
+			want:           &twitter.AuthorizationState{State: "state", CodeVerifier: "codeVerifier"},
+			wantStoreErr:   false,
+			wantFetchErr:   false,
 		},
 		{
 			name: "30分経過すると保存したトークンを取得できなくなる",
 			args: args{
-				userID: uuid.NewString(),
-				token: &oauth2.Token{
-					AccessToken: "accessToken",
-				},
+				stateID: uuid.NewString(),
+				state:   &twitter.AuthorizationState{State: "state", CodeVerifier: "codeVerifier"},
 			},
 			nowAfterStored: fixed.Add(30 * time.Minute),
 			want:           nil,
@@ -66,7 +59,7 @@ func Test_client_AccessToken(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if err := c.StoreAccessToken(context.Background(), tt.args.userID, tt.args.token); (err != nil) != tt.wantStoreErr {
+			if err := c.StoreAuthorizationState(context.Background(), tt.args.stateID, tt.args.state); (err != nil) != tt.wantStoreErr {
 				t.Errorf("StoreAccessToken() error = %v, wantErr %v", err, tt.wantStoreErr)
 			}
 
@@ -78,13 +71,13 @@ func Test_client_AccessToken(t *testing.T) {
 				now = tmpNow
 			}()
 
-			got, err := c.FetchAccessToken(context.Background(), tt.args.userID)
+			got, err := c.FetchAuthorizationState(context.Background(), tt.args.stateID)
 			if (err != nil) != tt.wantFetchErr {
 				t.Errorf("FetchAccessToken() error = %v, wantErr %v", err, tt.wantFetchErr)
 			}
 
-			if !cmp.Equal(got, tt.want, cmpopts.IgnoreUnexported(oauth2.Token{})) {
-				t.Errorf("FetchAccessToken() got = %v, want %v diff= %v", got, tt.args.token, cmp.Diff(got, tt.want))
+			if !cmp.Equal(got, tt.want) {
+				t.Errorf("FetchAuthorizationState() got = %v, want %v diff= %v", got, tt.args.state, cmp.Diff(got, tt.want))
 			}
 		})
 	}

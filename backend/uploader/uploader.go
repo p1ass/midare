@@ -2,12 +2,12 @@ package uploader
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/url"
 	"path"
 
-	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/logging"
 	"github.com/p1ass/midare/period"
@@ -16,17 +16,16 @@ import (
 )
 
 type ImageUploader struct {
-	twiCli twitter.Client
 }
 
-func NewImageUploader(twiCli twitter.Client) *ImageUploader {
-	return &ImageUploader{twiCli: twiCli}
+func NewImageUploader() *ImageUploader {
+	return &ImageUploader{}
 }
 
 // Upload uploads image to cloud storage via Cloud Functions and returns share URL.
-func (u *ImageUploader) Upload(periods []*period.Period, shareID string, accessToken *oauth.AccessToken) *url.URL {
+func (u *ImageUploader) Upload(periods []*period.Period, shareID string, twiCli twitter.Client) *url.URL {
 	logging.New().Info("uploadImage", zap.String("uuid", shareID))
-	go u.uploadImageThroughCloudFunctions(shareID, periods, accessToken)
+	go u.uploadImageThroughCloudFunctions(shareID, periods, twiCli)
 
 	parsed, err := url.Parse(config.ReadAllowCORSOriginURL())
 	if err != nil {
@@ -37,7 +36,7 @@ func (u *ImageUploader) Upload(periods []*period.Period, shareID string, accessT
 	return parsed
 }
 
-func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []*period.Period, accessToken *oauth.AccessToken) {
+func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []*period.Period, twiCli twitter.Client) {
 	type request struct {
 		Name    string           `json:"name"`
 		IconURL string           `json:"iconUrl"`
@@ -46,7 +45,7 @@ func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []
 	}
 
 	// 本当はここでAPIを叩きたくないが、レイテンシの削減のために非同期でAPIを叩きたいため、ここで叩いている
-	user, err := u.twiCli.AccountVerifyCredentials(accessToken)
+	user, err := twiCli.GetMe(context.Background())
 	if err != nil {
 		logging.New().Error("uploadImageThroughCloudFunctions: get account info" + err.Error())
 		return

@@ -6,14 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/period"
-	"github.com/p1ass/midare/usecase"
-
 	"github.com/p1ass/midare/twitter"
+	"github.com/p1ass/midare/usecase"
 )
 
 const (
-	sessionIDKey = "sessionID"
-	sevenDays    = 60 * 60 * 24 * 7
+	sevenDays = 60 * 60 * 24 * 7
 )
 
 // Handler is HTTP handler.
@@ -24,22 +22,22 @@ type Handler struct {
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiCli twitter.Client, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
+func NewHandler(twiAuth *twitter.Auth, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
 	return &Handler{
 		frontendCallbackURL: frontendCallbackURL,
 		dsCli:               dsCli,
-		usecase:             usecase.NewUsecase(twiCli),
+		usecase:             usecase.NewUsecase(twiAuth, dsCli),
 	}, nil
 }
 
 // GetMe gets my profile.
 func (h *Handler) GetMe(c *gin.Context) {
-	accessToken := h.getAccessToken(c)
-	if accessToken == nil {
+	_, token := h.getAccessToken(c)
+	if token == nil {
 		return
 	}
 
-	user, err := h.usecase.GetUser(accessToken)
+	user, err := h.usecase.GetUser(c.Request.Context(), token)
 	if err != nil {
 		sendError(err, c)
 		return
@@ -55,12 +53,12 @@ func (h *Handler) GetAwakePeriods(c *gin.Context) {
 		ShareURL string           `json:"shareUrl"`
 	}
 
-	accessToken := h.getAccessToken(c)
+	userID, accessToken := h.getAccessToken(c)
 	if accessToken == nil {
 		return
 	}
 
-	periods, shareURL, err := h.usecase.GetAwakePeriods(accessToken)
+	periods, shareURL, err := h.usecase.GetAwakePeriods(c.Request.Context(), userID, accessToken)
 	if err != nil {
 		sendError(err, c)
 		return

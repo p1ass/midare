@@ -2,90 +2,65 @@ package twitter
 
 import (
 	"context"
-	"encoding/json"
 
-	"github.com/mrjones/oauth"
+	"github.com/p1ass/midare/config"
+	"github.com/p1ass/midare/crypto"
 	"github.com/p1ass/midare/errors"
-	"github.com/p1ass/midare/logging"
+	"golang.org/x/oauth2"
 )
 
-// GetLoginURL gets login URL
-func (cli *client) GetLoginURL() (loginURL string, err error) {
-	rToken, loginURL, err := cli.consumer.GetRequestTokenAndUrl(cli.callbackURL)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to get access token")
-	}
+const (
+	authorizationURL = "https://twitter.com/i/oauth2/authorize"
+	tokenURL         = "https://api.twitter.com/2/oauth2/token"
+)
 
-	err = cli.dsCli.StoreRequestToken(context.Background(), rToken)
-	if err != nil {
-		logging.New().Error("failed to set request token to datastore", logging.Error(err))
-		return "", err
-	}
-
-	return loginURL, nil
+// Auth represents the twitter OAuth2 authorization.
+type Auth struct {
+	config oauth2.Config
 }
 
-// AuthorizeToken gets oauth access token
-func (cli *client) AuthorizeToken(token, verificationCode string) (*oauth.AccessToken, error) {
-
-	rToken, err := cli.dsCli.FetchRequestToken(context.Background(), token)
-	if err != nil {
-		logging.New().Error("failed to get request token from datastore", logging.Error(err))
-		return nil, err
-	}
-
-	aToken, err := cli.consumer.AuthorizeToken(rToken, verificationCode)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to authorize token")
-	}
-
-	return aToken, nil
+// AuthorizationState represents the state of the OAuth2 authorization state and PKCE code verifier.
+type AuthorizationState struct {
+	State        string
+	CodeVerifier string
 }
 
-// AccountVerifyCredentials fetch Twitter profile from Twitter api
-func (cli *client) AccountVerifyCredentials(token *oauth.AccessToken) (*TwitterUser, error) {
-	httpCli, err := cli.httpClient(token)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to make http client")
+func NewAuth() *Auth {
+	cfg := config.NewTwitter()
+	return &Auth{
+		config: oauth2.Config{
+			ClientID:     cfg.ClientID,
+			ClientSecret: cfg.ClientSecret,
+			Endpoint: oauth2.Endpoint{
+				AuthURL:   authorizationURL,
+				TokenURL:  tokenURL,
+				AuthStyle: oauth2.AuthStyleInHeader,
+			},
+			RedirectURL: cfg.OAuthCallBackURL,
+			Scopes:      []string{"tweet.read", "users.read"},
+		},
 	}
-
-	resp, err := httpCli.Get(twitterAPIEndpoint + "/account/verify_credentials.json")
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to fetch verify credentials from twitter api")
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		errMsg := &twitterError{}
-		err = json.NewDecoder(resp.Body).Decode(errMsg)
-		if err != nil {
-			return nil, errors.Wrap(err, "failed to decode twitter api response")
-		}
-		return nil, errors.New(errors.Unauthorized, "twitter api response status code=%d message=%v", resp.StatusCode, errMsg.Errors)
-	}
-
-	res := &userObject{}
-	err = json.NewDecoder(resp.Body).Decode(res)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to decode twitter api response")
-	}
-
-	twiUser := &TwitterUser{
-		ID:         res.IDStr,
-		Name:       res.Name,
-		ScreenName: res.ScreenName,
-		ImageURL:   res.ProfileImageURL,
-	}
-
-	return twiUser, nil
 }
 
-// userObject is a user object for Twitter api
-type userObject struct {
-	ID              int64  `json:"id"`
-	IDStr           string `json:"id_str"`
-	Name            string `json:"name"`
-	ScreenName      string `json:"screen_name"`
-	URL             string `json:"url"`
-	ProfileImageURL string `json:"profile_image_url_https"`
+func (a *Auth) BuildAuthorizationURL() (string, *AuthorizationState) {
+	state := crypto.ShortSecureRandomBase64()
+	codeVerifier := crypto.ShortSecureRandomBase64()
+
+	url := a.config.AuthCodeURL(
+		state,
+		oauth2.SetAuthURLParam("code_challenge", codeVerifier),
+		oauth2.SetAuthURLParam("code_challenge_method", "plain"))
+
+	return url, &AuthorizationState{
+		State:        state,
+		CodeVerifier: codeVerifier,
+	}
+}
+
+func (a *Auth) ExchangeCode(ctx context.Context, code, codeVerifier string) (*oauth2.Token, error) {
+	token, err := a.config.Exchange(ctx, code, oauth2.SetAuthURLParam("code_verifier", codeVerifier))
+	if err != nil {
+		return nil, errors.NewForbidden("failed to exchange code: %v", err)
+	}
+	return token, nil
 }

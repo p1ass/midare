@@ -11,12 +11,11 @@ import (
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/logging"
+	"github.com/p1ass/midare/twitter"
 	"go.uber.org/zap"
 
 	"cloud.google.com/go/profiler"
 	"github.com/p1ass/midare/web"
-
-	"github.com/p1ass/midare/twitter"
 )
 
 func main() {
@@ -39,9 +38,9 @@ func main() {
 		return
 	}
 
-	cli := twitter.NewClient(dsCli)
+	twiAuth := twitter.NewAuth()
 
-	handler, err := web.NewHandler(cli, dsCli, config.ReadFrontEndCallbackURL())
+	handler, err := web.NewHandler(twiAuth, dsCli, config.ReadFrontEndCallbackURL())
 	if err != nil {
 		logging.New().Fatal("Failed to initialize web handler", zap.Error(err))
 		return

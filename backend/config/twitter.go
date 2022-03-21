@@ -3,15 +3,15 @@ package config
 import "os"
 
 type Twitter struct {
-	ConsumerKey      string
-	ConsumerSecret   string
+	ClientID         string
+	ClientSecret     string
 	OAuthCallBackURL string
 }
 
 func NewTwitter() *Twitter {
 	return &Twitter{
-		ConsumerKey:      os.Getenv("TWITTER_CONSUMER_KEY"),
-		ConsumerSecret:   os.Getenv("TWITTER_CONSUMER_SECRET"),
+		ClientID:         os.Getenv("TWITTER_CLIENT_ID"),
+		ClientSecret:     os.Getenv("TWITTER_CLIENT_SECRET"),
 		OAuthCallBackURL: os.Getenv("TWITTER_OAUTH_CALLBACK_URL"),
 	}
 }

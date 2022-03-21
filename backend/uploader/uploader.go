@@ -11,15 +11,15 @@ import (
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/logging"
 	"github.com/p1ass/midare/period"
-	"github.com/p1ass/midare/twitter"
+	"github.com/p1ass/midare/twitterv1"
 	"go.uber.org/zap"
 )
 
 type ImageUploader struct {
-	twiCli twitter.Client
+	twiCli twitterv1.Client
 }
 
-func NewImageUploader(twiCli twitter.Client) *ImageUploader {
+func NewImageUploader(twiCli twitterv1.Client) *ImageUploader {
 	return &ImageUploader{twiCli: twiCli}
 }
 

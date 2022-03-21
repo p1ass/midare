@@ -6,18 +6,18 @@ import (
 	"github.com/google/uuid"
 	"github.com/mrjones/oauth"
 	"github.com/p1ass/midare/period"
-	"github.com/p1ass/midare/twitter"
+	"github.com/p1ass/midare/twitterv1"
 	"github.com/p1ass/midare/uploader"
 	"github.com/patrickmn/go-cache"
 )
 
 type Usecase struct {
-	twiCli        twitter.Client
+	twiCli        twitterv1.Client
 	responseCache *cache.Cache
 	imageUploader *uploader.ImageUploader
 }
 
-func NewUsecase(twiCli twitter.Client) *Usecase {
+func NewUsecase(twiCli twitterv1.Client) *Usecase {
 	return &Usecase{
 		twiCli:        twiCli,
 		responseCache: cache.New(5*time.Minute, 5*time.Minute),
@@ -73,7 +73,7 @@ func (u *Usecase) GetLoginUrl() (string, error) {
 	return url, nil
 }
 
-func (u *Usecase) GetUser(accessToken *oauth.AccessToken) (*twitter.TwitterUser, error) {
+func (u *Usecase) GetUser(accessToken *oauth.AccessToken) (*twitterv1.TwitterUser, error) {
 	user, err := u.twiCli.AccountVerifyCredentials(accessToken)
 	if err != nil {
 		return nil, err

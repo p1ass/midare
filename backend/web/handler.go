@@ -6,9 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/period"
+	"github.com/p1ass/midare/twitterv1"
 	"github.com/p1ass/midare/usecase"
-
-	"github.com/p1ass/midare/twitter"
 )
 
 const (
@@ -24,7 +23,7 @@ type Handler struct {
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiCli twitter.Client, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
+func NewHandler(twiCli twitterv1.Client, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
 	return &Handler{
 		frontendCallbackURL: frontendCallbackURL,
 		dsCli:               dsCli,

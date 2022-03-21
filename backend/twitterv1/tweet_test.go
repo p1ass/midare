@@ -1,7 +1,7 @@
 //go:build integration
 // +build integration
 
-package twitter
+package twitterv1
 
 import (
 	"os"

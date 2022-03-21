@@ -1,4 +1,4 @@
-package twitter
+package twitterv1
 
 import (
 	"net/http"

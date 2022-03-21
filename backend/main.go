@@ -11,12 +11,11 @@ import (
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/logging"
+	"github.com/p1ass/midare/twitterv1"
 	"go.uber.org/zap"
 
 	"cloud.google.com/go/profiler"
 	"github.com/p1ass/midare/web"
-
-	"github.com/p1ass/midare/twitter"
 )
 
 func main() {
@@ -39,7 +38,7 @@ func main() {
 		return
 	}
 
-	cli := twitter.NewClient(dsCli)
+	cli := twitterv1.NewClient(dsCli)
 
 	handler, err := web.NewHandler(cli, dsCli, config.ReadFrontEndCallbackURL())
 	if err != nil {

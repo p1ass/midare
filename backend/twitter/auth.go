@@ -2,6 +2,8 @@ package twitter
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
 
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/crypto"
@@ -43,13 +45,22 @@ func NewAuth() *Auth {
 }
 
 func (a *Auth) BuildAuthorizationURL() (string, *AuthorizationState) {
-	state := crypto.ShortSecureRandomBase64()
-	codeVerifier := crypto.ShortSecureRandomBase64()
+	// for CSRF attack
+	// https://datatracker.ietf.org/doc/html/rfc6749#section-10.12
+	// SHOULD be less than or equal to 2^(-160) means 160bit / 8 = 20 bytes
+	state := crypto.SecureRandomBase64Encoded(20)
+
+	// Proof Key for Code Exchange (RFC 7636)
+	// https://datatracker.ietf.org/doc/html/rfc7636
+	codeVerifier := crypto.SecureRandomBase64Encoded(32)
+	h := sha256.New()
+	h.Write([]byte(codeVerifier))
+	codeChallenge := base64.RawURLEncoding.EncodeToString(h.Sum(nil))
 
 	url := a.config.AuthCodeURL(
 		state,
-		oauth2.SetAuthURLParam("code_challenge", codeVerifier),
-		oauth2.SetAuthURLParam("code_challenge_method", "plain"))
+		oauth2.SetAuthURLParam("code_challenge", codeChallenge),
+		oauth2.SetAuthURLParam("code_challenge_method", "S256"))
 
 	return url, &AuthorizationState{
 		State:        state,

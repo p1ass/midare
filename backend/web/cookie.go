@@ -18,7 +18,7 @@ const (
 // setSessionAndCookie creates login session and saves it to cookie.
 func setSessionAndCookie(c *gin.Context, userID string) error {
 	session := sessions.Default(c)
-	sessID := crypto.LongSecureRandomBase64()
+	sessID := crypto.SecureRandomBase64Encoded(64)
 	session.Set(sessID, userID)
 	err := session.Save()
 	if err != nil {
@@ -53,7 +53,7 @@ func getOAuthStateID(c *gin.Context) (string, error) {
 	if ok {
 		return stateID, nil
 	}
-	stateID = crypto.LongSecureRandomBase64()
+	stateID = crypto.SecureRandomBase64Encoded(64)
 	session.Set(oauthStateKey, stateID)
 	err := session.Save()
 	if err != nil {

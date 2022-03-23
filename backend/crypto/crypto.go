@@ -6,20 +6,11 @@ import (
 	"io"
 )
 
-// LongSecureRandomBase64 returns 64byte length secure random string
-func LongSecureRandomBase64() string {
-	b := make([]byte, 64)
+// SecureRandomBase64Encoded returns base 64 url encoded secure random string
+func SecureRandomBase64Encoded(entropyByte int) string {
+	b := make([]byte, entropyByte)
 	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return ""
+		panic(err)
 	}
-	return base64.URLEncoding.EncodeToString(b)
-}
-
-// ShortSecureRandomBase64 returns 32byte length secure random string
-func ShortSecureRandomBase64() string {
-	b := make([]byte, 32)
-	if _, err := io.ReadFull(rand.Reader, b); err != nil {
-		return ""
-	}
-	return base64.URLEncoding.EncodeToString(b)
+	return base64.RawURLEncoding.EncodeToString(b)
 }

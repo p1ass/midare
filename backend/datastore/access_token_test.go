@@ -8,6 +8,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
+	"github.com/p1ass/midare/errors"
 	"golang.org/x/oauth2"
 )
 
@@ -87,5 +88,26 @@ func Test_client_AccessToken(t *testing.T) {
 				t.Errorf("FetchAccessToken() got = %v, want %v diff= %v", got, tt.args.token, cmp.Diff(got, tt.want))
 			}
 		})
+	}
+}
+
+func Test_client_FetchAccessTokenShouldNotFoundErrorWhenNotFoundId(t *testing.T) {
+	c, err := NewClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var notFoundID = "notFoundID"
+
+	_, err = c.FetchAccessToken(context.Background(), notFoundID)
+	se, ok := errors.Cause(err).(*errors.ServiceError)
+	if !ok {
+		t.Errorf("FetchAccessToken() error should ServiceError, but got %v", err)
+		return
+	}
+
+	wantCode := errors.NotFound
+	if se.Code != wantCode {
+		t.Errorf("FetchAccessToken() errorCode = %v, wantErr %v", se.Code, wantCode)
 	}
 }

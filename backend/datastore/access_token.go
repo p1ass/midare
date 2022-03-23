@@ -27,6 +27,9 @@ func (c client) FetchAccessToken(ctx context.Context, userID string) (*oauth2.To
 	dto := &accessToken{}
 	err := c.cli.Get(ctx, key, dto)
 	if err != nil {
+		if errors.Cause(err) == datastore.ErrNoSuchEntity {
+			return nil, errors.NewNotFound("access token not found")
+		}
 		return nil, errors.Wrap(err, "failed to fetch access token")
 	}
 
@@ -36,7 +39,7 @@ func (c client) FetchAccessToken(ctx context.Context, userID string) (*oauth2.To
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to delete access token")
 		}
-		return nil, errors.New(errors.Unauthorized, "request token expired")
+		return nil, errors.NewNotFound("state not found")
 	}
 
 	return &oauth2.Token{

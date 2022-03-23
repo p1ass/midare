@@ -69,6 +69,9 @@ func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state strin
 
 	authState, err := u.dsCli.FetchAuthorizationState(ctx, stateID)
 	if err != nil {
+		if se, ok := errors.Cause(err).(*errors.ServiceError); ok && se.Code == errors.NotFound {
+			return nil, errors.NewBadRequest("invalid state id: %s", stateID)
+		}
 		return nil, err
 	}
 

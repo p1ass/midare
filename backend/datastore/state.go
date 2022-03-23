@@ -28,7 +28,10 @@ func (c client) FetchAuthorizationState(ctx context.Context, stateID string) (*t
 	dto := &authorizationState{}
 	err := c.cli.Get(ctx, key, dto)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to fetch access token")
+		if errors.Cause(err) == datastore.ErrNoSuchEntity {
+			return nil, errors.NewNotFound("state not found")
+		}
+		return nil, errors.Wrap(err, "failed to fetch authorization state")
 	}
 
 	if now().Sub(dto.Created) >= 15*time.Minute {
@@ -36,7 +39,7 @@ func (c client) FetchAuthorizationState(ctx context.Context, stateID string) (*t
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to delete authorization state")
 		}
-		return nil, errors.New(errors.Unauthorized, "authorization state expired")
+		return nil, errors.NewNotFound("state not found")
 	}
 
 	return &twitter.AuthorizationState{

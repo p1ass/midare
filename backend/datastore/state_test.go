@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
+	"github.com/p1ass/midare/errors"
 	"github.com/p1ass/midare/twitter"
 )
 
@@ -80,5 +81,26 @@ func Test_client_AuthorizationState(t *testing.T) {
 				t.Errorf("FetchAuthorizationState() got = %v, want %v diff= %v", got, tt.args.state, cmp.Diff(got, tt.want))
 			}
 		})
+	}
+}
+
+func Test_client_FetchAuthorizationStateShouldNotFoundErrorWhenNotFoundId(t *testing.T) {
+	c, err := NewClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var notFoundID = "notFoundID"
+
+	_, err = c.FetchAuthorizationState(context.Background(), notFoundID)
+	se, ok := errors.Cause(err).(*errors.ServiceError)
+	if !ok {
+		t.Errorf("FetchAuthorizationState() error should ServiceError, but got %v", err)
+		return
+	}
+
+	wantCode := errors.NotFound
+	if se.Code != wantCode {
+		t.Errorf("FetchAuthorizationState() errorCode = %v, wantErr %v", se.Code, wantCode)
 	}
 }

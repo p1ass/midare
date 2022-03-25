@@ -16,7 +16,6 @@ const (
 	tokenURL         = "https://api.twitter.com/2/oauth2/token"
 )
 
-// Auth represents the twitter OAuth2 authorization.
 type auth struct {
 	config oauth2.Config
 }

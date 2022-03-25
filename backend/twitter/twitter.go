@@ -12,6 +12,7 @@ type Client interface {
 	GetTweets(ctx context.Context, userID string) ([]*Tweet, error)
 }
 
+// Auth represents the methods of Twitter OAuth2 authorization.
 type Auth interface {
 	BuildAuthorizationURL() (string, *AuthorizationState)
 	ExchangeCode(ctx context.Context, code, codeVerifier string) (*oauth2.Token, error)

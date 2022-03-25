@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
 	"path"
@@ -24,7 +25,7 @@ func NewImageUploader() *ImageUploader {
 
 // Upload uploads image to cloud storage via Cloud Functions and returns share URL.
 func (u *ImageUploader) Upload(periods []*period.Period, shareID string, twiCli twitter.Client) *url.URL {
-	logging.New().Info("uploadImage", zap.String("uuid", shareID))
+	logging.New().Info(fmt.Sprintf("uploadImage: %s", shareID), zap.String("uuid", shareID))
 	go u.uploadImageThroughCloudFunctions(shareID, periods, twiCli)
 
 	parsed, err := url.Parse(config.ReadAllowCORSOriginURL())

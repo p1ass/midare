@@ -1,19 +1,12 @@
 package twitter
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/g8rswimmer/go-twitter/v2"
 	"golang.org/x/oauth2"
 )
-
-// Client is a Twitter client. It must be created per bearer token.
-type Client interface {
-	GetMe(ctx context.Context) (*User, error)
-	GetTweets(ctx context.Context, userID string) ([]*Tweet, error)
-}
 
 type client struct {
 	cli *twitter.Client

@@ -18,7 +18,7 @@ type Handler struct {
 }
 
 // NewHandler returns a new struct of Handler.
-func NewHandler(twiAuth *twitter.Auth, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
+func NewHandler(twiAuth twitter.Auth, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
 	return &Handler{
 		frontendCallbackURL: frontendCallbackURL,
 		dsCli:               dsCli,

@@ -2,6 +2,7 @@ package twitter
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/g8rswimmer/go-twitter/v2"
@@ -39,7 +40,7 @@ func (c client) GetTweets(ctx context.Context, userID string) ([]*Tweet, error) 
 		}
 		tweets := toTweets(res.Raw.Tweets)
 
-		logging.New().Info("rate limit", zap.Any("remaining", res.RateLimit.Reset))
+		logging.New().Info(fmt.Sprintf("rate limit: %d", res.RateLimit.Remaining), zap.Any("remaining", res.RateLimit.Remaining))
 
 		if len(res.Raw.Tweets) == 0 {
 			return []*Tweet{}, nil

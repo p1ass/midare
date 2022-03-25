@@ -16,8 +16,7 @@ const (
 	tokenURL         = "https://api.twitter.com/2/oauth2/token"
 )
 
-// Auth represents the twitter OAuth2 authorization.
-type Auth struct {
+type auth struct {
 	config oauth2.Config
 }
 
@@ -27,9 +26,9 @@ type AuthorizationState struct {
 	CodeVerifier string
 }
 
-func NewAuth() *Auth {
+func NewAuth() Auth {
 	cfg := config.NewTwitter()
-	return &Auth{
+	return &auth{
 		config: oauth2.Config{
 			ClientID:     cfg.ClientID,
 			ClientSecret: cfg.ClientSecret,
@@ -44,7 +43,7 @@ func NewAuth() *Auth {
 	}
 }
 
-func (a *Auth) BuildAuthorizationURL() (string, *AuthorizationState) {
+func (a *auth) BuildAuthorizationURL() (string, *AuthorizationState) {
 	// for CSRF attack
 	// https://datatracker.ietf.org/doc/html/rfc6749#section-10.12
 	// SHOULD be less than or equal to 2^(-160) means 160bit / 8 = 20 bytes
@@ -68,7 +67,7 @@ func (a *Auth) BuildAuthorizationURL() (string, *AuthorizationState) {
 	}
 }
 
-func (a *Auth) ExchangeCode(ctx context.Context, code, codeVerifier string) (*oauth2.Token, error) {
+func (a *auth) ExchangeCode(ctx context.Context, code, codeVerifier string) (*oauth2.Token, error) {
 	token, err := a.config.Exchange(ctx, code, oauth2.SetAuthURLParam("code_verifier", codeVerifier))
 	if err != nil {
 		return nil, errors.NewForbidden("failed to exchange code: %v", err)

@@ -15,13 +15,13 @@ import (
 )
 
 type Usecase struct {
-	twiAuth       *twitter.Auth
+	twiAuth       twitter.Auth
 	dsCli         datastore.Client
 	responseCache *cache.Cache
 	imageUploader *uploader.ImageUploader
 }
 
-func NewUsecase(twiAuth *twitter.Auth, dsCli datastore.Client) *Usecase {
+func NewUsecase(twiAuth twitter.Auth, dsCli datastore.Client) *Usecase {
 	return &Usecase{
 		twiAuth:       twiAuth,
 		dsCli:         dsCli,

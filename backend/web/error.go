@@ -9,7 +9,7 @@ import (
 )
 
 func sendError(err error, c *gin.Context) {
-	logger := logging.New()
+	logger := logging.Extract(c.Request.Context())
 
 	switch e := errors.Cause(err).(type) {
 	case *errors.ServiceError:

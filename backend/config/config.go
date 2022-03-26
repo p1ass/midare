@@ -33,6 +33,10 @@ func ReadSessionEncryptionKey() ([]byte, error) {
 	return encryptionKey, nil
 }
 
+func ReadGoogleCloudProjectID() string {
+	return os.Getenv("GCP_PROJECT")
+}
+
 func IsLocal() bool {
 	return os.Getenv("ENV") == "LOCAL"
 }

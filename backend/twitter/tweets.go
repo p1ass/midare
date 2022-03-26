@@ -40,7 +40,7 @@ func (c client) GetTweets(ctx context.Context, userID string) ([]*Tweet, error) 
 		}
 		tweets := toTweets(res.Raw.Tweets)
 
-		logging.New().Info(fmt.Sprintf("rate limit: %d", res.RateLimit.Remaining), zap.Any("remaining", res.RateLimit.Remaining))
+		logging.Extract(ctx).Info(fmt.Sprintf("rate limit: %d", res.RateLimit.Remaining), zap.Any("remaining", res.RateLimit.Remaining))
 
 		if len(res.Raw.Tweets) == 0 {
 			return []*Tweet{}, nil

@@ -20,6 +20,7 @@ func NewRouter(handler *Handler, allowOrigin string) (*gin.Engine, error) {
 	r.Use(gin.Recovery())
 
 	logger := logging.New()
+	r.Use(TracerMiddleware(), LoggerMiddleware())
 	r.Use(ginzap.RecoveryWithZap(logger, true))
 
 	encryptionKey, err := config.ReadSessionEncryptionKey()

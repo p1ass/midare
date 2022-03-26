@@ -24,9 +24,9 @@ func NewImageUploader() *ImageUploader {
 }
 
 // Upload uploads image to cloud storage via Cloud Functions and returns share URL.
-func (u *ImageUploader) Upload(periods []*period.Period, shareID string, twiCli twitter.Client) *url.URL {
-	logging.New().Info(fmt.Sprintf("uploadImage: %s", shareID), zap.String("uuid", shareID))
-	go u.uploadImageThroughCloudFunctions(shareID, periods, twiCli)
+func (u *ImageUploader) Upload(ctx context.Context, periods []*period.Period, shareID string, twiCli twitter.Client) *url.URL {
+	logging.Extract(ctx).Info(fmt.Sprintf("uploadImage: %s", shareID), zap.String("uuid", shareID))
+	go u.uploadImageThroughCloudFunctions(ctx, shareID, periods, twiCli)
 
 	parsed, err := url.Parse(config.ReadAllowCORSOriginURL())
 	if err != nil {
@@ -37,7 +37,7 @@ func (u *ImageUploader) Upload(periods []*period.Period, shareID string, twiCli 
 	return parsed
 }
 
-func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []*period.Period, twiCli twitter.Client) {
+func (u *ImageUploader) uploadImageThroughCloudFunctions(ctx context.Context, uuid string, periods []*period.Period, twiCli twitter.Client) {
 	type request struct {
 		Name    string           `json:"name"`
 		IconURL string           `json:"iconUrl"`
@@ -45,10 +45,13 @@ func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []
 		Periods []*period.Period `json:"periods"`
 	}
 
+	logger := logging.Extract(ctx)
+
 	// 本当はここでAPIを叩きたくないが、レイテンシの削減のために非同期でAPIを叩きたいため、ここで叩いている
+	// リクエストの終了時にキャンセルされないようにcontextは別のものを使っている
 	user, err := twiCli.GetMe(context.Background())
 	if err != nil {
-		logging.New().Error("uploadImageThroughCloudFunctions: get account info" + err.Error())
+		logger.Error("uploadImageThroughCloudFunctions: get account info" + err.Error())
 		return
 	}
 
@@ -62,6 +65,6 @@ func (u *ImageUploader) uploadImageThroughCloudFunctions(uuid string, periods []
 
 	_, err = http.Post(config.ReadCloudFunctionsURL(), "application/json", bytes.NewBuffer(encoded))
 	if err != nil {
-		logging.New().Error("post period data to cloud functions" + err.Error())
+		logger.Error("post period data to cloud functions" + err.Error())
 	}
 }

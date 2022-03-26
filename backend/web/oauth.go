@@ -17,7 +17,7 @@ func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 		sendError(errors.Wrap(err, "failed to get oauth state id"), c)
 		return
 	}
-	url, err := h.usecase.GetLoginUrl(stateID)
+	url, err := h.usecase.GetLoginUrl(c.Request.Context(), stateID)
 	if err != nil {
 		sendError(errors.Wrap(err, "failed to get redirect url"), c)
 		return
@@ -31,7 +31,7 @@ func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 // TwitterCallback handles callback function after OAuth2 use authorization
 // Redirect to frontend even if callback function fails
 func (h *Handler) TwitterCallback(c *gin.Context) {
-	logger := logging.New()
+	logger := logging.Extract(c.Request.Context())
 
 	code := c.DefaultQuery("code", "")
 	if code == "" {
@@ -77,7 +77,7 @@ func (h *Handler) getAccessToken(c *gin.Context) (string, *oauth2.Token) {
 	}
 	userID := v.(string)
 
-	logger := logging.New()
+	logger := logging.Extract(c.Request.Context())
 
 	accessToken, err := h.dsCli.FetchAccessToken(c.Request.Context(), userID)
 	if err != nil {

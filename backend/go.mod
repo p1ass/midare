@@ -5,6 +5,7 @@ go 1.17
 require (
 	cloud.google.com/go/datastore v1.6.0
 	cloud.google.com/go/profiler v0.2.0
+	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.3.0
 	github.com/g8rswimmer/go-twitter/v2 v2.0.0-beta14
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.4
@@ -15,6 +16,8 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/tommy351/zap-stackdriver v0.1.4
+	go.opentelemetry.io/otel v1.6.0
+	go.opentelemetry.io/otel/trace v1.6.0
 	go.uber.org/zap v1.21.0
 	golang.org/x/oauth2 v0.0.0-20220309155454-6242fa91716a
 )

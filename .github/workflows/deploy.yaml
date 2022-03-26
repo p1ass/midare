@@ -56,7 +56,7 @@ jobs:
             --cpu 1 \
             --max-instances 10 \
             --memory 512Mi \
-            --set-env-vars `cat .env.prod | tr -s '\n' ','` \
+            --set-env-vars `cat .env.prod | tr -s '\n' ','`GCP_PROJECT=${GCP_PROJECT} \
             --set-secrets="TWITTER_CLIENT_ID=TWITTER_CLIENT_ID:latest,TWITTER_CLIENT_SECRET=TWITTER_CLIENT_SECRET:latest,CLOUD_FUNCTIONS_URL=CLOUD_FUNCTIONS_URL:latest,SESSION_KEY=SESSION_KEY:latest,SESSION_ENCRYPTION_KEY_BASE64_ENCODED=SESSION_ENCRYPTION_KEY_BASE64_ENCODED:latest,DATASTORE_PROJECT_ID=DATASTORE_PROJECT_ID:latest" \
             --allow-unauthenticated \
             --no-traffic

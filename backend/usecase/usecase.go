@@ -2,15 +2,18 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/p1ass/midare/datastore"
 	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
 	"github.com/p1ass/midare/period"
 	"github.com/p1ass/midare/twitter"
 	"github.com/p1ass/midare/uploader"
 	"github.com/patrickmn/go-cache"
+	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 )
 
@@ -54,7 +57,7 @@ func (u *Usecase) GetAwakePeriods(ctx context.Context, userID string, token *oau
 
 	shareID := uuid.New().String()
 
-	url := u.imageUploader.Upload(periods, shareID, twiCli)
+	url := u.imageUploader.Upload(ctx, periods, shareID, twiCli)
 
 	res := &getAwakePeriodsCache{Periods: periods, ShareURL: url.String()}
 
@@ -70,12 +73,13 @@ func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state strin
 	authState, err := u.dsCli.FetchAuthorizationState(ctx, stateID)
 	if err != nil {
 		if se, ok := errors.Cause(err).(*errors.ServiceError); ok && se.Code == errors.NotFound {
-			return nil, errors.NewBadRequest("invalid state id: %s", stateID)
+			return nil, errors.NewBadRequest("state not found: %s", stateID)
 		}
 		return nil, err
 	}
 
 	if state != authState.State {
+		logging.Extract(ctx).Info("state not matched", zap.String("state", state), zap.String("expected", authState.State))
 		return nil, errors.NewForbidden("state not matched")
 	}
 
@@ -97,8 +101,10 @@ func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state strin
 
 // GetLoginUrl gets login url which starts OAuth2 flow.
 // It is defined by OAuth2.
-func (u *Usecase) GetLoginUrl(stateID string) (string, error) {
+func (u *Usecase) GetLoginUrl(ctx context.Context, stateID string) (string, error) {
 	url, authState := u.twiAuth.BuildAuthorizationURL()
+	logging.Extract(ctx).Info(fmt.Sprintf("state id: %s", authState.State), zap.String("state", authState.State))
+
 	err := u.dsCli.StoreAuthorizationState(context.Background(), stateID, authState)
 	if err != nil {
 		return "", err

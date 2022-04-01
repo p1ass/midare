@@ -103,7 +103,7 @@ func (u *Usecase) AuthorizeToken(ctx context.Context, stateID, code, state strin
 // It is defined by OAuth2.
 func (u *Usecase) GetLoginUrl(ctx context.Context, stateID string) (string, error) {
 	url, authState := u.twiAuth.BuildAuthorizationURL()
-	logging.Extract(ctx).Info(fmt.Sprintf("state id: %s", authState.State), zap.String("state", authState.State))
+	logging.Extract(ctx).Info(fmt.Sprintf("state id: %s", stateID), zap.String("state", authState.State))
 
 	err := u.dsCli.StoreAuthorizationState(context.Background(), stateID, authState)
 	if err != nil {

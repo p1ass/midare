@@ -2,10 +2,13 @@ package datastore
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"cloud.google.com/go/datastore"
 	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
+	"go.uber.org/zap"
 	"golang.org/x/oauth2"
 )
 
@@ -35,6 +38,7 @@ func (c client) FetchAccessToken(ctx context.Context, userID string) (*oauth2.To
 
 	// Redis時代と同様にセキュリティ上の理由から30分でタイムアウトするようにする
 	if now().Sub(dto.Created) >= 30*time.Minute {
+		logging.Extract(ctx).Info(fmt.Sprintf("access token timeout: %s", userID), zap.String("userID", userID))
 		err := c.cli.Delete(ctx, key)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to delete access token")

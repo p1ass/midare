@@ -8,6 +8,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
 	"github.com/p1ass/midare/twitter"
 )
 
@@ -60,7 +61,10 @@ func Test_client_AuthorizationState(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if err := c.StoreAuthorizationState(context.Background(), tt.args.stateID, tt.args.state); (err != nil) != tt.wantStoreErr {
+			ctx := context.Background()
+			ctx = logging.Inject(ctx, logging.New())
+
+			if err := c.StoreAuthorizationState(ctx, tt.args.stateID, tt.args.state); (err != nil) != tt.wantStoreErr {
 				t.Errorf("StoreAccessToken() error = %v, wantErr %v", err, tt.wantStoreErr)
 			}
 
@@ -72,7 +76,7 @@ func Test_client_AuthorizationState(t *testing.T) {
 				now = tmpNow
 			}()
 
-			got, err := c.FetchAuthorizationState(context.Background(), tt.args.stateID)
+			got, err := c.FetchAuthorizationState(ctx, tt.args.stateID)
 			if (err != nil) != tt.wantFetchErr {
 				t.Errorf("FetchAccessToken() error = %v, wantErr %v", err, tt.wantFetchErr)
 			}

@@ -8,6 +8,7 @@ import (
 	"github.com/p1ass/midare/config"
 	"github.com/p1ass/midare/crypto"
 	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
 )
 
 const (
@@ -51,6 +52,7 @@ func getOAuthStateID(c *gin.Context) (string, error) {
 	session := sessions.Default(c)
 	stateID, ok := session.Get(oauthStateKey).(string)
 	if ok {
+		logging.Extract(c.Request.Context()).Info("state id not found in session")
 		return stateID, nil
 	}
 	stateID = crypto.SecureRandomBase64Encoded(64)

@@ -9,6 +9,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
 	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
 	"golang.org/x/oauth2"
 )
 
@@ -67,7 +68,10 @@ func Test_client_AccessToken(t *testing.T) {
 				t.Fatal(err)
 			}
 
-			if err := c.StoreAccessToken(context.Background(), tt.args.userID, tt.args.token); (err != nil) != tt.wantStoreErr {
+			ctx := context.Background()
+			ctx = logging.Inject(ctx, logging.New())
+
+			if err := c.StoreAccessToken(ctx, tt.args.userID, tt.args.token); (err != nil) != tt.wantStoreErr {
 				t.Errorf("StoreAccessToken() error = %v, wantErr %v", err, tt.wantStoreErr)
 			}
 
@@ -79,7 +83,7 @@ func Test_client_AccessToken(t *testing.T) {
 				now = tmpNow
 			}()
 
-			got, err := c.FetchAccessToken(context.Background(), tt.args.userID)
+			got, err := c.FetchAccessToken(ctx, tt.args.userID)
 			if (err != nil) != tt.wantFetchErr {
 				t.Errorf("FetchAccessToken() error = %v, wantErr %v", err, tt.wantFetchErr)
 			}

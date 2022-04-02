@@ -2,11 +2,14 @@ package datastore
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"cloud.google.com/go/datastore"
 	"github.com/p1ass/midare/errors"
+	"github.com/p1ass/midare/logging"
 	"github.com/p1ass/midare/twitter"
+	"go.uber.org/zap"
 )
 
 func (c client) StoreAuthorizationState(ctx context.Context, stateID string, authState *twitter.AuthorizationState) error {
@@ -35,6 +38,7 @@ func (c client) FetchAuthorizationState(ctx context.Context, stateID string) (*t
 	}
 
 	if now().Sub(dto.Created) >= 15*time.Minute {
+		logging.Extract(ctx).Info(fmt.Sprintf("authorization state timeout: %s", stateID), zap.String("stateID", stateID))
 		err := c.cli.Delete(ctx, key)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to delete authorization state")

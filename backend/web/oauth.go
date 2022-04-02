@@ -25,7 +25,7 @@ func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Pragma", "no-cache")
-	c.Redirect(http.StatusTemporaryRedirect, url)
+	c.Redirect(http.StatusFound, url)
 }
 
 // TwitterCallback handles callback function after OAuth2 use authorization

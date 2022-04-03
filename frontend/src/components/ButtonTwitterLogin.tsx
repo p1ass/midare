@@ -15,9 +15,6 @@ const TwitterButton = styled(ButtonBase)`
 export const ButtonTwitterLogin = () => {
   return (
     <TwitterButton
-      href={
-        'https://twitter.com/i/oauth2/authorize?client_id=aaaa&code_challenge=asdfasdf&code_challenge_method=S256&redirect_uri=http%3A%2F%2Flocalhost.local%3A8080%2Fcallback&response_type=code&scope=tweet.read+users.read&state=asdfasdf'
-      }
       onClick={() => {
         if (isProd()) {
           window.gtag('event', 'login', {
@@ -26,6 +23,8 @@ export const ButtonTwitterLogin = () => {
             value: 1,
           })
         }
+        window.location.href =
+          'https://twitter.com/i/oauth2/authorize?client_id=aaaa&code_challenge=asdfasdf&code_challenge_method=S256&redirect_uri=http%3A%2F%2Flocalhost.local%3A8080%2Fcallback&response_type=code&scope=tweet.read+users.read&state=asdfasdf'
       }}
     >
       <FontAwesomeIcon icon={faTwitter} style={{ paddingRight: '0.5rem' }} />

@@ -7,6 +7,7 @@ import { Header } from '../atom/Header'
 import { Footer } from '../atom/Footer'
 import { CalendarContainer } from '../components/CalendarContainer'
 import { useMe } from '../api/hooks'
+import { useHasTouchScreen } from '../lib/screen'
 
 const FlexContainer = styled.div`
   display: flex;
@@ -21,14 +22,11 @@ const Container = styled.div`
   margin: 0 auto;
 `
 
-const DescriptionWrapperAboutTwitterLogin = styled.div`
-  margin: 0 2rem 2rem 2rem;
+const MessageBrowser = styled.p`
+  font-size: 0.9rem;
   text-align: center;
-`
-
-const DescriptionAboutTwitterLogin = styled.p`
-  font-size: 0.8rem;
-  margin: 0;
+  color: #ff0000;
+  width: 80vw;
 `
 
 const Title = styled.h1`
@@ -37,17 +35,17 @@ const Title = styled.h1`
 
 const Main = () => {
   const [user, , isLoading] = useMe()
+  const { hasTouchScreen } = useHasTouchScreen()
   const SwitchWhetherLogin = user ? (
     <CalendarContainer user={user}></CalendarContainer>
   ) : (
     <>
+      {hasTouchScreen ? (
+        <MessageBrowser>
+          Twitterアプリ内で開いた場合は、 SafariやChromeで開き直してください
+        </MessageBrowser>
+      ) : null}
       <ButtonTwitterLogin></ButtonTwitterLogin>
-      <DescriptionWrapperAboutTwitterLogin>
-        <DescriptionAboutTwitterLogin>Twitterでログインしますが、</DescriptionAboutTwitterLogin>
-        <DescriptionAboutTwitterLogin>
-          勝手に呟いたりDMを覗き見ることはありません
-        </DescriptionAboutTwitterLogin>
-      </DescriptionWrapperAboutTwitterLogin>
     </>
   )
 

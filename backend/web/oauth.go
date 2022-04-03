@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/p1ass/midare/errors"
@@ -25,7 +26,21 @@ func (h *Handler) StartSignInWithTwitter(c *gin.Context) {
 
 	c.Header("Cache-Control", "no-cache")
 	c.Header("Pragma", "no-cache")
-	c.Redirect(http.StatusFound, url)
+
+	// iOSのアプリ内ブラウザでログインをしようとした場合、Locationヘッダーでリダイレクトすると、
+	// Twitterアプリが開いた後にデフフォルトのブラウザが表示されてしまう。
+	// その場合、UAが異なることになりStateが一致しないのでエラーになってしまう。
+	// 原因はユニバーサルリンクの機能でTwitterアプリが開いてしまうことなので、
+	// ユニバーサルリンクが無効なJSによるリダイレクトを行うことで、同一UAを担保する
+	html := fmt.Sprintf(`<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			window.location.href = "%s";
+		</script>
+	</head>
+</html>`, url)
+	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(html))
 }
 
 // TwitterCallback handles callback function after OAuth2 use authorization

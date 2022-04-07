@@ -51,8 +51,13 @@ func main() {
 		return
 	}
 
+	port := config.ReadPort()
+	if port == "" {
+		port = "8080"
+	}
+
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":" + port,
 		Handler: router,
 	}
 

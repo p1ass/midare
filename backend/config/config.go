@@ -5,6 +5,10 @@ import (
 	"os"
 )
 
+func ReadPort() string {
+	return os.Getenv("PORT")
+}
+
 func ReadCloudFunctionsURL() string {
 	return os.Getenv("CLOUD_FUNCTIONS_URL")
 }

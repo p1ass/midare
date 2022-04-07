@@ -68,7 +68,6 @@ func (h *Handler) TwitterCallback(c *gin.Context) {
 
 // getAccessToken gets OAuth2 access token from datastore.
 // It is expected that context passed AuthMiddleware
-// TODO: usecaseに移しても良いかも
 func (h *Handler) getAccessToken(c *gin.Context) (string, *oauth2.Token) {
 	v, ok := c.Get(userIDContextKey)
 	if !ok {
@@ -79,7 +78,7 @@ func (h *Handler) getAccessToken(c *gin.Context) (string, *oauth2.Token) {
 
 	logger := logging.Extract(c.Request.Context())
 
-	accessToken, err := h.dsCli.FetchAccessToken(c.Request.Context(), userID)
+	accessToken, err := h.usecase.GetAccessToken(c.Request.Context(), userID)
 	if err != nil {
 		if se, ok := errors.Cause(err).(*errors.ServiceError); ok && se.Code == errors.NotFound {
 			logger.Info("access token not found")

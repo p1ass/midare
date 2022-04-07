@@ -17,6 +17,9 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// newTwitterClient uses for injecting fake client for unit test.
+var newTwitterClient = twitter.NewClient
+
 type Usecase struct {
 	twiAuth       twitter.Auth
 	dsCli         datastore.Client
@@ -40,7 +43,7 @@ func (u *Usecase) GetAwakePeriods(ctx context.Context, userID string, token *oau
 		ShareURL string           `json:"shareUrl"`
 	}
 
-	twiCli := twitter.NewClient(token)
+	twiCli := newTwitterClient(token)
 
 	cached, ok := u.responseCache.Get(userID)
 	if ok {
@@ -114,11 +117,20 @@ func (u *Usecase) GetLoginUrl(ctx context.Context, stateID string) (string, erro
 
 // GetUser gets user information using Twitter API.
 func (u *Usecase) GetUser(ctx context.Context, token *oauth2.Token) (*twitter.User, error) {
-	twiCli := twitter.NewClient(token)
+	twiCli := newTwitterClient(token)
 
 	user, err := twiCli.GetMe(ctx)
 	if err != nil {
 		return nil, errors.Wrap(err, "account verify credentials")
 	}
 	return user, nil
+}
+
+// GetAccessToken gets access token from datastore.
+func (u *Usecase) GetAccessToken(ctx context.Context, userID string) (*oauth2.Token, error) {
+	token, err := u.dsCli.FetchAccessToken(ctx, userID)
+	if err != nil {
+		return nil, errors.Wrap(err, "fetch access token")
+	}
+	return token, nil
 }

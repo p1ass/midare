@@ -1,5 +1,7 @@
 ENV_FILE := .env
+ENV_EXAMPLE_FILE := .env.example
 ENV = $(shell cat $(ENV_FILE))
+ENV_EXAMPLE = $(shell cat $(ENV_EXAMPLE_FILE))
 
 .PHONY:serve
 serve:
@@ -7,7 +9,7 @@ serve:
 
 .PHONY:test
 test:
-	go test -v ./... -count=1
+	$(ENV_EXAMPLE) go test -v ./... -count=1
 
 .PHONY:start-deps
 start-deps:

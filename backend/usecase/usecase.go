@@ -122,3 +122,12 @@ func (u *Usecase) GetUser(ctx context.Context, token *oauth2.Token) (*twitter.Us
 	}
 	return user, nil
 }
+
+// GetAccessToken gets access token from datastore.
+func (u *Usecase) GetAccessToken(ctx context.Context, userID string) (*oauth2.Token, error) {
+	token, err := u.dsCli.FetchAccessToken(ctx, userID)
+	if err != nil {
+		return nil, errors.Wrap(err, "fetch access token")
+	}
+	return token, nil
+}

@@ -13,7 +13,6 @@ const (
 // Handler is HTTP handler.
 type Handler struct {
 	frontendCallbackURL string
-	dsCli               datastore.Client
 	usecase             *usecase.Usecase
 }
 
@@ -21,7 +20,6 @@ type Handler struct {
 func NewHandler(twiAuth twitter.Auth, dsCli datastore.Client, frontendCallbackURL string) (*Handler, error) {
 	return &Handler{
 		frontendCallbackURL: frontendCallbackURL,
-		dsCli:               dsCli,
 		usecase:             usecase.NewUsecase(twiAuth, dsCli),
 	}, nil
 }

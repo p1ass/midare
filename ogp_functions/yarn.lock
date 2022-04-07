@@ -165,21 +165,6 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@google-cloud/common@^3.8.1":
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/common/-/common-3.8.1.tgz#1313c55bb66df88f69bf7c828135fae25fbd2036"
-  integrity sha512-FOs3NFU6bDt5mXE7IFpwIeqzLwRZNu9lJYl+bHVNkwmxX/w4VyDZAiGjQHhpV1Ek+muNKlX8HPchxaIxNTuOhw==
-  dependencies:
-    "@google-cloud/projectify" "^2.0.0"
-    "@google-cloud/promisify" "^2.0.0"
-    arrify "^2.0.1"
-    duplexify "^4.1.1"
-    ent "^2.2.0"
-    extend "^3.0.2"
-    google-auth-library "^7.9.2"
-    retry-request "^4.2.2"
-    teeny-request "^7.0.0"
-
 "@google-cloud/functions-framework@^3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-3.0.0.tgz#2b7e6454ee9fe4d1eaaa08384fc01de4a72cd081"
@@ -211,13 +196,13 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-2.0.3.tgz#f934b5cdc939e3c7039ff62b9caaf59a9d89e3a8"
   integrity sha512-d4VSA86eL/AFTe5xtyZX+ePUjE8dIFu2T8zmdeNBSa5/kNgXPCx/o/wbFNHAGLJdGnk1vddRuMESD9HbOC8irw==
 
-"@google-cloud/storage@^5.18.3":
-  version "5.18.3"
-  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.18.3.tgz#becacb909b2abf4bb54500a0efd65ceb51ef8eab"
-  integrity sha512-573qJ0ECoy3nkY5YaMWcVf4/46n/zdvfNgAyjaLQywl/eL38uxDhs7YVJd3pcgslaMUwKKsd/eD3St+Pq2iPew==
+"@google-cloud/storage@^5.19.0":
+  version "5.19.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/storage/-/storage-5.19.0.tgz#ce4fc9487bb27d62a6813be1d17a0aa5dcebefb7"
+  integrity sha512-4gxY7XrCP64UMa7O4rxUR0QXYd4I/IxoAVCDSWcIKx+yuKM8QoiyONqoARiOEIw9tlhkyjnKBdI/IeX23FTaGw==
   dependencies:
-    "@google-cloud/common" "^3.8.1"
     "@google-cloud/paginator" "^3.0.7"
+    "@google-cloud/projectify" "^2.0.0"
     "@google-cloud/promisify" "^2.0.0"
     abort-controller "^3.0.0"
     arrify "^2.0.0"
@@ -226,17 +211,20 @@
     configstore "^5.0.0"
     date-and-time "^2.0.0"
     duplexify "^4.0.0"
+    ent "^2.2.0"
     extend "^3.0.2"
     gaxios "^4.0.0"
     get-stream "^6.0.0"
-    google-auth-library "^7.0.0"
+    google-auth-library "^7.14.1"
     hash-stream-validation "^0.2.2"
     mime "^3.0.0"
     mime-types "^2.0.8"
     p-limit "^3.0.1"
     pumpify "^2.0.0"
+    retry-request "^4.2.2"
     snakeize "^0.1.0"
     stream-events "^1.0.4"
+    teeny-request "^7.1.3"
     xdg-basedir "^4.0.0"
 
 "@humanwhocodes/config-array@^0.5.0":
@@ -274,10 +262,10 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
-"@tootallnate/once@1":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
-  integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
+"@tootallnate/once@2":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
+  integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
 "@types/body-parser@*":
   version "1.19.0"
@@ -596,7 +584,7 @@ array.prototype.flat@^1.2.5:
     define-properties "^1.1.3"
     es-abstract "^1.19.0"
 
-arrify@^2.0.0, arrify@^2.0.1:
+arrify@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/arrify/-/arrify-2.0.1.tgz#c9655e9331e0abcd588d2a7cad7e9956f66701fa"
   integrity sha512-3duEwti880xqi4eAMN8AyR4a0ByT90zoYdLlevfrvU43vb0YZwZVfxOgxWrLXXXpyugL0hNZc9G6BiB5B3nUug==
@@ -1582,10 +1570,10 @@ globby@^11.0.3:
     merge2 "^1.3.0"
     slash "^3.0.0"
 
-google-auth-library@^7.0.0, google-auth-library@^7.9.2:
-  version "7.10.0"
-  resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-7.10.0.tgz#6ab852f8e1abbe425aec695ac6501f80bd5eba56"
-  integrity sha512-ICsqaU+lxMHVlDUzMrfVIEqnARw2AwBiZ/2KnNM6BcTf9Nott+Af87DTIzmlnW865p3REUP2MVL0xkPC3a61aQ==
+google-auth-library@^7.14.1:
+  version "7.14.1"
+  resolved "https://registry.yarnpkg.com/google-auth-library/-/google-auth-library-7.14.1.tgz#e3483034162f24cc71b95c8a55a210008826213c"
+  integrity sha512-5Rk7iLNDFhFeBYc3s8l1CqzbEBcdhwR193RlD4vSNFajIcINKI8W8P0JLmBpwymHqqWbX34pJDQu39cSy/6RsA==
   dependencies:
     arrify "^2.0.0"
     base64-js "^1.3.0"
@@ -1685,12 +1673,12 @@ http-errors@1.8.1:
     statuses ">= 1.5.0 < 2"
     toidentifier "1.0.1"
 
-http-proxy-agent@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/http-proxy-agent/-/http-proxy-agent-4.0.1.tgz#8a8c8ef7f5932ccf953c296ca8291b95aa74aa3a"
-  integrity sha512-k0zdNgqWTGA6aeIRVpvfVob4fL52dTfaehylg0Y4UvSySvOq/Y+BOyPrgpUrA7HylqvU8vIZGsRuXmspskV0Tg==
+http-proxy-agent@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/http-proxy-agent/-/http-proxy-agent-5.0.0.tgz#5129800203520d434f142bc78ff3c170800f2b43"
+  integrity sha512-n2hY8YdoRE1i7r6M0w9DIw5GgZN0G25P8zLCRQ8rjXtTU3vsNFBI/vWK/UIeE6g5MUUz6avwAPXmL6Fy9D/90w==
   dependencies:
-    "@tootallnate/once" "1"
+    "@tootallnate/once" "2"
     agent-base "6"
     debug "4"
 
@@ -3042,12 +3030,12 @@ tar-stream@^2.1.4:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
 
-teeny-request@^7.0.0:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/teeny-request/-/teeny-request-7.0.1.tgz#bdd41fdffea5f8fbc0d29392cb47bec4f66b2b4c"
-  integrity sha512-sasJmQ37klOlplL4Ia/786M5YlOcoLGQyq2TE4WHSRupbAuDaQW0PfVxV4MtdBtRJ4ngzS+1qim8zP6Zp35qCw==
+teeny-request@^7.1.3:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/teeny-request/-/teeny-request-7.2.0.tgz#41347ece068f08d741e7b86df38a4498208b2633"
+  integrity sha512-SyY0pek1zWsi0LRVAALem+avzMLc33MKW/JLLakdP4s9+D7+jHcy5x6P+h94g2QNZsAqQNfX5lsbd3WSeJXrrw==
   dependencies:
-    http-proxy-agent "^4.0.0"
+    http-proxy-agent "^5.0.0"
     https-proxy-agent "^5.0.0"
     node-fetch "^2.6.1"
     stream-events "^1.0.5"

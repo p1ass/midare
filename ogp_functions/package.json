@@ -27,7 +27,7 @@
         "@google-cloud/storage": "^5.19.3",
         "dayjs": "^1.11.1",
         "express": "4.17.3",
-        "puppeteer": "^13.5.2",
+        "puppeteer": "^13.6.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "styled-components": "^5.3.5"

@@ -165,13 +165,14 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@google-cloud/functions-framework@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-3.1.0.tgz#7e17614dd17e70992581d382c3990c34e5445f0e"
-  integrity sha512-hdHxohi4S34H0lLMuXiEBsTXVbYBG7VH8PE4UCcGOn0mbjKXbSP4H6hBxMbQMonIPfO/JJjEeLaTCal8fiTmaA==
+"@google-cloud/functions-framework@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-3.1.1.tgz#ba336b81217ebe55f249ab20c2ee2be8dd80c0eb"
+  integrity sha512-ZC85zX757DUYuE6H0HONCD40PPdim4Ew0gOBVwtm7Lb5jqv7t2TeM8c2B3btHwaNnxBVOdMOhbwwXzVLsivOaA==
   dependencies:
+    "@types/express" "4.17.13"
     body-parser "^1.18.3"
-    cloudevents "^5.3.2"
+    cloudevents "^6.0.0"
     express "^4.16.4"
     minimist "^1.2.5"
     on-finished "^2.3.0"
@@ -291,7 +292,7 @@
     "@types/qs" "*"
     "@types/range-parser" "*"
 
-"@types/express@^4.17.13":
+"@types/express@4.17.13", "@types/express@^4.17.13":
   version "4.17.13"
   resolved "https://registry.yarnpkg.com/@types/express/-/express-4.17.13.tgz#a76e2995728999bab51a33fabce1d705a3709034"
   integrity sha512-6bSZTPaTIACxn48l50SR+axgrqm6qXFIxrdAKaG6PaJk3+zuUr35hBlgT7vOmJcum+OEaIBLtHV/qloEAFITeA==
@@ -503,7 +504,14 @@ agent-base@6:
   dependencies:
     debug "4"
 
-ajv@^6.10.0, ajv@^6.12.4, ajv@~6.12.3:
+ajv-formats@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/ajv-formats/-/ajv-formats-2.1.1.tgz#6e669400659eb74973bbf2e33327180a0996b520"
+  integrity sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==
+  dependencies:
+    ajv "^8.0.0"
+
+ajv@^6.10.0, ajv@^6.12.4:
   version "6.12.6"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
   integrity sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==
@@ -511,6 +519,16 @@ ajv@^6.10.0, ajv@^6.12.4, ajv@~6.12.3:
     fast-deep-equal "^3.1.1"
     fast-json-stable-stringify "^2.0.0"
     json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
+
+ajv@^8.0.0, ajv@^8.6.3:
+  version "8.11.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.0.tgz#977e91dd96ca669f54a11e23e378e33b884a565f"
+  integrity sha512-wGgprdCvMalC0BztXvitD2hC04YffAvtsUn93JbGXYLAtCUO4xd17mCCZQxUOItiBwZvJScWo8NIvQMQ71rdpg==
+  dependencies:
+    fast-deep-equal "^3.1.1"
+    json-schema-traverse "^1.0.0"
+    require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
 ajv@^8.0.1:
@@ -748,14 +766,15 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
-cloudevents@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/cloudevents/-/cloudevents-5.3.2.tgz#1338f0d51a2baac40ef7ea2b3577394447994d49"
-  integrity sha512-ZjEFjx0BJnio8SED1TzD7GHA118zCk04Mz6aDMMii+4/ZvX5LPgn1D4lT5Jj7HodCbdeRS6dX88unH06Qc3mkA==
+cloudevents@^6.0.0:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/cloudevents/-/cloudevents-6.0.1.tgz#06c6e5e5a2ce973befd3d22d191c3fd23950cc11"
+  integrity sha512-6Y2EOQKsEEciSeIPL8ENob2LcFSt/r0iftTefl3IanSVr2LyvXfbEdD5+pvufVDFdf6OVijvtl7UFx/0voMOsw==
   dependencies:
-    ajv "~6.12.3"
+    ajv "^8.6.3"
+    ajv-formats "^2.1.1"
     util "^0.12.4"
-    uuid "~8.3.0"
+    uuid "^8.3.2"
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -3287,7 +3306,7 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^8.0.0, uuid@~8.3.0:
+uuid@^8.0.0, uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==

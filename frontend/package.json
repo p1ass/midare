@@ -30,7 +30,7 @@
     "@next/eslint-plugin-next": "^12.1.6",
     "@types/downloadjs": "^1.4.3",
     "@types/gtag.js": "^0.0.10",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^27.5.0",
     "@types/node": "^17.0.31",
     "@types/react": "^17.0.43",
     "@types/react-dom": "^17.0.14",

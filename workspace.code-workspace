@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "backend",
+			"path": "backend"
+		},
+		{
+			"name": "frontend",
+			"path": "frontend"
+		},
+		{
+			"name": "ogp_functions",
+			"path": "ogp_functions"
+		},
+		{
+			"name": "midare",
+			"path": "."
+		}
+	],
+	"settings": {
+		"yaml.schemas": {
+			"https://json.schemastore.org/github-workflow.json": "file:///Users/plus/ghq/github.com/p1ass/midare/.github/workflows/deploy.yaml"
+		}
+	}
+}

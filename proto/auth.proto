@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/p1ass/midare/generated/pb";
+
+service AuthService {
+  // StartAuthorization はTwitter APIのOAuth 2.0 Authorization Code Flowを開始する
+  rpc StartAuthorization(google.protobuf.Empty)
+      returns (StartAuthorizationResp);
+  // ExchangeCode は認可レスポンスに含まれる認可コードを利用して、アクセストークンをサーバー再度に保存する。
+  rpc ExchangeCode(ExchangeCodeReq) returns (google.protobuf.Empty);
+}
+
+message StartAuthorizationResp {
+  string authorization_url = 1; // 認可エンドポイントのURL
+}
+
+message ExchangeCodeReq {
+  string code = 1;  // 認可コード
+  string state = 2; // OAuthのstate
+}

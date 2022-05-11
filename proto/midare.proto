@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/p1ass/midare/generated/pb";
+
+service MidareService {
+  // GetMe はログインユーザ情報を取得する。
+  rpc GetMe(google.protobuf.Empty) returns (GetMeResp);
+
+  // GetAwakePeriods はログインユーザの起きている期間を取得する。
+  rpc GetAwakePeriods(google.protobuf.Empty) returns (GetAwakePeriodsResp);
+}
+
+message GetMeResp {
+  User user = 1; // ログインユーザの情報
+}
+
+message GetAwakePeriodsResp {
+  repeated Period awake_periods = 1;
+  string share_url = 2; // 動的OGP画像が表示されるシェア用のURL
+}
+
+// User はユーザ情報を表す
+message User {
+  string id = 1;          // 例: "1032935958964973568"
+  string name = 2;        // 例: "ぷらす"
+  string screen_name = 3; // 例: "p1ass"
+  string image_url = 4;   // プロフィール画像のURL
+}
+
+// Periods は起きている期間を表す
+message Period {
+  Tweet oki_tweet = 1; // 起きたときのツイート
+  Tweet ne_tweet = 2;  // 寝たときのツイート
+}
+
+// Tweet はTwitterのツイートを表す
+message Tweet {
+  string id = 1;   // 例: "1521682005137977345"
+  string text = 2; // 例: "おはよう"
+  google.protobuf.Timestamp created_at = 3;
+}

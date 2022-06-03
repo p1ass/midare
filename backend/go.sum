@@ -61,8 +61,8 @@ cloud.google.com/go/storage v1.18.2/go.mod h1:AiIj7BWXyhO5gGVmYJ+S8tbkCx3yb0IMju
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1 h1:ehrYJQI0mFAed1smB9A4p59pmlNdesMrpI0b5EuHZ+8=
-github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.1/go.mod h1:lkyoCnkgX2rxsK/qn0l6POhbrqSCuRms1O5UQLlTHvg=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.2 h1:rs+6x86XeMcQN9hNGKKIYhfIUF83X8TgZkkLywPe3U8=
+github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.2/go.mod h1:cv+ITy1u9ONb3FH49mgRuMYkkdHqrLb5UxTrtgxQYw4=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/antonlindstrom/pgstore v0.0.0-20200229204646-b08ebf1105e0/go.mod h1:2Ti6VUHVxpC0VSmTZzEvpzysnaGAfGBOoMIz5ykPyyw=

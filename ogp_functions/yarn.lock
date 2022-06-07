@@ -165,10 +165,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@google-cloud/functions-framework@^3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-3.1.1.tgz#ba336b81217ebe55f249ab20c2ee2be8dd80c0eb"
-  integrity sha512-ZC85zX757DUYuE6H0HONCD40PPdim4Ew0gOBVwtm7Lb5jqv7t2TeM8c2B3btHwaNnxBVOdMOhbwwXzVLsivOaA==
+"@google-cloud/functions-framework@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@google-cloud/functions-framework/-/functions-framework-3.1.2.tgz#2cd92ce4307bf7f32555d028dca22e398473b410"
+  integrity sha512-pYvEH65/Rqh1JNPdcBmorcV7Xoom2/iOSmbtYza8msro7Inl+qOYxbyMiQfySD2gwAyn38WyWPRqsDRcf/BFLg==
   dependencies:
     "@types/express" "4.17.13"
     body-parser "^1.18.3"

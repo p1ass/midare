@@ -27,7 +27,7 @@
     "typescript": "~4.7.4"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^12.2.1",
+    "@next/eslint-plugin-next": "^12.2.2",
     "@types/downloadjs": "^1.4.3",
     "@types/gtag.js": "^0.0.10",
     "@types/jest": "^28.1.4",

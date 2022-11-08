@@ -6,7 +6,7 @@ require (
 	cloud.google.com/go/datastore v1.8.0
 	cloud.google.com/go/profiler v0.3.0
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go v1.5.2
-	github.com/g8rswimmer/go-twitter/v2 v2.1.2
+	github.com/g8rswimmer/go-twitter/v2 v2.1.4
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-contrib/zap v0.0.2

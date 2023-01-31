@@ -1378,10 +1378,10 @@ hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.3.0:
   dependencies:
     react-is "^16.7.0"
 
-html-to-image@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/html-to-image/-/html-to-image-1.9.0.tgz#cb49bf9f4b37376771c85cfdd65863ae9420b268"
-  integrity sha512-9gaDCIYg62Ek07F2pBk76AHgYZ2gxq2YALU7rK3gNCqXuhu6cWzsOQqM7qGbjZiOzxGzrU1deDqZpAod2NEwbA==
+html-to-image@^1.11.7:
+  version "1.11.7"
+  resolved "https://registry.yarnpkg.com/html-to-image/-/html-to-image-1.11.7.tgz#592bfbb40bb0d598101ad759b38c5ced7a42bd1e"
+  integrity sha512-/r8sAQ+EXkvOnRe2kKDjIV8jbhQggFEs7mVB7JisUNn8NMwJ/JtqWJCIDm3cUb73QtFNnYz69RuYijJ1XP2n6g==
 
 ignore@^5.2.0:
   version "5.2.0"

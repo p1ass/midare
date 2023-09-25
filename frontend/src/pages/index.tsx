@@ -51,7 +51,8 @@ const Main = () => {
           {/* <OneYearMessage>祝1周年🎉</OneYearMessage>
           <OneYearDescription>いつもお使いいただきありがとうございます！</OneYearDescription> */}
 
-          {!isLoading ? SwitchWhetherLogin : null}
+          <p>Twitter APIの有料化に伴い、サービスを終了しました。</p>
+          <p>長きにわたりお使いいただきありがとうございました。</p>
           <GoogleAds
             client="ca-pub-4978327687969784"
             slot="6211274963"

@@ -6,7 +6,7 @@
     "config": {
         "function_name": "ogpFunctions",
         "region": "asia-northeast1",
-        "runtime": "nodejs12"
+        "runtime": "nodejs18"
     },
     "scripts": {
         "clean": "rimraf \"functions/*\"",
